@@ -29,7 +29,8 @@ namespace LuckyDice.custom.items.dice
             {
                 return;
             }
-
+            
+            Plugin.Log.LogMessage($"Rolled event: {outcomes[side].ToString()}");
             EventManager.Instance.AddPlayerToEventServerRPC(outcomes[side], playerHeldBy.playerSteamId);
         }
     

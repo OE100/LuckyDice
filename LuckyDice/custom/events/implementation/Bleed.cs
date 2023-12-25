@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events.prototype;
 using UnityEngine;
@@ -27,15 +28,17 @@ namespace LuckyDice.custom.events
                 {
                     playersToMult[player]--;
                 }
-                else
+
+                if (playersToMult[player] == 0)
                 {
-                    player.bleedingHeavily = false;                    
+                    player.bleedingHeavily = false;
                 }
             }
         }
 
         public override IEnumerator EventCoroutine()
         {
+            List<PlayerControllerB> playersToRemove = new List<PlayerControllerB>();
             while (running)
             {
                 if (playersToMult.Count > 0)
@@ -53,7 +56,7 @@ namespace LuckyDice.custom.events
                         {
                             if (player.isInHangarShipRoom)
                             {
-                                RemovePlayer(player);
+                                playersToRemove.Add(player);
                             }
                             if (playersToMult[player] > 0)
                             {
@@ -61,6 +64,8 @@ namespace LuckyDice.custom.events
                                 player.DamagePlayer(damageNumber: playersToMult[player], hasDamageSFX: false);
                             }
                         }
+                        playersToRemove.ForEach(RemovePlayer);
+                        playersToRemove.Clear();
                     }
                 }
                 yield return new WaitForSeconds(2.4f);

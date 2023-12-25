@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using GameNetcodeStuff;
 using LuckyDice.custom.events;
+using LuckyDice.custom.events.implementation;
 using LuckyDice.custom.events.prototype;
+using LuckyDice.Patches;
 using Unity.Netcode;
 using UnityEngine;
 using Event = LuckyDice.custom.network.Event;
@@ -13,7 +15,11 @@ namespace LuckyDice.custom.network
         public static EventManager Instance { get; private set; }
         private readonly IDiceEvent[] Events = {
             new Bleed(),
-            new SpawnCoilhead()
+            new SpawnEnemyEvent(Enemies.SpringMan),
+            new SpawnEnemyEvent(Enemies.Flowerman),
+            new SpawnEnemyEvent(Enemies.MaskedPlayerEnemy),
+            new SpawnEnemyEvent(Enemies.Jester),
+            new SpawnEnemyEvent(Enemies.Centipede, amountPerStack: 4),
         };
         
         public override void OnNetworkSpawn()

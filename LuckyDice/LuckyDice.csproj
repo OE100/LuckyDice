@@ -67,24 +67,25 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="custom\events\Bleed.cs" />
+        <Compile Include="custom\events\implementation\Bleed.cs" />
+        <Compile Include="custom\events\implementation\SpawnEnemyEvent.cs" />
+        <Compile Include="custom\events\implementation\SpawnItemEvent.cs" />
         <Compile Include="custom\events\prototype\BaseDiceEvent.cs" />
         <Compile Include="custom\events\prototype\IDiceEvent.cs" />
         <Compile Include="custom\events\prototype\MultiplierDiceEvent.cs" />
-        <Compile Include="custom\events\SpawnCoilhead.cs" />
         <Compile Include="custom\items\dice\D20.cs" />
         <Compile Include="custom\items\dice\DiceItem.cs" />
         <Compile Include="custom\network\Event.cs" />
         <Compile Include="custom\network\EventManager.cs" />
+        <Compile Include="Patches\Enemies.cs" />
         <Compile Include="Patches\NetworkStuffPatch.cs" />
+        <Compile Include="Patches\StartOfRoundPatch.cs" />
+        <Compile Include="Patches\TerminalPatch.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="luckydice" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="custom\events\implementation\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

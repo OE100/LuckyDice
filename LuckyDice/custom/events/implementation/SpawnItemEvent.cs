@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events.prototype;
-using Unity.Netcode;
 using UnityEngine;
-using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
 
-namespace LuckyDice.custom.events
+namespace LuckyDice.custom.events.implementation
 {
-    public class SpawnCoilhead : MultiplierDiceEvent<int>
+    public class SpawnItemEvent : MultiplierDiceEvent<int>
     {
-        private List<NetworkObject> coilheads = new List<NetworkObject>();
-        public static EnemyType coilhead = null;
-
+        private int stackValue;
+        private int numberOfItems;
+        
+        public SpawnItemEvent(int stackValue = 70, int numberOfItems = 1)
+        {
+            this.stackValue = stackValue;
+            this.numberOfItems = this.numberOfItems;
+        }
+        
         public override void AddPlayer(PlayerControllerB player)
         {
             if (playersToMult.ContainsKey(player))
@@ -39,21 +42,13 @@ namespace LuckyDice.custom.events
 
         public override IEnumerator EventCoroutine()
         {
-            if (coilhead == null)
-            {
-                Plugin.Log.LogError("Coilhead enemy not found!");
-            }
+            List<PlayerControllerB> playersToRemove = new List<PlayerControllerB>();
             while (running)
             {
                 if (playersToMult.Count > 0)
                 {
                     if (IsPhaseForbidden())
                     {
-                        if (coilheads.Count > 0)
-                        {
-                            coilheads.ForEach(coil => coil.Despawn());
-                            coilheads.Clear();
-                        }
                         yield return new WaitForSeconds(10);
                     }
                     else
@@ -62,16 +57,23 @@ namespace LuckyDice.custom.events
                         {
                             if (item.Value > 0 && item.Key.isInsideFactory && !item.Key.isPlayerDead)
                             {
-                                Object.Instantiate(coilhead.enemyPrefab,
-                                    (Vector3)(Random.insideUnitCircle * 10) + item.Key.transform.position, Random.rotation);
-                                RemovePlayer(item.Key);
+                                // todo: spawn items of stackValue split between numberOfItems items
                             }
                         }
+
+                        playersToRemove.ForEach(RemovePlayer);
                     }
                 }
-                
+
                 yield return new WaitForSeconds(5);
             }
+        }
+        
+        private void SpawnScrapOnPlayer(PlayerControllerB player)
+        {
+            Vector3 position = player.transform.position + (Vector3)(Random.insideUnitCircle * 5);
+            float rotation = player.transform.rotation.y;
+            // todo: finish implementing this
         }
     }
 }

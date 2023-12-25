@@ -5,10 +5,10 @@ using LuckyDice.custom.network;
 
 namespace LuckyDice.custom.events.prototype
 {
-    public abstract class MultiplierDiceEvent<T> : IDiceEvent
+    public abstract class MultiplierDiceEvent<TMultiplier> : IDiceEvent
     {
         protected bool running = false;
-        protected Dictionary<PlayerControllerB, T> playersToMult = new Dictionary<PlayerControllerB, T>();
+        protected Dictionary<PlayerControllerB, TMultiplier> playersToMult = new Dictionary<PlayerControllerB, TMultiplier>();
         
         public abstract void AddPlayer(PlayerControllerB player);
 

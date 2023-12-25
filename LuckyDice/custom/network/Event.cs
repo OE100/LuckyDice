@@ -5,7 +5,11 @@ namespace LuckyDice.custom.network
     [Serializable]
     public enum Event
     {
-        BleedEvent = 0,
-        SpawnCoilhead = 1
+        Bleed = 0,
+        SpawnCoilhead,
+        SpawnFlowerman,
+        SpawnMasked,
+        SpawnJester,
+        SpawnCentipede
     }
 }
