@@ -1,5 +1,11 @@
-﻿using BepInEx;
+﻿using System.Reflection;
+using BepInEx;
+using BepInEx.Logging;
 using HarmonyLib;
+using LethalLib.Modules;
+using LuckyDice.Patches.custom.network;
+using Unity.Netcode;
+using UnityEngine;
 
 namespace LuckyDice
 {
@@ -14,7 +20,9 @@ namespace LuckyDice
 
         internal static Plugin Instance;
 
-        internal static BepInEx.Logging.ManualLogSource Log;
+        internal static ManualLogSource Log;
+
+        internal static AssetBundle ab = null;
 
         private void Awake()
         {
@@ -24,9 +32,49 @@ namespace LuckyDice
             if (Instance == null)
                 Instance = this;
             
+            Log.LogMessage("Trying to load asset bundle");
+            ab = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly()
+                .GetManifestResourceStream(Assembly.GetExecutingAssembly().GetManifestResourceNames()[0]));
+            if (ab == null)
+            {
+                Log.LogError("Failed to load asset bundle");
+            }
+            
+            RegisterItems();
+            SpawnEventManager();
+            
             harmony.PatchAll();
 
             Log.LogInfo($"'{NAME}' loaded!");
+        }
+
+        private void InitializeNetworkRoutine()
+        {
+            var types = Assembly.GetExecutingAssembly().GetTypes();
+            foreach (var type in types)
+            {
+                var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+                foreach (var method in methods)
+                {
+                    var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
+                    if (attributes.Length > 0)
+                    {
+                        method.Invoke(null, null);
+                    }
+                }
+            }
+        }
+        
+        private void RegisterItems()
+        {
+            Item d20 = ab.LoadAsset<Item>("20SidedDice.asset");
+            Items.RegisterScrap(d20, 50, Levels.LevelTypes.All);
+        }
+        
+        private void SpawnEventManager()
+        {
+            GameObject eventManager = ab.LoadAsset<GameObject>("EventManager.prefab");
+            NetworkManager.Singleton.AddNetworkPrefab(eventManager);
         }
     }
 }
