@@ -28,8 +28,6 @@ namespace LuckyDice.custom.network
             base.OnNetworkSpawn();
             Instance = this;
             
-            // todo: find coilhead enemy for event
-            
             // start all events
             foreach (IDiceEvent e in Events)
             {
