@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using GameNetcodeStuff;
 using LuckyDice.custom.events;
+using LuckyDice.custom.events.prototype;
 using Unity.Netcode;
+using UnityEngine;
 using Event = LuckyDice.custom.network.Event;
 
 namespace LuckyDice.custom.network
@@ -9,14 +11,24 @@ namespace LuckyDice.custom.network
     public class EventManager : NetworkBehaviour
     {
         public static EventManager Instance { get; private set; }
-        public readonly IDiceEvent[] Events = {
-            new BleedEvent()
+        private readonly IDiceEvent[] Events = {
+            new Bleed(),
+            new SpawnCoilhead()
         };
         
         public override void OnNetworkSpawn()
         {
+            // initialize singleton
             base.OnNetworkSpawn();
             Instance = this;
+            
+            // todo: find coilhead enemy for event
+            
+            // start all events
+            foreach (IDiceEvent e in Events)
+            {
+                e.Run();
+            }
         }
         
         [ServerRpc(RequireOwnership = false)]

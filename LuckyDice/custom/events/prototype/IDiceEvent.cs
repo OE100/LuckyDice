@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using GameNetcodeStuff;
 
-namespace LuckyDice.custom.events
+namespace LuckyDice.custom.events.prototype
 {
     public interface IDiceEvent 
     {

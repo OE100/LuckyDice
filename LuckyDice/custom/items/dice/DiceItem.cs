@@ -12,6 +12,12 @@ namespace LuckyDice.custom.items.dice
     
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
+            // if in ship phase or on company moon don't roll
+            if (StartOfRound.Instance.inShipPhase || StartOfRound.Instance.currentLevelID == 3)
+            {
+                return;
+            }
+            
             base.ItemActivate(used, buttonDown);
             Roll();
             playerHeldBy.DespawnHeldObject();
