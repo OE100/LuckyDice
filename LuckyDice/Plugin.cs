@@ -3,8 +3,6 @@ using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using LethalLib.Modules;
-using LuckyDice.Patches.custom.network;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace LuckyDice
@@ -41,7 +39,7 @@ namespace LuckyDice
             }
             
             RegisterItems();
-            SpawnEventManager();
+            InitializeNetworkRoutine();
             
             harmony.PatchAll();
 
@@ -69,12 +67,6 @@ namespace LuckyDice
         {
             Item d20 = ab.LoadAsset<Item>("20SidedDice.asset");
             Items.RegisterScrap(d20, 50, Levels.LevelTypes.All);
-        }
-        
-        private void SpawnEventManager()
-        {
-            GameObject eventManager = ab.LoadAsset<GameObject>("EventManager.prefab");
-            NetworkManager.Singleton.AddNetworkPrefab(eventManager);
         }
     }
 }

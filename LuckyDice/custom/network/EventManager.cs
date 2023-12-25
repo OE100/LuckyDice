@@ -1,14 +1,15 @@
 ﻿using System.Linq;
 using GameNetcodeStuff;
-using LuckyDice.Patches.custom.events;
+using LuckyDice.custom.events;
 using Unity.Netcode;
+using Event = LuckyDice.custom.network.Event;
 
-namespace LuckyDice.Patches.custom.network
+namespace LuckyDice.custom.network
 {
     public class EventManager : NetworkBehaviour
     {
         public static EventManager Instance { get; private set; }
-        public readonly DiceEvent[] Events = {
+        public readonly IDiceEvent[] Events = {
             new BleedEvent()
         };
         

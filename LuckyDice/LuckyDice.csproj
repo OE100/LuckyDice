@@ -66,12 +66,13 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Patches\custom\events\BleedEvent.cs" />
-        <Compile Include="Patches\custom\events\DiceEvent.cs" />
-        <Compile Include="Patches\custom\items\dice\D20.cs" />
-        <Compile Include="Patches\custom\items\dice\DiceItem.cs" />
-        <Compile Include="Patches\custom\network\EventManager.cs" />
-        <Compile Include="Patches\custom\network\Event.cs" />
+        <Compile Include="custom\events\BleedEvent.cs" />
+        <Compile Include="custom\events\IDiceEvent.cs" />
+        <Compile Include="custom\items\dice\D20.cs" />
+        <Compile Include="custom\items\dice\DiceItem.cs" />
+        <Compile Include="custom\network\Event.cs" />
+        <Compile Include="custom\network\EventManager.cs" />
+        <Compile Include="Patches\NetworkStuffPatch.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>

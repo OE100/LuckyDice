@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using GameNetcodeStuff;
 
-namespace LuckyDice.Patches.custom.events
+namespace LuckyDice.custom.events
 {
-    public interface DiceEvent 
+    public interface IDiceEvent 
     {
         void AddPlayer(PlayerControllerB player);
         void RemovePlayer(PlayerControllerB player);

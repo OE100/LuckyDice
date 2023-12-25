@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using LuckyDice.Patches.custom.network;
+﻿using System.Collections.Generic;
+using LuckyDice.custom.network;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Event = LuckyDice.custom.network.Event;
 
-namespace LuckyDice.Patches.custom.items.dice
+namespace LuckyDice.custom.items.dice
 {
     public class DiceItem : GrabbableObject
     {
@@ -21,7 +21,7 @@ namespace LuckyDice.Patches.custom.items.dice
         {
             if (side >= outcomes.Count || side < 0)
             {
-                Debug.Log("Side out of range");
+                return;
             }
 
             EventManager.Instance.AddPlayerToEventServerRPC(outcomes[side], playerHeldBy.playerSteamId);

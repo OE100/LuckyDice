@@ -1,7 +1,6 @@
-﻿using LuckyDice.Patches.custom.events;
-using LuckyDice.Patches.custom.network;
+﻿using LuckyDice.custom.network;
 
-namespace LuckyDice.Patches.custom.items.dice
+namespace LuckyDice.custom.items.dice
 {
     public class D20 : DiceItem
     {

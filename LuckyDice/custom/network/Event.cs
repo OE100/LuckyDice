@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LuckyDice.Patches.custom.network
+namespace LuckyDice.custom.network
 {
     [Serializable]
     public enum Event

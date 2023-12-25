@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using GameNetcodeStuff;
-using LuckyDice.Patches.custom.network;
+using LuckyDice.custom.network;
 using UnityEngine;
 
-namespace LuckyDice.Patches.custom.events
+namespace LuckyDice.custom.events
 {
-    public class BleedEvent : DiceEvent
+    public class BleedEvent : IDiceEvent
     {
         private List<PlayerControllerB> playersAffected = new List<PlayerControllerB>();
         private bool running = false;
