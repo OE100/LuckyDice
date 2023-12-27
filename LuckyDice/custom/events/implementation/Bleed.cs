@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using LuckyDice.custom.events.prototype;
 using UnityEngine;
 
-namespace LuckyDice.custom.events
+namespace LuckyDice.custom.events.implementation
 {
     public class Bleed : MultiplierDiceEvent<int>
     {
