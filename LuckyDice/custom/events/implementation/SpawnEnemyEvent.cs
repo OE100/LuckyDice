@@ -14,6 +14,7 @@ namespace LuckyDice.custom.events.implementation
         public SpawnEnemyEvent(string name, int amountPerStack = 1)
         {
             this.name = name;
+            this.amountPerStack = amountPerStack;
         }
         
         public override void AddPlayer(PlayerControllerB player)

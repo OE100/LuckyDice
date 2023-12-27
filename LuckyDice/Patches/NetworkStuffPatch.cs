@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Collections.Generic;
+using HarmonyLib;
 using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,18 +9,19 @@ namespace LuckyDice.Patches
     [HarmonyPatch]
     public class NetworkStuffPatch
     {
-        private static GameObject networkPrefab;
+        internal static List<GameObject> networkPrefabs = new List<GameObject>();
         
         [HarmonyPatch(typeof(GameNetworkManager), "Start"), HarmonyPostfix]
         public static void PatchGameNetworkManagerStart()
         {
-            if (networkPrefab != null)
+            if (networkPrefabs.Count != 0)
                 return;
-
-            networkPrefab = (GameObject)Plugin.ab.LoadAsset("EventManagerObject.prefab");
-            networkPrefab.AddComponent<EventManager>();
             
-            NetworkManager.Singleton.AddNetworkPrefab(networkPrefab);
+            networkPrefabs.Add(Plugin.ab.LoadAsset<GameObject>("EventManagerObject.prefab"));
+            networkPrefabs.Add(Plugin.ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d20/20SidedDice.asset").spawnPrefab);
+            
+            foreach (GameObject networkPrefab in networkPrefabs)
+                NetworkManager.Singleton.AddNetworkPrefab(networkPrefab);
         }
         
         [HarmonyPatch(typeof(StartOfRound), "Awake"), HarmonyPostfix]
@@ -27,8 +29,8 @@ namespace LuckyDice.Patches
         {
             if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
             {
-                var networkHandlerHost = Object.Instantiate(networkPrefab, Vector3.zero, Quaternion.identity);
-                networkHandlerHost.GetComponent<NetworkObject>().Spawn();
+                var networkHandlerHost = Object.Instantiate(networkPrefabs[0], Vector3.zero, Quaternion.identity);
+                networkHandlerHost.GetComponent<NetworkObject>().Spawn(destroyWithScene: false);
             }
         }
     }

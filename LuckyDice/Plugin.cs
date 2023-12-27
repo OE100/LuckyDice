@@ -3,6 +3,8 @@ using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using LethalLib.Modules;
+using LuckyDice.custom.network;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace LuckyDice
@@ -38,8 +40,8 @@ namespace LuckyDice
                 Log.LogError("Failed to load asset bundle");
             }
             
-            RegisterItems();
             InitializeNetworkRoutine();
+            RegisterItems();
             
             harmony.PatchAll();
 
@@ -65,8 +67,8 @@ namespace LuckyDice
         
         private void RegisterItems()
         {
-            Item d20 = ab.LoadAsset<Item>("20SidedDice.asset");
-            Items.RegisterScrap(d20, 50, Levels.LevelTypes.All);
+            Item d20 = ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d20/20SidedDice.asset");
+            LethalLib.Modules.Items.RegisterScrap(d20, 100, Levels.LevelTypes.All);
         }
     }
 }

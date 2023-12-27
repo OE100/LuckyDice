@@ -74,6 +74,7 @@
         <Compile Include="custom\events\prototype\IDiceEvent.cs" />
         <Compile Include="custom\events\prototype\MultiplierDiceEvent.cs" />
         <Compile Include="custom\items\dice\D20.cs" />
+        <Compile Include="custom\items\dice\D4.cs" />
         <Compile Include="custom\items\dice\DiceItem.cs" />
         <Compile Include="custom\network\Event.cs" />
         <Compile Include="custom\network\EventManager.cs" />

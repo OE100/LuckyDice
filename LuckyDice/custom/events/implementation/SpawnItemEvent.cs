@@ -14,7 +14,7 @@ namespace LuckyDice.custom.events.implementation
         public SpawnItemEvent(int stackValue = 70, int numberOfItems = 1)
         {
             this.stackValue = stackValue;
-            this.numberOfItems = this.numberOfItems;
+            this.numberOfItems = numberOfItems;
         }
         
         public override void AddPlayer(PlayerControllerB player)
