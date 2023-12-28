@@ -75,10 +75,15 @@ namespace LuckyDice.custom.network
         }
         
         [ClientRpc]
-        public void BleedPlayerClientRPC(NetworkObjectReference playerRef, bool bleed)
+        public void BleedPlayerClientRPC(NetworkObjectReference playerRef, bool bleed, int damage = 0)
         {
             if (playerRef.TryGet(out NetworkObject networkObject))
-                networkObject.GetComponentInChildren<PlayerControllerB>().bleedingHeavily = bleed;
+            {
+                PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
+                player.bleedingHeavily = bleed;
+                if (bleed)
+                    player.DamagePlayer(damageNumber: damage, hasDamageSFX: false);
+            }
         }
     }
 }

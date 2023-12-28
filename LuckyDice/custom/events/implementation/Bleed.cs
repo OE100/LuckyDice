@@ -62,8 +62,7 @@ namespace LuckyDice.custom.events.implementation
                             }
                             if (playersToMult[player] > 0)
                             {
-                                EventManager.Instance.BleedPlayerClientRPC(new NetworkObjectReference(player.GetComponentInParent<NetworkObject>()), true);
-                                player.DamagePlayer(damageNumber: playersToMult[player], hasDamageSFX: false);
+                                EventManager.Instance.BleedPlayerClientRPC(new NetworkObjectReference(player.GetComponentInParent<NetworkObject>()), true, playersToMult[player]);
                             }
                         }
                         playersToRemove.ForEach(RemovePlayer);

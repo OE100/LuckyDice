@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.network;
+using Unity.Netcode;
 
 namespace LuckyDice.custom.events.prototype
 {
@@ -16,7 +17,8 @@ namespace LuckyDice.custom.events.prototype
 
         public virtual void Run()
         {
-            if (!RoundManager.Instance.IsHost && !RoundManager.Instance.IsServer)
+            Plugin.Log.LogMessage($"IsHost: {NetworkManager.Singleton.IsHost}, IsServer: {NetworkManager.Singleton.IsServer}, condition: {!NetworkManager.Singleton.IsHost && !NetworkManager.Singleton.IsServer}");
+            if (!NetworkManager.Singleton.IsHost && !NetworkManager.Singleton.IsServer)
                 return;
             running = true;
             EventManager.Instance.StartCoroutine(EventCoroutine());
