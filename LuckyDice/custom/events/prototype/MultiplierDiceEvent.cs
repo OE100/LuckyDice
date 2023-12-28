@@ -14,13 +14,16 @@ namespace LuckyDice.custom.events.prototype
 
         public abstract void RemovePlayer(PlayerControllerB player);
 
-        public void Run()
+        public virtual void Run()
         {
-            running = true;
-            EventManager.Instance.StartCoroutine(EventCoroutine());
+            if (RoundManager.Instance.IsServer)
+            {
+                running = true;
+                EventManager.Instance.StartCoroutine(EventCoroutine());
+            }
         }
 
-        public void Stop()
+        public virtual void Stop()
         {
             running = false;
         }

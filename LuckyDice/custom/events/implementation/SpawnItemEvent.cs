@@ -16,7 +16,7 @@ namespace LuckyDice.custom.events.implementation
             this.stackValue = stackValue;
             this.numberOfItems = numberOfItems;
         }
-        
+
         public override void AddPlayer(PlayerControllerB player)
         {
             if (playersToMult.ContainsKey(player))

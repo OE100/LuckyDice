@@ -22,8 +22,11 @@ namespace LuckyDice.custom.events.prototype
 
         public void Run()
         {
-            running = true;
-            EventManager.Instance.StartCoroutine(EventCoroutine());
+            if (RoundManager.Instance.IsServer)
+            {
+                running = true;
+                EventManager.Instance.StartCoroutine(EventCoroutine());
+            }
         }
 
         public void Stop()

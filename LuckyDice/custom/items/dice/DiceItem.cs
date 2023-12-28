@@ -12,7 +12,6 @@ namespace LuckyDice.custom.items.dice
         
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
-            ItemActivateServerRPC(used, buttonDown);
             // if in ship phase or on company moon don't roll
             if (StartOfRound.Instance.inShipPhase || StartOfRound.Instance.currentLevelID == 3)
             {
@@ -20,6 +19,7 @@ namespace LuckyDice.custom.items.dice
             }
             // else activate item and despawn it
             base.ItemActivate(used, buttonDown);
+            ItemActivateServerRPC(used, buttonDown);
         }
 
         [ServerRpc(RequireOwnership = false)]
