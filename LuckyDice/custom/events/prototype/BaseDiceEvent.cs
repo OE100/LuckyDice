@@ -10,17 +10,17 @@ namespace LuckyDice.custom.events.prototype
         protected bool running = false;
         protected List<PlayerControllerB> players = new List<PlayerControllerB>();
         
-        public void AddPlayer(PlayerControllerB player)
+        public virtual void AddPlayer(PlayerControllerB player)
         {
             players.Add(player);
         }
 
-        public void RemovePlayer(PlayerControllerB player)
+        public virtual void RemovePlayer(PlayerControllerB player)
         {
             players.Remove(player);
         }
 
-        public void Run()
+        public virtual void Run()
         {
             if (RoundManager.Instance.IsServer)
             {
@@ -29,7 +29,7 @@ namespace LuckyDice.custom.events.prototype
             }
         }
 
-        public void Stop()
+        public virtual void Stop()
         {
             running = false;
         }

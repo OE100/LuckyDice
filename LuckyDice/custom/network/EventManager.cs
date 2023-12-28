@@ -15,6 +15,7 @@ namespace LuckyDice.custom.network
         public static EventManager Instance { get; private set; }
         private readonly IDiceEvent[] Events = {
             new Bleed(),
+            new RandomizeLocks(),
             new SpawnEnemyEvent(Enemies.SpringMan),
             new SpawnEnemyEvent(Enemies.Flowerman),
             new SpawnEnemyEvent(Enemies.MaskedPlayerEnemy),
@@ -83,6 +84,12 @@ namespace LuckyDice.custom.network
         {
             PlayerControllerB player = StartOfRound.Instance.allPlayerScripts.First(p => p.playerSteamId == steamId);
             Events[(int)e].RemovePlayer(player);
+        }
+        
+        [ClientRpc]
+        public void LockDoorClientRPC(DoorLock doorLock)
+        {
+            doorLock.LockDoor();
         }
     }
 }

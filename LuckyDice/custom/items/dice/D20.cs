@@ -13,6 +13,7 @@ namespace LuckyDice.custom.items.dice
             outcomes.Add(Event.SpawnMasked);
             outcomes.Add(Event.SpawnJester);
             outcomes.Add(Event.SpawnCentipede);
+            outcomes.Add(Event.RandomizeLocks);
             // todo: add more outcomes
         }
     }

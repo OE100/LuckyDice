@@ -6,6 +6,7 @@ namespace LuckyDice.custom.network
     public enum Event
     {
         Bleed = 0,
+        RandomizeLocks,
         SpawnCoilhead,
         SpawnFlowerman,
         SpawnMasked,
