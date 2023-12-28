@@ -22,7 +22,7 @@ namespace LuckyDice.custom.events.prototype
 
         public virtual void Run()
         {
-            if (RoundManager.Instance.IsHost)
+            if (RoundManager.Instance.IsHost || RoundManager.Instance.IsServer)
             {
                 running = true;
                 EventManager.Instance.StartCoroutine(EventCoroutine());

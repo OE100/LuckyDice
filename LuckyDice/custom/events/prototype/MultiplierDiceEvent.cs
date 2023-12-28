@@ -16,11 +16,10 @@ namespace LuckyDice.custom.events.prototype
 
         public virtual void Run()
         {
-            if (RoundManager.Instance.IsHost)
-            {
-                running = true;
-                EventManager.Instance.StartCoroutine(EventCoroutine());
-            }
+            if (!RoundManager.Instance.IsHost && !RoundManager.Instance.IsServer)
+                return;
+            running = true;
+            EventManager.Instance.StartCoroutine(EventCoroutine());
         }
 
         public virtual void Stop()

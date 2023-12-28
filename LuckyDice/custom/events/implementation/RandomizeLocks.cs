@@ -10,12 +10,16 @@ namespace LuckyDice.custom.events.implementation
 {
     public class RandomizeLocks : BaseDiceEvent
     {
-        public List<DoorLock> doors = new List<DoorLock>();
+        public static List<DoorLock> doors = new List<DoorLock>();
 
         public override void AddPlayer(PlayerControllerB player)
         {
-            base.AddPlayer(player);
-            player.StartCoroutine(EventCoroutine());
+            if (StartOfRound.Instance.IsHost || StartOfRound.Instance.IsServer)
+                player.StartCoroutine(EventCoroutine());
+        }
+
+        public override void Run()
+        {
         }
 
         public override IEnumerator EventCoroutine()
@@ -23,9 +27,14 @@ namespace LuckyDice.custom.events.implementation
             foreach (DoorLock door in doors)
             {
                 if (Random.Range(0, 2) == 0)
-                    EventManager.Instance.LockDoorClientRPC(new NetworkObjectReference(door.gameObject));
-                else
-                    door.UnlockDoorSyncWithServer();
+                {
+                    if (!door.isLocked)
+                        EventManager.Instance.LockDoorClientRPC(new NetworkObjectReference(door.gameObject));
+                }
+                else if (door.isLocked)
+                {
+                    EventManager.Instance.UnlockDoorClientRPC(new NetworkObjectReference(door.gameObject));
+                }
             }
 
             yield break;

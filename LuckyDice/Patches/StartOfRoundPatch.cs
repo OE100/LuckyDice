@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HarmonyLib;
+using LuckyDice.custom.events.implementation;
 
 namespace LuckyDice.Patches
 {
@@ -25,6 +26,12 @@ namespace LuckyDice.Patches
                     enemyWithRarities.Add(TerminalPatch.Enemies[enemy]);
                 }
             }
+        }
+
+        [HarmonyPatch("ShipLeave"), HarmonyPostfix]
+        private static void PatchShipLeave()
+        {
+            RandomizeLocks.doors.Clear();
         }
     }
 }

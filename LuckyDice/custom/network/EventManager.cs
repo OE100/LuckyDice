@@ -37,37 +37,7 @@ namespace LuckyDice.custom.network
         }
         
         [ServerRpc(RequireOwnership = false)]
-        public void StartEventServerRPC(Event e)
-        {
-            StartEventClientRPC(e);
-        }
-        
-        [ClientRpc]
-        public void StartEventClientRPC(Event e)
-        {
-            Events[(int)e].Run();
-        }
-        
-        [ServerRpc(RequireOwnership = false)]
-        public void StopEventServerRPC(Event e)
-        {
-            StopEventClientRPC(e);
-        }
-        
-        [ClientRpc]
-        public void StopEventClientRPC(Event e)
-        {
-            Events[(int)e].Stop();
-        }
-        
-        [ServerRpc(RequireOwnership = false)]
         public void AddPlayerToEventServerRPC(Event e, NetworkObjectReference playerRef)
-        {
-            AddPlayerToEventClientRPC(e, playerRef);
-        }
-        
-        [ClientRpc]
-        public void AddPlayerToEventClientRPC(Event e, NetworkObjectReference playerRef)
         {
             if (playerRef.TryGet(out NetworkObject networkObject))
                 Events[(int)e].AddPlayer(networkObject.GetComponent<PlayerControllerB>());
@@ -76,12 +46,6 @@ namespace LuckyDice.custom.network
         [ServerRpc(RequireOwnership = false)]
         public void RemovePlayerFromEventServerRPC(Event e, NetworkObjectReference playerRef)
         {
-            RemovePlayerFromEventClientRPC(e, playerRef);
-        }
-        
-        [ClientRpc]
-        public void RemovePlayerFromEventClientRPC(Event e, NetworkObjectReference playerRef)
-        {
             if (playerRef.TryGet(out NetworkObject networkObject))
                 Events[(int)e].RemovePlayer(networkObject.GetComponent<PlayerControllerB>());
         }
@@ -89,8 +53,29 @@ namespace LuckyDice.custom.network
         [ClientRpc]
         public void LockDoorClientRPC(NetworkObjectReference doorLockRef)
         {
+            Plugin.Log.LogMessage($"Trying to lock door");
             if (doorLockRef.TryGet(out NetworkObject networkObject))
-                networkObject.GetComponent<DoorLock>().LockDoor();
+            {
+                DoorLock doorLock = networkObject.GetComponent<DoorLock>();
+                bool original = doorLock.isLocked;
+                doorLock.LockDoor();
+                doorLock.doorLockSFX.PlayOneShot(doorLock.unlockSFX);
+                Plugin.Log.LogMessage($"Door locked: {original} -> {doorLock.isLocked}");
+            }
+        }
+        
+        [ClientRpc]
+        public void UnlockDoorClientRPC(NetworkObjectReference doorLockRef)
+        {
+            Plugin.Log.LogMessage($"Trying to unlock door");
+            if (doorLockRef.TryGet(out NetworkObject networkObject))
+            {
+                DoorLock doorLock = networkObject.GetComponent<DoorLock>();
+                bool original = !doorLock.isLocked;
+                doorLock.UnlockDoor();
+                doorLock.doorLockSFX.PlayOneShot(doorLock.unlockSFX);
+                Plugin.Log.LogMessage($"Door unlocked: {original} -> {!doorLock.isLocked}");
+            }
         }
         
         [ClientRpc]
