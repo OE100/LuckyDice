@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events.prototype;
 using LuckyDice.custom.network;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace LuckyDice.custom.events.implementation
@@ -48,7 +49,7 @@ namespace LuckyDice.custom.events.implementation
                     {
                         foreach (PlayerControllerB player in playersToMult.Keys)
                         {
-                            EventManager.Instance.BleedPlayerClientRPC(player.playerSteamId, false);
+                            EventManager.Instance.BleedPlayerClientRPC(new NetworkObjectReference(player.gameObject), false);
                         }
                     }
                     else
@@ -61,7 +62,7 @@ namespace LuckyDice.custom.events.implementation
                             }
                             if (playersToMult[player] > 0)
                             {
-                                EventManager.Instance.BleedPlayerClientRPC(player.playerSteamId, true);
+                                EventManager.Instance.BleedPlayerClientRPC(new NetworkObjectReference(player.gameObject), true);
                                 player.DamagePlayer(damageNumber: playersToMult[player], hasDamageSFX: false);
                             }
                         }

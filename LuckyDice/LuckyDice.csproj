@@ -79,7 +79,6 @@
         <Compile Include="custom\items\dice\DiceItem.cs" />
         <Compile Include="custom\network\Event.cs" />
         <Compile Include="custom\network\EventManager.cs" />
-        <Compile Include="Patches\DoorLockPatch.cs" />
         <Compile Include="Patches\Enemies.cs" />
         <Compile Include="Patches\NetworkStuffPatch.cs" />
         <Compile Include="Patches\StartOfRoundPatch.cs" />

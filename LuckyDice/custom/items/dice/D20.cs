@@ -7,12 +7,6 @@ namespace LuckyDice.custom.items.dice
         public override void Start()
         {
             base.Start();
-            outcomes.Add(Event.Bleed);
-            outcomes.Add(Event.SpawnCoilhead);
-            outcomes.Add(Event.SpawnFlowerman);
-            outcomes.Add(Event.SpawnMasked);
-            outcomes.Add(Event.SpawnJester);
-            outcomes.Add(Event.SpawnCentipede);
             outcomes.Add(Event.RandomizeLocks);
             // todo: add more outcomes
         }

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events.prototype;
 using LuckyDice.custom.network;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace LuckyDice.custom.events.implementation
 {
     public class RandomizeLocks : BaseDiceEvent
     {
-        public static Dictionary<ulong, DoorLock> DoorLocks = new Dictionary<ulong, DoorLock>();
+        public List<DoorLock> doors = new List<DoorLock>();
 
         public override void AddPlayer(PlayerControllerB player)
         {
@@ -19,12 +20,12 @@ namespace LuckyDice.custom.events.implementation
 
         public override IEnumerator EventCoroutine()
         {
-            foreach (KeyValuePair<ulong,DoorLock> pair in DoorLocks)
+            foreach (DoorLock door in doors)
             {
                 if (Random.Range(0, 2) == 0)
-                    EventManager.Instance.LockDoorClientRPC(pair.Key);
+                    EventManager.Instance.LockDoorClientRPC(new NetworkObjectReference(door.gameObject));
                 else
-                    pair.Value.UnlockDoorSyncWithServer();
+                    door.UnlockDoorSyncWithServer();
             }
 
             yield break;

@@ -61,42 +61,43 @@ namespace LuckyDice.custom.network
         }
         
         [ServerRpc(RequireOwnership = false)]
-        public void AddPlayerToEventServerRPC(Event e, ulong steamId)
+        public void AddPlayerToEventServerRPC(Event e, NetworkObjectReference playerRef)
         {
-            AddPlayerToEventClientRPC(e, steamId);
+            AddPlayerToEventClientRPC(e, playerRef);
         }
         
         [ClientRpc]
-        public void AddPlayerToEventClientRPC(Event e, ulong steamId)
+        public void AddPlayerToEventClientRPC(Event e, NetworkObjectReference playerRef)
         {
-            PlayerControllerB player = StartOfRound.Instance.allPlayerScripts.First(p => p.playerSteamId == steamId);
-            Events[(int)e].AddPlayer(player);
+            if (playerRef.TryGet(out NetworkObject networkObject))
+                Events[(int)e].AddPlayer(networkObject.GetComponent<PlayerControllerB>());
         }
         
         [ServerRpc(RequireOwnership = false)]
-        public void RemovePlayerFromEventServerRPC(Event e, ulong steamId)
+        public void RemovePlayerFromEventServerRPC(Event e, NetworkObjectReference playerRef)
         {
-            RemovePlayerFromEventClientRPC(e, steamId);
+            RemovePlayerFromEventClientRPC(e, playerRef);
         }
         
         [ClientRpc]
-        public void RemovePlayerFromEventClientRPC(Event e, ulong steamId)
+        public void RemovePlayerFromEventClientRPC(Event e, NetworkObjectReference playerRef)
         {
-            PlayerControllerB player = StartOfRound.Instance.allPlayerScripts.First(p => p.playerSteamId == steamId);
-            Events[(int)e].RemovePlayer(player);
+            if (playerRef.TryGet(out NetworkObject networkObject))
+                Events[(int)e].RemovePlayer(networkObject.GetComponent<PlayerControllerB>());
         }
         
         [ClientRpc]
-        public void LockDoorClientRPC(ulong networkId)
+        public void LockDoorClientRPC(NetworkObjectReference doorLockRef)
         {
-            RandomizeLocks.DoorLocks[networkId].LockDoor();
+            if (doorLockRef.TryGet(out NetworkObject networkObject))
+                networkObject.GetComponent<DoorLock>().LockDoor();
         }
         
         [ClientRpc]
-        public void BleedPlayerClientRPC(ulong steamId, bool bleed)
+        public void BleedPlayerClientRPC(NetworkObjectReference playerRef, bool bleed)
         {
-            PlayerControllerB player = StartOfRound.Instance.allPlayerScripts.First(p => p.playerSteamId == steamId);
-            player.bleedingHeavily = bleed;
+            if (playerRef.TryGet(out NetworkObject networkObject))
+                networkObject.GetComponent<PlayerControllerB>().bleedingHeavily = bleed;
         }
     }
 }

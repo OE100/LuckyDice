@@ -8,7 +8,6 @@ namespace LuckyDice.custom.items.dice
         {
             base.Start();
             outcomes.Add(Event.Bleed);
-            //outcomes.Add(Event.SpawnCentipede);
             // todo: add more outcomes
         }
     }
