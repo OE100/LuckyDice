@@ -87,9 +87,16 @@ namespace LuckyDice.custom.network
         }
         
         [ClientRpc]
-        public void LockDoorClientRPC(DoorLock doorLock)
+        public void LockDoorClientRPC(ulong networkId)
         {
-            doorLock.LockDoor();
+            RandomizeLocks.DoorLocks[networkId].LockDoor();
+        }
+        
+        [ClientRpc]
+        public void BleedPlayerClientRPC(ulong steamId, bool bleed)
+        {
+            PlayerControllerB player = StartOfRound.Instance.allPlayerScripts.First(p => p.playerSteamId == steamId);
+            player.bleedingHeavily = bleed;
         }
     }
 }

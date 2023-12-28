@@ -9,25 +9,22 @@ namespace LuckyDice.custom.events.implementation
 {
     public class RandomizeLocks : BaseDiceEvent
     {
-        public static List<DoorLock> DoorLocks = new List<DoorLock>();
+        public static Dictionary<ulong, DoorLock> DoorLocks = new Dictionary<ulong, DoorLock>();
 
         public override void AddPlayer(PlayerControllerB player)
         {
-            if (RoundManager.Instance.IsServer)
-            {
-                base.AddPlayer(player);
-                player.StartCoroutine(EventCoroutine());
-            }
+            base.AddPlayer(player);
+            player.StartCoroutine(EventCoroutine());
         }
 
         public override IEnumerator EventCoroutine()
         {
-            foreach (DoorLock doorLock in DoorLocks)
+            foreach (KeyValuePair<ulong,DoorLock> pair in DoorLocks)
             {
                 if (Random.Range(0, 2) == 0)
-                    EventManager.Instance.LockDoorClientRPC(doorLock);
+                    EventManager.Instance.LockDoorClientRPC(pair.Key);
                 else
-                    doorLock.UnlockDoorSyncWithServer();
+                    pair.Value.UnlockDoorSyncWithServer();
             }
 
             yield break;
