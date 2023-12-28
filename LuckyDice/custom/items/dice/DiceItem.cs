@@ -42,7 +42,7 @@ namespace LuckyDice.custom.items.dice
         [ServerRpc(RequireOwnership = false)]
         private void TriggerEventServerRPC(int side)
         {
-            EventManager.Instance.AddPlayerToEventServerRPC(outcomes[side], new NetworkObjectReference(playerHeldBy.gameObject));
+            EventManager.Instance.AddPlayerToEventServerRPC(outcomes[side], new NetworkObjectReference(playerHeldBy.GetComponentInParent<NetworkObject>()));
             TriggerEventClientRPC(side);
         }
         

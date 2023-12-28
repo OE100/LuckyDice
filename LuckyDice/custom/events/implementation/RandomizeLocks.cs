@@ -29,11 +29,11 @@ namespace LuckyDice.custom.events.implementation
                 if (Random.Range(0, 2) == 0)
                 {
                     if (!door.isLocked)
-                        EventManager.Instance.LockDoorClientRPC(new NetworkObjectReference(door.gameObject));
+                        EventManager.Instance.LockDoorClientRPC(new NetworkObjectReference(door.GetComponentInParent<NetworkObject>()));
                 }
                 else if (door.isLocked)
                 {
-                    EventManager.Instance.UnlockDoorClientRPC(new NetworkObjectReference(door.gameObject));
+                    EventManager.Instance.UnlockDoorClientRPC(new NetworkObjectReference(door.GetComponentInParent<NetworkObject>()));
                 }
             }
 
