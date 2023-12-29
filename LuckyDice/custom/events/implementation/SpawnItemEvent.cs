@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using GameNetcodeStuff;
 using LuckyDice.custom.events.prototype;
+using LuckyDice.custom.network;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace LuckyDice.custom.events.implementation
@@ -10,11 +13,13 @@ namespace LuckyDice.custom.events.implementation
     {
         private int stackValue;
         private int numberOfItems;
+        private int itemId;
         
-        public SpawnItemEvent(int stackValue = 70, int numberOfItems = 1)
+        public SpawnItemEvent(int stackValue = 70, int numberOfItems = 1, int itemId = -1)
         {
             this.stackValue = stackValue;
             this.numberOfItems = numberOfItems;
+            this.itemId = itemId;
         }
 
         public override void AddPlayer(PlayerControllerB player)
@@ -27,6 +32,8 @@ namespace LuckyDice.custom.events.implementation
             {
                 playersToMult.Add(player, 1);
             }
+
+            player.StartCoroutine(EventCoroutine());
         }
 
         public override void RemovePlayer(PlayerControllerB player)
@@ -43,37 +50,21 @@ namespace LuckyDice.custom.events.implementation
         public override IEnumerator EventCoroutine()
         {
             List<PlayerControllerB> playersToRemove = new List<PlayerControllerB>();
-            while (running)
+            foreach (var item in playersToMult)
             {
-                if (playersToMult.Count > 0)
+                if (item.Value > 0 && item.Key.isInsideFactory && !item.Key.isPlayerDead)
                 {
-                    if (IsPhaseForbidden())
-                    {
-                        yield return new WaitForSeconds(10);
-                    }
-                    else
-                    {
-                        foreach (var item in playersToMult)
-                        {
-                            if (item.Value > 0 && item.Key.isInsideFactory && !item.Key.isPlayerDead)
-                            {
-                                // todo: spawn items of stackValue split between numberOfItems items
-                            }
-                        }
-
-                        playersToRemove.ForEach(RemovePlayer);
-                    }
+                    EventManager.Instance.SpawnScrapOnPlayer(
+                        item.Key, 
+                        numberOfItems: numberOfItems,
+                        stackValue: stackValue,
+                        itemId: itemId
+                        );
                 }
-
-                yield return new WaitForSeconds(5);
             }
-        }
-        
-        private void SpawnScrapOnPlayer(PlayerControllerB player)
-        {
-            Vector3 position = player.transform.position + (Vector3)(Random.insideUnitCircle * 5);
-            float rotation = player.transform.rotation.y;
-            // todo: finish implementing this
+
+            playersToRemove.ForEach(RemovePlayer);
+            yield break;
         }
     }
 }

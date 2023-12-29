@@ -1,8 +1,11 @@
-﻿using GameNetcodeStuff;
+﻿using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
+using GameNetcodeStuff;
 using LuckyDice.custom.events.implementation;
 using LuckyDice.custom.events.prototype;
 using LuckyDice.Patches;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace LuckyDice.custom.network
 {
@@ -17,6 +20,10 @@ namespace LuckyDice.custom.network
             new SpawnEnemyEvent(Enemies.MaskedPlayerEnemy),
             new SpawnEnemyEvent(Enemies.Jester),
             new SpawnEnemyEvent(Enemies.Centipede, amountPerStack: 4),
+            new SpawnItemEvent(stackValue: 50, numberOfItems: 2, itemId: 25), // clown horn
+            new SpawnItemEvent(stackValue: 200, numberOfItems: 1, itemId: 36), // gold bar
+            new SpawnItemEvent(stackValue: 50, numberOfItems: 10, itemId: 44), // pickle jar
+            new SpawnItemForAllEvent(stackValue: 100, numberOfItems: 1, itemId: 36) // gold bar for all
         };
         
         public override void OnNetworkSpawn()
@@ -83,6 +90,30 @@ namespace LuckyDice.custom.network
                 player.bleedingHeavily = bleed;
                 if (bleed)
                     player.DamagePlayer(damageNumber: damage, hasDamageSFX: false);
+            }
+        }
+        
+        [ServerRpc]
+        public void SpawnScrapOnPlayer(PlayerControllerB player, int numberOfItems, int stackValue, int itemId)
+        {
+            List<Item> itemsList = StartOfRound.Instance.allItemsList.itemsList;
+            Transform transform = player.transform;
+            for (int i = 0; i < numberOfItems; i++)
+            {
+                Item itemToSpawn = itemId == -1 ? itemsList[Random.Range(0, itemsList.Count)] : itemsList[itemId];
+                Vector3 position = transform.position + (Vector3)(Random.insideUnitCircle * 15);
+                GameObject gameObject = Object.Instantiate(
+                    itemToSpawn.spawnPrefab, 
+                    position, 
+                    Random.rotation
+                );
+                gameObject.AddComponent<ScanNodeProperties>().scrapValue = stackValue;
+                GrabbableObject component = gameObject.GetComponent<GrabbableObject>();
+                component.FallToGround();
+                component.SetScrapValue(stackValue);
+                gameObject.GetComponent<NetworkObject>().Spawn();
+
+                Plugin.Log.LogMessage($"Spawned scrap: {itemToSpawn.itemName}, with value: {stackValue}, on player: {player.playerUsername}, at position: {position}");
             }
         }
     }

@@ -11,6 +11,10 @@ namespace LuckyDice.custom.network
         SpawnFlowerman,
         SpawnMasked,
         SpawnJester,
-        SpawnCentipede
+        SpawnCentipede,
+        SpawnClownHorn,
+        SpawnGoldBar,
+        SpawnPickleJar,
+        SpawnGoldBarForAll
     }
 }

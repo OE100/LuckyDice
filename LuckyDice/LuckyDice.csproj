@@ -71,6 +71,7 @@
         <Compile Include="custom\events\implementation\RandomizeLocks.cs" />
         <Compile Include="custom\events\implementation\SpawnEnemyEvent.cs" />
         <Compile Include="custom\events\implementation\SpawnItemEvent.cs" />
+        <Compile Include="custom\events\implementation\SpawnItemForAllEvent.cs" />
         <Compile Include="custom\events\prototype\BaseDiceEvent.cs" />
         <Compile Include="custom\events\prototype\IDiceEvent.cs" />
         <Compile Include="custom\events\prototype\MultiplierDiceEvent.cs" />

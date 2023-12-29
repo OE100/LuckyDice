@@ -64,7 +64,7 @@ namespace LuckyDice.custom.events.implementation
                                     for (int i = 0; i < amountPerStack; i++)
                                     {
                                         Vector3 spawnPos = item.Key.transform.position +
-                                                           (Vector3)(Random.insideUnitCircle * 20);
+                                                           (Vector3)(Random.insideUnitCircle * 35);
                                         float spawnRot = item.Key.transform.rotation.y;
                                         RoundManager.Instance.SpawnEnemyOnServer(spawnPos, spawnRot, spawnIndex);
                                     }

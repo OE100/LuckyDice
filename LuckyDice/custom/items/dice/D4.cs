@@ -7,7 +7,7 @@ namespace LuckyDice.custom.items.dice
         public override void Start()
         {
             base.Start();
-            outcomes.Add(Event.Bleed);
+            outcomes.Add(Event.SpawnGoldBar);
             // todo: add more outcomes
         }
     }
