@@ -28,6 +28,11 @@ namespace LuckyDice.custom.events.implementation
 
         public override IEnumerator EventCoroutine()
         {
+            EventManager.Instance.DisplayMessageClientRPC(
+                new NetworkObjectReference(),
+                "The locks... they are changing!",
+                "Hope you brought a lock pick!"
+                );
             foreach (DoorLock door in doors)
             {
                 if (Random.Range(0, 2) == 0)

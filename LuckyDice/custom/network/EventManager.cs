@@ -42,6 +42,19 @@ namespace LuckyDice.custom.network
                 e.Run();
             }
         }
+
+        [ClientRpc]
+        public void DisplayMessageClientRPC(NetworkObjectReference playerRef, string header, string body)
+        {
+            if (playerRef.TryGet(out NetworkObject networkObject))
+            {
+                PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
+                if (player == StartOfRound.Instance.localPlayerController)
+                    HUDManager.Instance.DisplayTip(headerText: header, bodyText: body);
+                return;
+            }
+            HUDManager.Instance.DisplayTip(headerText: header, bodyText: body);
+        }
         
         [ServerRpc(RequireOwnership = false)]
         public void AddPlayerToEventServerRPC(Event e, NetworkObjectReference playerRef)
@@ -127,15 +140,31 @@ namespace LuckyDice.custom.network
         }
 
         [ClientRpc]
+        public void PlayJihadSoundFromPlayerClientRPC(NetworkObjectReference playerRef)
+        {
+            if (playerRef.TryGet(out NetworkObject networkObject))
+            {
+                PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
+                player.voiceMuffledByEnemy = true;
+                player.currentVoiceChatAudioSource.PlayOneShot(HolyJihad.beepClip, 1f);
+                WalkieTalkie.TransmitOneShotAudio(player.currentVoiceChatAudioSource, HolyJihad.beepClip);
+            }
+        }
+        
+        [ClientRpc]
         public void SpawnExplosionOnPlayerClientRPC(NetworkObjectReference playerRef)
         {
             if (playerRef.TryGet(out NetworkObject networkObject))
+            {
+                PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
+                player.currentVoiceChatAudioSource.PlayOneShot(HolyJihad.jihadClip);
+                WalkieTalkie.TransmitOneShotAudio(player.currentVoiceChatAudioSource, HolyJihad.jihadClip);
                 Landmine.SpawnExplosion(
-                    networkObject.GetComponentInChildren<PlayerControllerB>().transform.position, 
-                    killRange: 10f, 
+                    player.transform.position,
+                    killRange: 10f,
                     damageRange: 14f
-                    );
-            
+                );
+            }
         }
     }
 }

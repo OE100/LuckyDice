@@ -22,6 +22,11 @@ namespace LuckyDice.custom.events.implementation
             }
             else
             {
+                EventManager.Instance.DisplayMessageClientRPC(
+                    new NetworkObjectReference(player.GetComponentInParent<NetworkObject>()), 
+                    "Unlucky roll!", 
+                    "Your tongue begins to bleed..."
+                    );
                 playersToMult.Add(player, 1);
             }
         }

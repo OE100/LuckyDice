@@ -69,10 +69,10 @@ namespace LuckyDice
         
         private void RegisterItems()
         {
-            Item d20 = ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d20/D20.asset");
-            Items.RegisterScrap(d20, 100, Levels.LevelTypes.All);
             Item d4 = ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d4/D4.asset");
-            Items.RegisterScrap(d4, 100, Levels.LevelTypes.All);
+            Items.RegisterScrap(d4, 50, Levels.LevelTypes.All);
+            Item d20 = ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d20/D20.asset");
+            Items.RegisterScrap(d20, 15, Levels.LevelTypes.All);
         }
     }
 }

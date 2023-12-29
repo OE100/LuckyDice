@@ -21,8 +21,8 @@ namespace LuckyDice.Patches
                 return;
             
             networkPrefabs.Add(Plugin.ab.LoadAsset<GameObject>("EventManagerObject.prefab"));
-            networkPrefabs.Add(Plugin.ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d20/D20.asset").spawnPrefab);
             networkPrefabs.Add(Plugin.ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d4/D4.asset").spawnPrefab);
+            networkPrefabs.Add(Plugin.ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d20/D20.asset").spawnPrefab);
             
             foreach (GameObject networkPrefab in networkPrefabs)
                 NetworkManager.Singleton.AddNetworkPrefab(networkPrefab);
