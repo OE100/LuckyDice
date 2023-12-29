@@ -93,7 +93,7 @@ namespace LuckyDice.custom.network
             }
         }
         
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         public void SpawnScrapOnPlayer(PlayerControllerB player, int numberOfItems, int stackValue, int itemId)
         {
             List<Item> itemsList = StartOfRound.Instance.allItemsList.itemsList;
@@ -101,15 +101,19 @@ namespace LuckyDice.custom.network
             for (int i = 0; i < numberOfItems; i++)
             {
                 Item itemToSpawn = itemId == -1 ? itemsList[Random.Range(0, itemsList.Count)] : itemsList[itemId];
-                Vector3 position = transform.position + (Vector3)(Random.insideUnitCircle * 15);
-                GameObject gameObject = Object.Instantiate(
+                Vector2 randomVect2 = Random.insideUnitCircle * 15;
+                Vector3 position = transform.position + new Vector3(randomVect2.x, 0, randomVect2.y);
+                if (Physics.Raycast(position, Vector3.down, out RaycastHit hit, 20))
+                    position = hit.point;
+                    
+                
+                GameObject gameObject = Instantiate(
                     itemToSpawn.spawnPrefab, 
                     position, 
                     Random.rotation
                 );
                 gameObject.AddComponent<ScanNodeProperties>().scrapValue = stackValue;
                 GrabbableObject component = gameObject.GetComponent<GrabbableObject>();
-                component.FallToGround();
                 component.SetScrapValue(stackValue);
                 gameObject.GetComponent<NetworkObject>().Spawn();
 

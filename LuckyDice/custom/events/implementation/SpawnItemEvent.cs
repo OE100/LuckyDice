@@ -24,6 +24,9 @@ namespace LuckyDice.custom.events.implementation
 
         public override void AddPlayer(PlayerControllerB player)
         {
+            if (!NetworkManager.Singleton.IsHost && !NetworkManager.Singleton.IsServer)
+                return;
+            
             if (playersToMult.ContainsKey(player))
             {
                 playersToMult[player]++;
@@ -32,7 +35,7 @@ namespace LuckyDice.custom.events.implementation
             {
                 playersToMult.Add(player, 1);
             }
-
+            
             player.StartCoroutine(EventCoroutine());
         }
 
