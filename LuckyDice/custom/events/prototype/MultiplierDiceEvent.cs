@@ -34,7 +34,7 @@ namespace LuckyDice.custom.events.prototype
         }
 
         public abstract IEnumerator EventCoroutine();
-        
+
         protected static bool IsPhaseForbidden()
         {
             return StartOfRound.Instance.inShipPhase || StartOfRound.Instance.currentLevelID == 3;

@@ -59,8 +59,8 @@ namespace LuckyDice.custom.events.implementation
             {
                 if (item.Value > 0 && item.Key.isInsideFactory && !item.Key.isPlayerDead)
                 {
-                    EventManager.Instance.SpawnScrapOnPlayer(
-                        item.Key, 
+                    EventManager.Instance.SpawnScrapOnPlayerServerRPC(
+                        new NetworkObjectReference(item.Key.GetComponentInParent<NetworkObject>()), 
                         numberOfItems: numberOfItems,
                         stackValue: stackValue,
                         itemId: itemId

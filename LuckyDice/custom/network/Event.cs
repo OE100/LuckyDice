@@ -19,6 +19,7 @@ namespace LuckyDice.custom.network
         SpawnClownHorn,
         SpawnGoldBar,
         SpawnPickleJar,
-        SpawnGoldBarForAll
+        SpawnGoldBarForAll,
+        HolyJihad
     }
 }

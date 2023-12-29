@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using LuckyDice.custom.network;
 using Unity.Netcode;
+using UnityEngine;
 using Random = UnityEngine.Random;
 using Event = LuckyDice.custom.network.Event;
 
@@ -12,7 +13,20 @@ namespace LuckyDice.custom.items.dice
 {
     public class DiceItem : GrabbableObject
     {
+        internal static AudioClip rollSound = null;
         protected List<Event> outcomes = new List<Event>();
+        protected AudioSource audioSource;
+
+        public override void Start()
+        {
+            base.Start();
+            audioSource = GetComponent<AudioSource>();
+            if (rollSound == null)
+                rollSound = Plugin.ab.LoadAsset<AudioClip>("Assets/custom/luckydice/sounds/rolling_dice.mp3");
+            audioSource.clip = rollSound;
+        }
+
+        
         
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
@@ -53,6 +67,7 @@ namespace LuckyDice.custom.items.dice
         [ClientRpc]
         private void TriggerEventClientRPC(int side)
         {
+            audioSource.Play();
             TriggerEvent(side);
         }
         

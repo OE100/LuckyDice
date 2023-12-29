@@ -26,7 +26,8 @@ namespace LuckyDice.custom.network
             new SpawnItemEvent(stackValue: 50, numberOfItems: 2, itemId: 25), // clown horn
             new SpawnItemEvent(stackValue: 200, numberOfItems: 1, itemId: 36), // gold bar
             new SpawnItemEvent(stackValue: 50, numberOfItems: 10, itemId: 44), // pickle jar
-            new SpawnItemForAllEvent(stackValue: 100, numberOfItems: 1, itemId: 36) // gold bar for all
+            new SpawnItemForAllEvent(stackValue: 100, numberOfItems: 1, itemId: 36), // gold bar for all
+            new HolyJihad()
         };
         
         public override void OnNetworkSpawn()
@@ -97,31 +98,44 @@ namespace LuckyDice.custom.network
         }
         
         [ServerRpc(RequireOwnership = false)]
-        public void SpawnScrapOnPlayer(PlayerControllerB player, int numberOfItems, int stackValue, int itemId)
+        public void SpawnScrapOnPlayerServerRPC(NetworkObjectReference playerRef, int numberOfItems, int stackValue, int itemId)
         {
-            List<Item> itemsList = StartOfRound.Instance.allItemsList.itemsList;
-            Transform transform = player.transform;
-            for (int i = 0; i < numberOfItems; i++)
+            if (playerRef.TryGet(out NetworkObject networkObject))
             {
-                Item itemToSpawn = itemId == -1 ? itemsList[Random.Range(0, itemsList.Count)] : itemsList[itemId];
-                Vector2 randomVect2 = Random.insideUnitCircle * 15;
-                Vector3 position = transform.position + new Vector3(randomVect2.x, 0, randomVect2.y);
-                if (Physics.Raycast(position, Vector3.down, out RaycastHit hit, 20))
-                    position = hit.point;
-                    
+                PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
+                List<Item> itemsList = StartOfRound.Instance.allItemsList.itemsList;
+                Transform transform = player.transform;
+                for (int i = 0; i < numberOfItems; i++)
+                {
+                    Item itemToSpawn = itemId == -1 ? itemsList[Random.Range(0, itemsList.Count)] : itemsList[itemId];
+                    Vector2 randomVect2 = Random.insideUnitCircle * 5;
+                    Vector3 position = transform.position + new Vector3(randomVect2.x, 0, randomVect2.y);
                 
-                GameObject gameObject = Instantiate(
-                    itemToSpawn.spawnPrefab, 
-                    position, 
-                    Random.rotation
-                );
-                gameObject.AddComponent<ScanNodeProperties>().scrapValue = stackValue;
-                GrabbableObject component = gameObject.GetComponent<GrabbableObject>();
-                component.SetScrapValue(stackValue);
-                gameObject.GetComponent<NetworkObject>().Spawn();
+                    GameObject gameObject = Instantiate(
+                        itemToSpawn.spawnPrefab, 
+                        position, 
+                        Random.rotation
+                    );
+                    gameObject.AddComponent<ScanNodeProperties>().scrapValue = stackValue;
+                    GrabbableObject component = gameObject.GetComponent<GrabbableObject>();
+                    component.SetScrapValue(stackValue);
+                    gameObject.GetComponent<NetworkObject>().Spawn();
 
-                Plugin.Log.LogMessage($"Spawned scrap: {itemToSpawn.itemName}, with value: {stackValue}, on player: {player.playerUsername}, at position: {position}");
+                    Plugin.Log.LogMessage($"Spawned scrap: {itemToSpawn.itemName}, with value: {stackValue}, on player: {player.playerUsername}, at position: {position}");
+                }
             }
+        }
+
+        [ClientRpc]
+        public void SpawnExplosionOnPlayerClientRPC(NetworkObjectReference playerRef)
+        {
+            if (playerRef.TryGet(out NetworkObject networkObject))
+                Landmine.SpawnExplosion(
+                    networkObject.GetComponentInChildren<PlayerControllerB>().transform.position, 
+                    killRange: 10f, 
+                    damageRange: 14f
+                    );
+            
         }
     }
 }
