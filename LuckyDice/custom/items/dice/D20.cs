@@ -1,4 +1,8 @@
-﻿using LuckyDice.custom.network;
+﻿#region
+
+using LuckyDice.custom.network;
+
+#endregion
 
 namespace LuckyDice.custom.items.dice
 {

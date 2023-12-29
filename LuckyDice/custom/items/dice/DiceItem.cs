@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using LuckyDice.custom.network;
 using Unity.Netcode;
 using Random = UnityEngine.Random;
 using Event = LuckyDice.custom.network.Event;
+
+#endregion
 
 namespace LuckyDice.custom.items.dice
 {

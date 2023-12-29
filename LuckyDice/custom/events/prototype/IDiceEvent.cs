@@ -1,5 +1,9 @@
-﻿using System.Collections;
+﻿#region
+
+using System.Collections;
 using GameNetcodeStuff;
+
+#endregion
 
 namespace LuckyDice.custom.events.prototype
 {

@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
 using System.Collections.Generic;
 using HarmonyLib;
 using LuckyDice.custom.events.implementation;
+using UnityEngine;
+
+#endregion
 
 namespace LuckyDice.Patches
 {
@@ -15,7 +19,7 @@ namespace LuckyDice.Patches
         {
             if (terminal == null)
             {
-                terminal = UnityEngine.Object.FindObjectOfType<Terminal>();
+                terminal = Object.FindObjectOfType<Terminal>();
             }
 
             List<SpawnableEnemyWithRarity> enemyWithRarities = terminal.moonsCatalogueList[levelID].Enemies;

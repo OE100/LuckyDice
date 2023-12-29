@@ -1,11 +1,13 @@
-﻿using System.Reflection;
+﻿#region
+
+using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using LethalLib.Modules;
-using LuckyDice.custom.network;
-using Unity.Netcode;
 using UnityEngine;
+
+#endregion
 
 namespace LuckyDice
 {
@@ -68,9 +70,9 @@ namespace LuckyDice
         private void RegisterItems()
         {
             Item d20 = ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d20/D20.asset");
-            LethalLib.Modules.Items.RegisterScrap(d20, 100, Levels.LevelTypes.All);
+            Items.RegisterScrap(d20, 100, Levels.LevelTypes.All);
             Item d4 = ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d4/D4.asset");
-            LethalLib.Modules.Items.RegisterScrap(d4, 100, Levels.LevelTypes.All);
+            Items.RegisterScrap(d4, 100, Levels.LevelTypes.All);
         }
     }
 }

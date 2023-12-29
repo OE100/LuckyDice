@@ -1,4 +1,8 @@
-﻿using GameNetcodeStuff;
+﻿#region
+
+using GameNetcodeStuff;
+
+#endregion
 
 namespace LuckyDice.custom.events.implementation
 {

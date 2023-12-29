@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using HarmonyLib;
-using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
+
+#endregion
 
 namespace LuckyDice.Patches
 {

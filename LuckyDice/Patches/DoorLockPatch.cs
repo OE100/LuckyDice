@@ -1,5 +1,9 @@
-﻿using HarmonyLib;
+﻿#region
+
+using HarmonyLib;
 using LuckyDice.custom.events.implementation;
+
+#endregion
 
 namespace LuckyDice.Patches
 {

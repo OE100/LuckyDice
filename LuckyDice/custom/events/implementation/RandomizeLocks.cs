@@ -1,10 +1,14 @@
-﻿using System.Collections;
+﻿#region
+
+using System.Collections;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events.prototype;
 using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
+
+#endregion
 
 namespace LuckyDice.custom.events.implementation
 {

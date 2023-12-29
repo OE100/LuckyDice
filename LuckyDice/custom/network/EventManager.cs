@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
+﻿#region
+
+using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events.implementation;
 using LuckyDice.custom.events.prototype;
 using LuckyDice.Patches;
 using Unity.Netcode;
 using UnityEngine;
+
+#endregion
 
 namespace LuckyDice.custom.network
 {

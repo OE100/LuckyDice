@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using HarmonyLib;
-using LuckyDice.custom.events;
+
+#endregion
 
 namespace LuckyDice.Patches
 {
