@@ -12,6 +12,8 @@ namespace LuckyDice.custom.items.dice
         {
             base.Start();
             outcomes.Add(Event.SpawnGoldBar);
+            outcomes.Add(Event.SpawnClownHorn);
+            outcomes.Add(Event.SpawnClownHorn);
             outcomes.Add(Event.RandomizeLocks);
             outcomes.Add(Event.SpawnCentipede);
             outcomes.Add(Event.SpawnCentipede);
@@ -21,6 +23,7 @@ namespace LuckyDice.custom.items.dice
             outcomes.Add(Event.Bleed);
             outcomes.Add(Event.Bleed);
             outcomes.Add(Event.Bleed);
+            outcomes.Add(Event.MaskedChaos);
             /*
              * 1/10 chance to spawn gold bar
              * 1/10 chance to randomize locks

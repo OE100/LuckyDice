@@ -20,6 +20,7 @@ namespace LuckyDice.custom.network
         SpawnGoldBar,
         SpawnPickleJar,
         SpawnGoldBarForAll,
-        HolyJihad
+        HolyJihad,
+        MaskedChaos
     }
 }

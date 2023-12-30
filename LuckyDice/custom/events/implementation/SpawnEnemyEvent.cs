@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events.prototype;
 using UnityEngine;
+using UnityEngine.AI;
 
 #endregion
 
@@ -70,6 +71,10 @@ namespace LuckyDice.custom.events.implementation
                                         Vector2 randVect2 = Random.insideUnitCircle * 35;
                                         Vector3 spawnPos = item.Key.transform.position +
                                                            new Vector3(randVect2.x, 0, randVect2.y);
+                                        // check for closest navmesh point
+                                        NavMesh.SamplePosition(spawnPos, out NavMeshHit navHit, Mathf.Infinity, NavMesh.AllAreas);
+                                        if (navHit.hit)
+                                            spawnPos = navHit.position;
                                         float spawnRot = item.Key.transform.rotation.y;
                                         RoundManager.Instance.SpawnEnemyOnServer(spawnPos, spawnRot, spawnIndex);
                                     }

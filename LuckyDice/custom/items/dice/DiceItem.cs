@@ -22,11 +22,16 @@ namespace LuckyDice.custom.items.dice
             base.Start();
             audioSource = GetComponent<AudioSource>();
             if (rollSound == null)
-                rollSound = Plugin.ab.LoadAsset<AudioClip>("Assets/custom/luckydice/sounds/rolling_dice.mp3");
+            {
+                Plugin.Log.LogDebug("Loading dice sound from ab");
+                if ((rollSound = Plugin.ab.LoadAsset<AudioClip>("assets/custom/luckydice/sounds/rolling_dice.mp3")) != null)
+                    Plugin.Log.LogDebug("Loaded dice sound from ab");
+                else 
+                    Plugin.Log.LogError("Failed to load dice sound from ab");
+            }
+
             audioSource.clip = rollSound;
         }
-
-        
         
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
@@ -77,7 +82,7 @@ namespace LuckyDice.custom.items.dice
             {
                 return;
             }
-            Plugin.Log.LogMessage($"Rolled event: {outcomes[side].ToString()}");
+            Plugin.Log.LogDebug($"Rolled event: {outcomes[side].ToString()}");
         }
     
         private void Roll()

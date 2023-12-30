@@ -11,12 +11,13 @@ namespace LuckyDice.custom.items.dice
         public override void Start()
         {
             base.Start();
+            outcomes.Add(Event.MaskedChaos);
             outcomes.Add(Event.SpawnGoldBarForAll);
             outcomes.Add(Event.SpawnGoldBar);
             outcomes.Add(Event.SpawnGoldBar);
             outcomes.Add(Event.SpawnPickleJar);
             outcomes.Add(Event.SpawnPickleJar);
-            outcomes.Add(Event.HolyJihad);
+            // outcomes.Add(Event.HolyJihad);
             outcomes.Add(Event.SpawnCoilhead);
             outcomes.Add(Event.SpawnCoilhead);
             outcomes.Add(Event.SpawnJester);

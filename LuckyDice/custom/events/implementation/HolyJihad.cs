@@ -17,9 +17,22 @@ namespace LuckyDice.custom.events.implementation
         {
             base.Run();
             if (jihadClip == null)
-                jihadClip = Plugin.ab.LoadAsset<AudioClip>("Assets/custom/luckydice/sounds/jihad_explode.ogg");
+            {
+                Plugin.Log.LogDebug("Loading jihad explode sound from ab");
+                if ((jihadClip = Plugin.ab.LoadAsset<AudioClip>("assets/custom/luckydice/sounds/jihad_explode.ogg")) != null)
+                    Plugin.Log.LogDebug("Loaded jihad explode sound from ab");
+                else
+                    Plugin.Log.LogError("Failed to load jihad explode sound from ab");
+            }
+
             if (beepClip == null)
-                beepClip = Plugin.ab.LoadAsset<AudioClip>("Assets/custom/luckydice/sounds/jihad_beep.mp3");
+            {
+                Plugin.Log.LogDebug("Loading jihad beep sound from ab");
+                if ((beepClip = Plugin.ab.LoadAsset<AudioClip>("assets/custom/luckydice/sounds/jihad_beep.mp3")) != null)
+                    Plugin.Log.LogDebug("Loaded jihad beep sound from ab");
+                else 
+                    Plugin.Log.LogError("Failed to load jihad beep sound from ab");
+            }
         }
 
         public override void AddPlayer(PlayerControllerB player)

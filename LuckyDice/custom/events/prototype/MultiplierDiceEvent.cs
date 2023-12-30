@@ -21,7 +21,7 @@ namespace LuckyDice.custom.events.prototype
 
         public virtual void Run()
         {
-            Plugin.Log.LogMessage($"IsHost: {NetworkManager.Singleton.IsHost}, IsServer: {NetworkManager.Singleton.IsServer}, condition: {!NetworkManager.Singleton.IsHost && !NetworkManager.Singleton.IsServer}");
+            Plugin.Log.LogDebug($"IsHost: {NetworkManager.Singleton.IsHost}, IsServer: {NetworkManager.Singleton.IsServer}, condition: {!NetworkManager.Singleton.IsHost && !NetworkManager.Singleton.IsServer}");
             if (!NetworkManager.Singleton.IsHost && !NetworkManager.Singleton.IsServer)
                 return;
             running = true;

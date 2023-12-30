@@ -20,6 +20,7 @@ namespace LuckyDice.Patches
             if (networkPrefabs.Count != 0)
                 return;
             
+            // todo: maybe add a debug null check for each prefab
             networkPrefabs.Add(Plugin.ab.LoadAsset<GameObject>("EventManagerObject.prefab"));
             networkPrefabs.Add(Plugin.ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d4/D4.asset").spawnPrefab);
             networkPrefabs.Add(Plugin.ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d20/D20.asset").spawnPrefab);

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.network;
+using Unity.Netcode;
 
 #endregion
 
@@ -26,11 +27,10 @@ namespace LuckyDice.custom.events.prototype
 
         public virtual void Run()
         {
-            if (RoundManager.Instance.IsHost || RoundManager.Instance.IsServer)
-            {
-                running = true;
-                EventManager.Instance.StartCoroutine(EventCoroutine());
-            }
+            if (!NetworkManager.Singleton.IsHost && !NetworkManager.Singleton.IsServer)
+                return;
+            running = true;
+            EventManager.Instance.StartCoroutine(EventCoroutine());
         }
 
         public virtual void Stop()

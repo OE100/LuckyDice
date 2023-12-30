@@ -15,7 +15,6 @@ namespace LuckyDice.Patches
         [HarmonyPatch("Start"), HarmonyPostfix]
         private static void PatchStart(Terminal __instance)
         {
-            Plugin.Log.LogMessage("Printing all enemies in each moon:");
             for (int i = 0; i < __instance.moonsCatalogueList.Length; i++)
             {
                 SelectableLevel level = __instance.moonsCatalogueList[i];

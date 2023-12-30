@@ -27,7 +27,8 @@ namespace LuckyDice.custom.network
             new SpawnItemEvent(stackValue: 200, numberOfItems: 1, itemId: 36), // gold bar
             new SpawnItemEvent(stackValue: 50, numberOfItems: 10, itemId: 44), // pickle jar
             new SpawnItemForAllEvent(stackValue: 100, numberOfItems: 1, itemId: 36), // gold bar for all
-            new HolyJihad()
+            new HolyJihad(),
+            new MaskedChaos()
         };
         
         public override void OnNetworkSpawn()
@@ -73,28 +74,28 @@ namespace LuckyDice.custom.network
         [ClientRpc]
         public void LockDoorClientRPC(NetworkObjectReference doorLockRef)
         {
-            Plugin.Log.LogMessage($"Trying to lock door");
+            Plugin.Log.LogDebug($"Trying to lock door");
             if (doorLockRef.TryGet(out NetworkObject networkObject))
             {
                 DoorLock doorLock = networkObject.GetComponentInChildren<DoorLock>();
                 bool original = doorLock.isLocked;
                 doorLock.LockDoor();
                 doorLock.doorLockSFX.PlayOneShot(doorLock.unlockSFX);
-                Plugin.Log.LogMessage($"Door locked: {original} -> {doorLock.isLocked}");
+                Plugin.Log.LogDebug($"Door locked: {original} -> {doorLock.isLocked}");
             }
         }
         
         [ClientRpc]
         public void UnlockDoorClientRPC(NetworkObjectReference doorLockRef)
         {
-            Plugin.Log.LogMessage($"Trying to unlock door");
+            Plugin.Log.LogDebug($"Trying to unlock door");
             if (doorLockRef.TryGet(out NetworkObject networkObject))
             {
                 DoorLock doorLock = networkObject.GetComponentInChildren<DoorLock>();
                 bool original = !doorLock.isLocked;
                 doorLock.UnlockDoor();
                 doorLock.doorLockSFX.PlayOneShot(doorLock.unlockSFX);
-                Plugin.Log.LogMessage($"Door unlocked: {original} -> {!doorLock.isLocked}");
+                Plugin.Log.LogDebug($"Door unlocked: {original} -> {!doorLock.isLocked}");
             }
         }
         
@@ -134,7 +135,7 @@ namespace LuckyDice.custom.network
                     component.SetScrapValue(stackValue);
                     gameObject.GetComponent<NetworkObject>().Spawn();
 
-                    Plugin.Log.LogMessage($"Spawned scrap: {itemToSpawn.itemName}, with value: {stackValue}, on player: {player.playerUsername}, at position: {position}");
+                    Plugin.Log.LogDebug($"Spawned scrap: {itemToSpawn.itemName}, with value: {stackValue}, on player: {player.playerUsername}, at position: {position}");
                 }
             }
         }
@@ -162,7 +163,8 @@ namespace LuckyDice.custom.network
                 Landmine.SpawnExplosion(
                     player.transform.position,
                     killRange: 10f,
-                    damageRange: 14f
+                    damageRange: 14f,
+                    spawnExplosionEffect: true
                 );
             }
         }
