@@ -3,6 +3,9 @@
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events.implementation;
+using LuckyDice.custom.events.implementation.map;
+using LuckyDice.custom.events.implementation.player;
+using LuckyDice.custom.events.implementation.spawn;
 using LuckyDice.custom.events.prototype;
 using LuckyDice.Patches;
 using Unity.Netcode;
@@ -39,9 +42,7 @@ namespace LuckyDice.custom.network
             
             // start all events
             foreach (IDiceEvent e in Events)
-            {
                 e.Run();
-            }
         }
 
         [ClientRpc]
@@ -157,6 +158,16 @@ namespace LuckyDice.custom.network
                     spawnExplosionEffect: true
                 );
             }
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
+
+            Instance = null;
+            
+            foreach (IDiceEvent e in Events)
+                e.Stop();
         }
     }
 }

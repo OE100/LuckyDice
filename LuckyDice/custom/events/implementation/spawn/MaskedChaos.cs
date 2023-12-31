@@ -6,7 +6,7 @@ using LuckyDice.Patches;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace LuckyDice.custom.events.implementation
+namespace LuckyDice.custom.events.implementation.spawn
 {
     public class MaskedChaos : BaseDiceEvent
     {
@@ -73,11 +73,14 @@ namespace LuckyDice.custom.events.implementation
 
                     bool found = Utilities.Utilities.ReturnClosestNavMeshPoint(
                         randomPos,
-                        out var closestPoint,
-                        radius: 5);
+                        out var closestPoint);
 
                     if (!found)
+                    {
+                        if (player.isPlayerDead)
+                            count = 0;
                         continue;
+                    }
                     
                     int mask = Random.Range(0, 2); // 0 = Tragedy, 1 = Comedy
                     EventManager.Instance.SpawnItemAroundPositionServerRPC(
@@ -88,7 +91,8 @@ namespace LuckyDice.custom.events.implementation
                     count--;
                 }
             }
-
+            
+            Plugin.Log.LogDebug("Masked Chaos, waiting for 7 seconds...");
             yield return new WaitForSeconds(7);
             
             Plugin.Log.LogDebug("Spawning masked enemies around players");
@@ -103,13 +107,12 @@ namespace LuckyDice.custom.events.implementation
                 {
                     Vector3 position = Utilities.Utilities.GetRandomLocationAroundPosition(
                         origin: player.transform.position,
-                        radius: 40,
+                        radius: 20,
                         randomHeight: false);
 
                     bool found = Utilities.Utilities.ReturnClosestNavMeshPoint(
                         origin: position,
-                        closestPoint:out var closestPoint,
-                        radius:5);
+                        closestPoint:out var closestPoint);
 
                     if (!found)
                         continue;

@@ -2,7 +2,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using GameNetcodeStuff;
 using LuckyDice.custom.events.prototype;
 using LuckyDice.custom.network;
@@ -11,7 +10,7 @@ using UnityEngine;
 
 #endregion
 
-namespace LuckyDice.custom.events.implementation
+namespace LuckyDice.custom.events.implementation.spawn
 {
     public class SpawnItemEvent : MultiplierDiceEvent<int>
     {
@@ -84,8 +83,7 @@ namespace LuckyDice.custom.events.implementation
 
                                 bool found = Utilities.Utilities.ReturnClosestNavMeshPoint(
                                     randomPos,
-                                    out var closestPoint,
-                                    radius: 5);
+                                    out var closestPoint);
 
                                 if (!found)
                                     continue;

@@ -6,7 +6,7 @@ using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace LuckyDice.custom.events.implementation
+namespace LuckyDice.custom.events.implementation.player
 {
     public class HolyJihad : MultiplierDiceEvent<IEnumerator>
     {

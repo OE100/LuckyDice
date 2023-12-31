@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using HarmonyLib;
 using LuckyDice.custom.events.implementation;
+using LuckyDice.custom.events.implementation.map;
 using UnityEngine;
 
 #endregion

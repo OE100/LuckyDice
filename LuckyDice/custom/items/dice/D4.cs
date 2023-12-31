@@ -12,18 +12,18 @@ namespace LuckyDice.custom.items.dice
         {
             base.Start();
             outcomes.Add(Event.SpawnGoldBar);
-            outcomes.Add(Event.SpawnClownHorn);
-            outcomes.Add(Event.SpawnClownHorn);
-            outcomes.Add(Event.RandomizeLocks);
-            outcomes.Add(Event.SpawnCentipede);
-            outcomes.Add(Event.SpawnCentipede);
-            outcomes.Add(Event.SpawnFlowerman);
-            outcomes.Add(Event.SpawnClownHorn);
-            outcomes.Add(Event.SpawnClownHorn);
-            outcomes.Add(Event.Bleed);
-            outcomes.Add(Event.Bleed);
-            outcomes.Add(Event.Bleed);
-            outcomes.Add(Event.MaskedChaos);
+            // outcomes.Add(Event.SpawnClownHorn);
+            // outcomes.Add(Event.SpawnClownHorn);
+            // outcomes.Add(Event.RandomizeLocks);
+            // outcomes.Add(Event.SpawnCentipede);
+            // outcomes.Add(Event.SpawnCentipede);
+            // outcomes.Add(Event.SpawnFlowerman);
+            // outcomes.Add(Event.SpawnClownHorn);
+            // outcomes.Add(Event.SpawnClownHorn);
+            // outcomes.Add(Event.Bleed);
+            // outcomes.Add(Event.Bleed);
+            // outcomes.Add(Event.Bleed);
+            // outcomes.Add(Event.MaskedChaos);
             /*
              * 1/11 chance to spawn gold bar
              * 1/11 chance to randomize locks

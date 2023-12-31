@@ -2,6 +2,7 @@
 
 using HarmonyLib;
 using LuckyDice.custom.events.implementation;
+using LuckyDice.custom.events.implementation.map;
 
 #endregion
 

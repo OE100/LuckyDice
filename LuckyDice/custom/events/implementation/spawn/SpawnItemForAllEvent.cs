@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 
 #endregion
 
-namespace LuckyDice.custom.events.implementation
+namespace LuckyDice.custom.events.implementation.spawn
 {
     public class SpawnItemForAllEvent : SpawnItemEvent
     {

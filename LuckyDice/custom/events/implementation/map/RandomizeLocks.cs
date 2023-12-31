@@ -10,7 +10,7 @@ using UnityEngine;
 
 #endregion
 
-namespace LuckyDice.custom.events.implementation
+namespace LuckyDice.custom.events.implementation.map
 {
     public class RandomizeLocks : BaseDiceEvent
     {

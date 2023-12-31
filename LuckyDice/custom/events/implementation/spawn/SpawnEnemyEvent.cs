@@ -7,11 +7,10 @@ using LuckyDice.custom.events.prototype;
 using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.AI;
 
 #endregion
 
-namespace LuckyDice.custom.events.implementation
+namespace LuckyDice.custom.events.implementation.spawn
 {
     public class SpawnEnemyEvent : MultiplierDiceEvent<int>
     {
@@ -80,8 +79,7 @@ namespace LuckyDice.custom.events.implementation
                                         bool found = Utilities.Utilities.ReturnClosestNavMeshPoint(
                                             Utilities.Utilities.GetRandomLocationAroundPosition(
                                                 item.Key.transform.position),
-                                            out var position
-                                        );
+                                            out var position);
                                         if (found)
                                         {
                                             RoundManager.Instance.SpawnEnemyOnServer(

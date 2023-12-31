@@ -16,7 +16,9 @@ namespace LuckyDice.Utilities
             Vector3 random = Random.insideUnitSphere * radius;
             if (!randomHeight)
                 random.y = 0;
-            return random + origin;
+            Vector3 finalPos = random + origin;
+            Plugin.Log.LogDebug($"Utilities, get position: {finalPos}");
+            return finalPos;
         }
 
         public static bool ReturnClosestNavMeshPoint(Vector3 origin,
@@ -28,6 +30,7 @@ namespace LuckyDice.Utilities
                 closestPoint = hit.position;
             else
                 closestPoint = default;
+            Plugin.Log.LogDebug($"Utilities found NavMesh: {found}, position: {closestPoint}");
             return found;
         }
     }

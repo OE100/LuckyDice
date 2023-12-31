@@ -73,13 +73,13 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="custom\events\implementation\Bleed.cs" />
-        <Compile Include="custom\events\implementation\HolyJihad.cs" />
-        <Compile Include="custom\events\implementation\MaskedChaos.cs" />
-        <Compile Include="custom\events\implementation\RandomizeLocks.cs" />
-        <Compile Include="custom\events\implementation\SpawnEnemyEvent.cs" />
-        <Compile Include="custom\events\implementation\SpawnItemEvent.cs" />
-        <Compile Include="custom\events\implementation\SpawnItemForAllEvent.cs" />
+        <Compile Include="custom\events\implementation\map\RandomizeLocks.cs" />
+        <Compile Include="custom\events\implementation\player\Bleed.cs" />
+        <Compile Include="custom\events\implementation\player\HolyJihad.cs" />
+        <Compile Include="custom\events\implementation\spawn\MaskedChaos.cs" />
+        <Compile Include="custom\events\implementation\spawn\SpawnEnemyEvent.cs" />
+        <Compile Include="custom\events\implementation\spawn\SpawnItemEvent.cs" />
+        <Compile Include="custom\events\implementation\spawn\SpawnItemForAllEvent.cs" />
         <Compile Include="custom\events\prototype\BaseDiceEvent.cs" />
         <Compile Include="custom\events\prototype\IDiceEvent.cs" />
         <Compile Include="custom\events\prototype\MultiplierDiceEvent.cs" />
@@ -100,6 +100,9 @@
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="luckydice" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="custom\events\implementation\weather\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using LuckyDice.custom.events.implementation;
+using LuckyDice.custom.events.implementation.spawn;
 using UnityEngine;
 
 namespace LuckyDice.Patches
