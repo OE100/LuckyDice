@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events.prototype;
+using LuckyDice.custom.network;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -66,17 +68,31 @@ namespace LuckyDice.custom.events.implementation
                                     .FindIndex(x => x.enemyType.name == name);
                                 if (spawnIndex >= 0)
                                 {
-                                    for (int i = 0; i < amountPerStack; i++)
+                                    EventManager.Instance.DisplayMessageClientRPC(
+                                        new NetworkObjectReference(item.Key.GetComponentInParent<NetworkObject>()),
+                                        "The air begins to shift",
+                                        "The molecules around you start to shift and rearrange...");
+
+                                    int count = amountPerStack;
+                                    
+                                    while (count > 0)
                                     {
-                                        Vector2 randVect2 = Random.insideUnitCircle * 35;
-                                        Vector3 spawnPos = item.Key.transform.position +
-                                                           new Vector3(randVect2.x, 0, randVect2.y);
-                                        // check for closest navmesh point
-                                        NavMesh.SamplePosition(spawnPos, out NavMeshHit navHit, Mathf.Infinity, NavMesh.AllAreas);
-                                        if (navHit.hit)
-                                            spawnPos = navHit.position;
-                                        float spawnRot = item.Key.transform.rotation.y;
-                                        RoundManager.Instance.SpawnEnemyOnServer(spawnPos, spawnRot, spawnIndex);
+                                        bool found = Utilities.Utilities.ReturnClosestNavMeshPoint(
+                                            Utilities.Utilities.GetRandomLocationAroundPosition(
+                                                item.Key.transform.position),
+                                            out var position
+                                        );
+                                        if (found)
+                                        {
+                                            RoundManager.Instance.SpawnEnemyOnServer(
+                                                position,
+                                                item.Key.transform.rotation.y,
+                                                spawnIndex);
+                                            
+                                            count--;
+                                        }
+                                        else
+                                            Plugin.Log.LogDebug($"Didn't find NavMesh position around player {item.Key.playerUsername}, searching again...");
                                     }
                                     playersToRemove.Add(item.Key);
                                 }

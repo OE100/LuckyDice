@@ -25,12 +25,13 @@ namespace LuckyDice.custom.items.dice
             outcomes.Add(Event.Bleed);
             outcomes.Add(Event.MaskedChaos);
             /*
-             * 1/10 chance to spawn gold bar
-             * 1/10 chance to randomize locks
-             * 2/10 chance to spawn centipede
-             * 1/10 chance to spawn flowerman
-             * 2/10 chance to spawn clown horn
-             * 3/10 chance to bleed
+             * 1/11 chance to spawn gold bar
+             * 1/11 chance to randomize locks
+             * 2/11 chance to spawn centipede
+             * 1/11 chance to spawn flowerman
+             * 2/11 chance to spawn clown horn
+             * 3/11 chance to bleed
+             * 1/11 chance to spawn masked chaos
              */
         }
     }

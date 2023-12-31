@@ -5,7 +5,6 @@ using LuckyDice.custom.network;
 using LuckyDice.Patches;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace LuckyDice.custom.events.implementation
 {
@@ -64,13 +63,29 @@ namespace LuckyDice.custom.events.implementation
                 if (player.isPlayerDead)
                     continue;
 
-                for (int i = 0; i < 2; i++)
+                int count = 2;
+                while (count > 0)
                 {
+                    Vector3 randomPos = Utilities.Utilities.GetRandomLocationAroundPosition(
+                        player.transform.position,
+                        radius: 5,
+                        randomHeight: false);
+
+                    bool found = Utilities.Utilities.ReturnClosestNavMeshPoint(
+                        randomPos,
+                        out var closestPoint,
+                        radius: 5);
+
+                    if (!found)
+                        continue;
+                    
                     int mask = Random.Range(0, 2); // 0 = Tragedy, 1 = Comedy
-                    EventManager.Instance.SpawnScrapOnPlayerServerRPC(
-                        new NetworkObjectReference(player.GetComponentInParent<NetworkObject>()),
-                        1, 35 - mask * 10, mask + 65
-                    );
+                    EventManager.Instance.SpawnItemAroundPositionServerRPC(
+                        closestPoint,
+                        itemId: mask + 65,
+                        stackValue: 35 - mask * 10);
+
+                    count--;
                 }
             }
 
@@ -82,18 +97,29 @@ namespace LuckyDice.custom.events.implementation
             {
                 if (player.isPlayerDead)
                     continue;
-                
-                for (int i = 0; i < 4; i ++)
+
+                int count = 4;
+                while (count > 0)
                 {
-                    Vector2 randVect2 = Random.insideUnitCircle * 45;
-                    Vector3 spawnPos = player.transform.position +
-                                       new Vector3(randVect2.x, 0, randVect2.y);
-                    // check for closest navmesh point
-                    NavMesh.SamplePosition(spawnPos, out NavMeshHit navHit, Mathf.Infinity, NavMesh.AllAreas);
-                    if (navHit.hit)
-                        spawnPos = navHit.position;
-                    float spawnRot = player.transform.rotation.y;
-                    RoundManager.Instance.SpawnEnemyOnServer(spawnPos, spawnRot, spawnIndex);
+                    Vector3 position = Utilities.Utilities.GetRandomLocationAroundPosition(
+                        origin: player.transform.position,
+                        radius: 40,
+                        randomHeight: false);
+
+                    bool found = Utilities.Utilities.ReturnClosestNavMeshPoint(
+                        origin: position,
+                        closestPoint:out var closestPoint,
+                        radius:5);
+
+                    if (!found)
+                        continue;
+                    
+                    RoundManager.Instance.SpawnEnemyOnServer(
+                        closestPoint, 
+                        player.transform.rotation.y, 
+                        spawnIndex);
+
+                    count--;
                 }
             }
         }

@@ -112,32 +112,22 @@ namespace LuckyDice.custom.network
         }
         
         [ServerRpc(RequireOwnership = false)]
-        public void SpawnScrapOnPlayerServerRPC(NetworkObjectReference playerRef, int numberOfItems, int stackValue, int itemId)
+        public void SpawnItemAroundPositionServerRPC(Vector3 position, int itemId, int stackValue = 0)
         {
-            if (playerRef.TryGet(out NetworkObject networkObject))
-            {
-                PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
-                List<Item> itemsList = StartOfRound.Instance.allItemsList.itemsList;
-                Transform transform = player.transform;
-                for (int i = 0; i < numberOfItems; i++)
-                {
-                    Item itemToSpawn = itemId == -1 ? itemsList[Random.Range(0, itemsList.Count)] : itemsList[itemId];
-                    Vector2 randomVect2 = Random.insideUnitCircle * 5;
-                    Vector3 position = transform.position + new Vector3(randomVect2.x, 0, randomVect2.y);
-                
-                    GameObject gameObject = Instantiate(
-                        itemToSpawn.spawnPrefab, 
-                        position, 
-                        Random.rotation
-                    );
-                    gameObject.AddComponent<ScanNodeProperties>().scrapValue = stackValue;
-                    GrabbableObject component = gameObject.GetComponent<GrabbableObject>();
-                    component.SetScrapValue(stackValue);
-                    gameObject.GetComponent<NetworkObject>().Spawn();
+            List<Item> itemsList = StartOfRound.Instance.allItemsList.itemsList;
+            Item itemToSpawn = itemId == -1 ? itemsList[Random.Range(0, itemsList.Count)] : itemsList[itemId];
+        
+            GameObject gameObject = Instantiate(
+                itemToSpawn.spawnPrefab, 
+                position, 
+                Random.rotation
+            );
+            gameObject.AddComponent<ScanNodeProperties>().scrapValue = stackValue;
+            GrabbableObject component = gameObject.GetComponent<GrabbableObject>();
+            component.SetScrapValue(stackValue);
+            gameObject.GetComponent<NetworkObject>().Spawn();
 
-                    Plugin.Log.LogDebug($"Spawned scrap: {itemToSpawn.itemName}, with value: {stackValue}, on player: {player.playerUsername}, at position: {position}");
-                }
-            }
+            Plugin.Log.LogDebug($"Spawned item: {itemToSpawn.itemName}, with value: {stackValue}, at position: ({position.x}, {position.y}, {position.z})");
         }
 
         [ClientRpc]

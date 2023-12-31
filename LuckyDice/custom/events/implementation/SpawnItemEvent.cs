@@ -2,10 +2,12 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GameNetcodeStuff;
 using LuckyDice.custom.events.prototype;
 using LuckyDice.custom.network;
 using Unity.Netcode;
+using UnityEngine;
 
 #endregion
 
@@ -37,8 +39,6 @@ namespace LuckyDice.custom.events.implementation
             {
                 playersToMult.Add(player, 1);
             }
-            
-            player.StartCoroutine(EventCoroutine());
         }
 
         public override void RemovePlayer(PlayerControllerB player)
@@ -55,21 +55,58 @@ namespace LuckyDice.custom.events.implementation
         public override IEnumerator EventCoroutine()
         {
             List<PlayerControllerB> playersToRemove = new List<PlayerControllerB>();
-            foreach (var item in playersToMult)
+            while (running)
             {
-                if (item.Value > 0 && item.Key.isInsideFactory && !item.Key.isPlayerDead)
+                if (playersToMult.Count > 0)
                 {
-                    EventManager.Instance.SpawnScrapOnPlayerServerRPC(
-                        new NetworkObjectReference(item.Key.GetComponentInParent<NetworkObject>()), 
-                        numberOfItems: numberOfItems,
-                        stackValue: stackValue,
-                        itemId: itemId
-                        );
-                }
-            }
+                    if (!IsPhaseForbidden())
+                    {
+                        foreach (var item in playersToMult)
+                        {
+                            if (item.Value <= 0)
+                                continue;
 
-            playersToRemove.ForEach(RemovePlayer);
-            yield break;
+                            EventManager.Instance.DisplayMessageClientRPC(
+                                new NetworkObjectReference(item.Key.GetComponentInParent<NetworkObject>()),
+                                "The air begins to shift",
+                                "The molecules around you start to shift and rearrange...");
+
+                            yield return new WaitForSeconds(5);
+                            
+                            int count = numberOfItems;
+
+                            while (count > 0)
+                            {
+                                Vector3 randomPos = Utilities.Utilities.GetRandomLocationAroundPosition(
+                                    item.Key.transform.position,
+                                    radius: 5,
+                                    randomHeight: true);
+
+                                bool found = Utilities.Utilities.ReturnClosestNavMeshPoint(
+                                    randomPos,
+                                    out var closestPoint,
+                                    radius: 5);
+
+                                if (!found)
+                                    continue;
+                                
+                                EventManager.Instance.SpawnItemAroundPositionServerRPC(
+                                    position: closestPoint,
+                                    itemId: itemId,
+                                    stackValue: stackValue);
+                                
+                                count--;
+                            }
+
+                            playersToRemove.Add(item.Key);
+                        }
+                    }
+
+                    playersToRemove.ForEach(RemovePlayer);
+                }
+
+                yield return new WaitForSeconds(5);
+            }
         }
     }
 }

@@ -76,7 +76,7 @@ namespace LuckyDice.custom.items.dice
             TriggerEvent(side);
         }
         
-        private void TriggerEvent(int side)
+        protected virtual void TriggerEvent(int side)
         {
             if (side >= outcomes.Count || side < 0)
             {
@@ -85,7 +85,7 @@ namespace LuckyDice.custom.items.dice
             Plugin.Log.LogDebug($"Rolled event: {outcomes[side].ToString()}");
         }
     
-        private void Roll()
+        protected virtual void Roll()
         {
             int side = Random.Range(0, outcomes.Count);
             TriggerEventServerRPC(side);
