@@ -12,7 +12,9 @@ namespace LuckyDice.custom.events.implementation.player
     {
         internal static AudioClip jihadClip = null;
         internal static AudioClip beepClip = null;
-        
+
+        public override bool IsOneTime() => true;
+
         public override void Run()
         {
             base.Run();
@@ -70,7 +72,7 @@ namespace LuckyDice.custom.events.implementation.player
             yield return new WaitForSeconds(time - 10);
             EventManager.Instance.DisplayMessageClientRPC(
                 new NetworkObjectReference(player.GetComponentInParent<NetworkObject>()),
-                "Alahu Akbar!",
+                "Allah hu Akbar!",
                 "Prepare for holy jihad!"
                 );
             yield return new WaitForSeconds(10);

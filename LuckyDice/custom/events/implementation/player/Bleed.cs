@@ -14,6 +14,8 @@ namespace LuckyDice.custom.events.implementation.player
 {
     public class Bleed : MultiplierDiceEvent<int>
     {
+        public override bool IsOneTime() => false;
+
         public override void AddPlayer(PlayerControllerB player)
         {
             if (playersToMult.ContainsKey(player))

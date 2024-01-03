@@ -2,10 +2,10 @@
 
 using System.Collections.Generic;
 using GameNetcodeStuff;
-using LuckyDice.custom.events.implementation;
 using LuckyDice.custom.events.implementation.map;
 using LuckyDice.custom.events.implementation.player;
 using LuckyDice.custom.events.implementation.spawn;
+using LuckyDice.custom.events.implementation.weather;
 using LuckyDice.custom.events.prototype;
 using LuckyDice.Patches;
 using Unity.Netcode;
@@ -31,7 +31,9 @@ namespace LuckyDice.custom.network
             new SpawnItemEvent(stackValue: 50, numberOfItems: 10, itemId: 44), // pickle jar
             new SpawnItemForAllEvent(stackValue: 100, numberOfItems: 1, itemId: 36), // gold bar for all
             new HolyJihad(),
-            new MaskedChaos()
+            new MaskedChaos(),
+            new StormyWeatherEvent(),
+            new ExplodeLandmines()
         };
         
         public override void OnNetworkSpawn()
@@ -44,7 +46,17 @@ namespace LuckyDice.custom.network
             foreach (IDiceEvent e in Events)
                 e.Run();
         }
+        
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
 
+            Instance = null;
+            
+            foreach (IDiceEvent e in Events)
+                e.Stop();
+        }
+        
         [ClientRpc]
         public void DisplayMessageClientRPC(NetworkObjectReference playerRef, string header, string body)
         {
@@ -160,14 +172,24 @@ namespace LuckyDice.custom.network
             }
         }
 
-        public override void OnNetworkDespawn()
+        [ClientRpc]
+        public void SetStormClientRPC(bool storm)
         {
-            base.OnNetworkDespawn();
-
-            Instance = null;
-            
-            foreach (IDiceEvent e in Events)
-                e.Stop();
+            GameObject stormyWeatherObject = GameObject.Find("Systems/GameSystems/TimeAndWeather/Stormy");
+            if (stormyWeatherObject == null)
+            {
+                Plugin.Log.LogError("Stormy weather not found, event not running!");
+                return;
+            }
+            stormyWeatherObject.SetActive(true);
+            StormyWeather stormyWeather = stormyWeatherObject.GetComponent<StormyWeather>();
+        }
+        
+        [ClientRpc]
+        public void DetonateMineClientRPC(NetworkObjectReference landmineRef)
+        {
+            if (landmineRef.TryGet(out NetworkObject networkObject))
+                networkObject.GetComponentInChildren<Landmine>().Detonate();
         }
     }
 }

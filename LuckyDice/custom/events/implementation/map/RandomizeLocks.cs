@@ -16,6 +16,8 @@ namespace LuckyDice.custom.events.implementation.map
     {
         public static List<DoorLock> doors = new List<DoorLock>();
 
+        public override bool IsOneTime() => false;
+
         public override void AddPlayer(PlayerControllerB player)
         {
             if (StartOfRound.Instance.IsHost || StartOfRound.Instance.IsServer)

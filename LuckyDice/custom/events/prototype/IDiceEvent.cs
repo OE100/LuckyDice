@@ -14,5 +14,6 @@ namespace LuckyDice.custom.events.prototype
         void Run();
         void Stop();
         IEnumerator EventCoroutine();
+        bool IsOneTime();
     }
 }

@@ -11,7 +11,8 @@ namespace LuckyDice.custom.items.dice
         public override void Start()
         {
             base.Start();
-            outcomes.Add(Event.SpawnGoldBar);
+            outcomes.Add(Event.ExplodeLandmines);
+            // outcomes.Add(Event.SpawnGoldBar);
             // outcomes.Add(Event.SpawnClownHorn);
             // outcomes.Add(Event.SpawnClownHorn);
             // outcomes.Add(Event.RandomizeLocks);

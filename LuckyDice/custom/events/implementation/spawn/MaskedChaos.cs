@@ -12,6 +12,8 @@ namespace LuckyDice.custom.events.implementation.spawn
     {
         internal static bool triggered = false;
 
+        public override bool IsOneTime() => true;
+
         public override void Run()
         {
             base.Run();

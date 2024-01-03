@@ -17,7 +17,9 @@ namespace LuckyDice.custom.events.implementation.spawn
         private int stackValue;
         private int numberOfItems;
         private int itemId;
-        
+
+        public override bool IsOneTime() => false;
+
         public SpawnItemEvent(int stackValue = 70, int numberOfItems = 1, int itemId = -1)
         {
             this.stackValue = stackValue;

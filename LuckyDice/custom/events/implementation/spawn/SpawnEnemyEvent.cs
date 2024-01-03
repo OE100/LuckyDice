@@ -16,7 +16,9 @@ namespace LuckyDice.custom.events.implementation.spawn
     {
         private string name;
         private int amountPerStack;
-        
+
+        public override bool IsOneTime() => false;
+
         public SpawnEnemyEvent(string name, int amountPerStack = 1)
         {
             this.name = name;

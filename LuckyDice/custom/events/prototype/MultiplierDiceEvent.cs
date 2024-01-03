@@ -39,5 +39,7 @@ namespace LuckyDice.custom.events.prototype
         {
             return StartOfRound.Instance.inShipPhase || StartOfRound.Instance.currentLevelID == 3;
         }
+
+        public abstract bool IsOneTime();
     }
 }
