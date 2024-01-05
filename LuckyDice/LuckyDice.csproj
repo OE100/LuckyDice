@@ -92,10 +92,6 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="custom\events\EventRegistry.cs" />
-        <Compile Include="custom\events\implementation\player\HolyJihad.cs" />
-        <Compile Include="custom\events\prototype\BaseDiceEvent.cs" />
-        <Compile Include="custom\events\prototype\IDiceEvent.cs" />
-        <Compile Include="custom\events\prototype\MultiplierDiceEvent.cs" />
         <Compile Include="custom\items\dice\D20.cs" />
         <Compile Include="custom\items\dice\D4.cs" />
         <Compile Include="custom\items\dice\DiceItem.cs" />
@@ -109,8 +105,8 @@
         <Compile Include="custom\monobehaviour\impl\map\ExplodeLandmines.cs" />
         <Compile Include="custom\monobehaviour\impl\map\RandomizeLocks.cs" />
         <Compile Include="custom\monobehaviour\impl\map\StormyWeather.cs" />
-        <Compile Include="custom\monobehaviour\impl\Player.cs" />
         <Compile Include="custom\monobehaviour\impl\player\Bleed.cs" />
+        <Compile Include="custom\monobehaviour\impl\player\TroubleInTerroristTown.cs" />
         <Compile Include="custom\monobehaviour\impl\spawn\Enemies\SpawnCentipede.cs" />
         <Compile Include="custom\monobehaviour\impl\spawn\Enemies\SpawnCoilhead.cs" />
         <Compile Include="custom\monobehaviour\impl\spawn\Enemies\SpawnDressGirl.cs" />

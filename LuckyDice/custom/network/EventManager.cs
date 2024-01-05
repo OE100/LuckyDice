@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events;
-using LuckyDice.custom.events.implementation.player;
 using LuckyDice.Utilities;
 using Unity.Netcode;
 using UnityEngine;
@@ -111,14 +110,14 @@ namespace LuckyDice.custom.network
         }
 
         [ClientRpc]
-        public void PlayJihadSoundFromPlayerClientRPC(NetworkObjectReference playerRef)
+        public void PlayTerroristSoundFromPlayerClientRPC(NetworkObjectReference playerRef)
         {
             if (playerRef.TryGet(out NetworkObject networkObject))
             {
                 PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
                 player.voiceMuffledByEnemy = true;
-                player.currentVoiceChatAudioSource.PlayOneShot(HolyJihad.beepClip, 1f);
-                WalkieTalkie.TransmitOneShotAudio(player.currentVoiceChatAudioSource, HolyJihad.beepClip);
+                // player.currentVoiceChatAudioSource.PlayOneShot(HolyJihad.beepClip, 1f); // todo: fix this
+                // WalkieTalkie.TransmitOneShotAudio(player.currentVoiceChatAudioSource, HolyJihad.beepClip); // todo: fix this
             }
         }
         
@@ -128,8 +127,8 @@ namespace LuckyDice.custom.network
             if (playerRef.TryGet(out NetworkObject networkObject))
             {
                 PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
-                player.currentVoiceChatAudioSource.PlayOneShot(HolyJihad.jihadClip);
-                WalkieTalkie.TransmitOneShotAudio(player.currentVoiceChatAudioSource, HolyJihad.jihadClip);
+                // player.currentVoiceChatAudioSource.PlayOneShot(HolyJihad.jihadClip); // todo: fix this
+                // WalkieTalkie.TransmitOneShotAudio(player.currentVoiceChatAudioSource, HolyJihad.jihadClip); // todo: fix this
                 Landmine.SpawnExplosion(
                     player.transform.position,
                     killRange: 10f,
