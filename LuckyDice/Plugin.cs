@@ -8,6 +8,8 @@ using LethalLib.Modules;
 using LuckyDice.custom.events;
 using LuckyDice.custom.items.dice;
 using LuckyDice.custom.monobehaviour;
+using LuckyDice.custom.monobehaviour.impl.player;
+using LuckyDice.custom.monobehaviour.impl.tweak;
 using LuckyDice.custom.network;
 using LuckyDice.Patches;
 using UnityEngine;
@@ -88,6 +90,23 @@ namespace LuckyDice
             }
 
             return item;
+        }
+        
+        internal static void RegisterEventsAndItems()
+        {
+            if (EventManager.Instance == null || EventManager.Instance.gameObject == null)
+            {
+                Log.LogError("We're fucked!!!");
+                return;
+            }
+            
+            // register d4 pool
+            string d4Pool = EventRegistry.RegisterItem<D4>();
+            EventRegistry.RegisterEvent<MaskedChaos>(d4Pool, EventManager.Instance.gameObject);
+            
+            // register d20 pool
+            string d20Pool = EventRegistry.RegisterItem<D20>();
+            EventRegistry.RegisterEvent<TroubleInTerroristTown>(d20Pool, EventManager.Instance.gameObject);
         }
     }
 }

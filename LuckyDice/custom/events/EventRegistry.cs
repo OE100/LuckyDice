@@ -17,10 +17,13 @@ namespace LuckyDice.custom.events
         private static Dictionary<string, List<(Type, GameObject)>> removedEventPools = new Dictionary<string, List<(Type, GameObject)>>();
         private static Dictionary<GameObject, Type> mountedEvents = new Dictionary<GameObject, Type>();
 
-        public static void RegisterItem(Type item, string pool)
+        public static string RegisterItem<TItem>(string pool = null) where TItem : GrabbableObject
         {
-            Plugin.Log.LogDebug($"Associating item: {item.Name}, with pool: {pool}");
-            itemToPool[item] = pool;
+            if (pool == null)
+                pool = typeof(TItem).Name;
+            Plugin.Log.LogDebug($"Associating item: {typeof(TItem).Name}, with pool: {pool}");
+            itemToPool[typeof(TItem)] = pool;
+            return pool;
         }
         
         public static string GetPoolFromItem(Type item)
@@ -35,6 +38,32 @@ namespace LuckyDice.custom.events
             string poolFromItem = itemToPool[item];
             Plugin.Log.LogDebug($"Pool for item: {item.Name}, is: {poolFromItem}");
             return poolFromItem;
+        }
+        
+        public static void RegisterEvent<TEvent>(string pool, GameObject mountingPoint) where TEvent : BaseEventBehaviour
+        {
+            Plugin.Log.LogDebug($"Registering event: {typeof(TEvent).Name}, to pool: {pool}");
+            // check for inheritance requirement
+            if (!typeof(BaseEventBehaviour).IsAssignableFrom(typeof(TEvent)))
+            {
+                Plugin.Log.LogError($"Event: {typeof(TEvent).Name}, does not inherit from BaseEventBehaviour!");
+                return;
+            }
+            
+            if (!eventPools.ContainsKey(pool))
+            {
+                Plugin.Log.LogDebug($"Creating new event pool: {pool}");
+                eventPools.Add(pool, new List<(Type, GameObject)>());
+                removedEventPools.Add(pool, new List<(Type, GameObject)>());
+            }
+            Plugin.Log.LogDebug($"Adding event: {typeof(TEvent).Name}, to pool: {pool}");
+            eventPools[pool].Add((typeof(TEvent), mountingPoint));
+            
+            if (Attribute.GetCustomAttribute(typeof(TEvent), typeof(MountAtRegistry)) != null)
+            {
+                Plugin.Log.LogDebug($"Event: {typeof(TEvent).Name}, is a mount at registry event, mounting now");
+                MountEvent(mountingPoint, typeof(TEvent));
+            }
         }
         
         public static void RegisterEvent(string pool, Type eventMonoBehaviourType, GameObject mountingPoint)

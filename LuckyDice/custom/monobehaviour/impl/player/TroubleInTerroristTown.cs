@@ -19,19 +19,22 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             Plugin.Log.LogDebug("TroubleInTerroristTown Awake!");
             NeedsRemoval = false;
             IsOneTimeEvent = true;
-            Plugin.Log.LogDebug("TroubleInTerroristTown AddPlayer!");
+            // roll terrorists
             List<PlayerControllerB> players = new List<PlayerControllerB>(StartOfRound.Instance.allPlayerScripts);
-            players.RemoveAll(p => p.isPlayerDead);
+            players.RemoveAll(p => p.isPlayerDead || !p.isPlayerControlled);
             if (players.Count <= 1)
             {
                 Plugin.Log.LogDebug("One player alive, cancelling trouble in terrorist town.");
                 Destroy(this);
             }
             // select non-terrorist
-            players.RemoveAt(Random.Range(0, players.Count));
+            int nInd = Random.Range(0, players.Count);
+            Plugin.Log.LogDebug($"Chosen {players[nInd].playerUsername} as non-terrorist");
+            players.RemoveAt(nInd);
             // select terrorist
             terrorists = new List<PlayerControllerB>();
             int tInd = Random.Range(0, players.Count);
+            Plugin.Log.LogDebug($"Chosen {players[tInd].playerUsername} as terrorist");
             terrorists.Add(players[tInd]);
             players.RemoveAt(tInd);
             // randomly roll the rest
@@ -39,7 +42,12 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             {
                 // todo: replace with terrorist chance from config
                 if (Random.Range(0f, 1f) > 0.5f)
+                {
+                    Plugin.Log.LogDebug($"Chosen {players[0].playerUsername} as terrorist");
                     terrorists.Add(players[0]);
+                }
+                else
+                    Plugin.Log.LogDebug($"Chosen {players[0].playerUsername} as non-terrorist");
                 players.RemoveAt(0);
             }
 
