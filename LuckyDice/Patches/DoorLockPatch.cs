@@ -1,8 +1,7 @@
 ﻿#region
 
 using HarmonyLib;
-using LuckyDice.custom.events.implementation;
-using LuckyDice.custom.events.implementation.map;
+using LuckyDice.custom.monobehaviour.impl;
 
 #endregion
 
@@ -16,6 +15,13 @@ namespace LuckyDice.Patches
         {
             if (StartOfRound.Instance.IsHost || StartOfRound.Instance.IsServer)
                 RandomizeLocks.doors.Add(__instance);
+        }
+        
+        [HarmonyPatch("OnDestroy"), HarmonyPostfix]
+        private static void PatchOnDestroy(DoorLock __instance)
+        {
+            if (StartOfRound.Instance.IsHost || StartOfRound.Instance.IsServer)
+                RandomizeLocks.doors.Remove(__instance);
         }
     }
 }

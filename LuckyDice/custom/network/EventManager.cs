@@ -74,36 +74,6 @@ namespace LuckyDice.custom.network
         
         // todo: move to event monobehaviour
         [ClientRpc]
-        public void LockDoorClientRPC(NetworkObjectReference doorLockRef)
-        {
-            Plugin.Log.LogDebug($"Trying to lock door");
-            if (doorLockRef.TryGet(out NetworkObject networkObject))
-            {
-                DoorLock doorLock = networkObject.GetComponentInChildren<DoorLock>();
-                bool original = doorLock.isLocked;
-                doorLock.LockDoor();
-                doorLock.doorLockSFX.PlayOneShot(doorLock.unlockSFX);
-                Plugin.Log.LogDebug($"Door locked: {original} -> {doorLock.isLocked}");
-            }
-        }
-        
-        // todo: move to event monobehaviour
-        [ClientRpc]
-        public void UnlockDoorClientRPC(NetworkObjectReference doorLockRef)
-        {
-            Plugin.Log.LogDebug($"Trying to unlock door");
-            if (doorLockRef.TryGet(out NetworkObject networkObject))
-            {
-                DoorLock doorLock = networkObject.GetComponentInChildren<DoorLock>();
-                bool original = !doorLock.isLocked;
-                doorLock.UnlockDoor();
-                doorLock.doorLockSFX.PlayOneShot(doorLock.unlockSFX);
-                Plugin.Log.LogDebug($"Door unlocked: {original} -> {!doorLock.isLocked}");
-            }
-        }
-        
-        // todo: move to event monobehaviour
-        [ClientRpc]
         public void BleedPlayerClientRPC(NetworkObjectReference playerRef, bool bleed, int damage = 0)
         {
             if (playerRef.TryGet(out NetworkObject networkObject))

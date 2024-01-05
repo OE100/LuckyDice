@@ -92,7 +92,6 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="custom\events\EventRegistry.cs" />
-        <Compile Include="custom\events\implementation\map\RandomizeLocks.cs" />
         <Compile Include="custom\events\implementation\player\Bleed.cs" />
         <Compile Include="custom\events\implementation\player\HolyJihad.cs" />
         <Compile Include="custom\events\implementation\spawn\MaskedChaos.cs" />
@@ -110,6 +109,7 @@
         <Compile Include="custom\monobehaviour\def\BaseEventBehaviour.cs" />
         <Compile Include="custom\monobehaviour\impl\ExplodeLandmines.cs" />
         <Compile Include="custom\monobehaviour\impl\Player.cs" />
+        <Compile Include="custom\monobehaviour\impl\RandomizeLocks.cs" />
         <Compile Include="custom\network\EventManager.cs" />
         <Compile Include="Patches\DoorLockPatch.cs" />
         <Compile Include="Patches\Enemies.cs" />
@@ -126,6 +126,9 @@
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="custom\events\implementation\map\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
