@@ -2,6 +2,8 @@
 
 using System.Collections.Generic;
 using HarmonyLib;
+using LuckyDice.Utilities;
+using UnityEngine;
 
 #endregion
 
@@ -15,6 +17,7 @@ namespace LuckyDice.Patches
         [HarmonyPatch("Start"), HarmonyPostfix]
         private static void PatchStart(Terminal __instance)
         {
+            // Enemies
             for (int i = 0; i < __instance.moonsCatalogueList.Length; i++)
             {
                 SelectableLevel level = __instance.moonsCatalogueList[i];
@@ -30,6 +33,23 @@ namespace LuckyDice.Patches
                     }
                 }
             }
+            
+            // Get weather
+            Utils.TimeAndWeather = GameObject.Find("Systems/GameSystems/TimeAndWeather");
+            // stormy
+            Utils.StormyWeatherContainer = Utils.TimeAndWeather.transform.Find("Stormy").gameObject;
+            Utils.StormyWeather = Utils.StormyWeatherContainer.GetComponent<StormyWeather>();
+            Utils.StormyRainContainer = Utils.TimeAndWeather.transform.Find("StormyRainParticleContainer").gameObject;
+            // foggy
+            Utils.FoggyWeatherContainer = Utils.TimeAndWeather.transform.Find("Foggy").gameObject;
+            // flooding
+            Utils.FloodingWeatherContainer = Utils.TimeAndWeather.transform.Find("Flooding").gameObject;
+            // eclipse
+            Utils.EclipseWeatherContainer = Utils.TimeAndWeather.transform.Find("Eclipse").gameObject;
+            // dust storm
+            Utils.DustStormWeatherContainer = Utils.TimeAndWeather.transform.Find("DustStorm").gameObject;
+            // rainy
+            Utils.RainyWeatherContainer = Utils.TimeAndWeather.transform.Find("RainParticleContainer").gameObject;
         }
     }
 }

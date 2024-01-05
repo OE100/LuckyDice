@@ -7,6 +7,31 @@ namespace LuckyDice.Utilities
 {
     public static class Utils
     {
+        // weather container
+        public static GameObject TimeAndWeather;
+        
+        // stormy
+        public static GameObject StormyWeatherContainer;
+        public static StormyWeather StormyWeather;
+        public static GameObject StormyRainContainer;
+        
+        // foggy
+        public static GameObject FoggyWeatherContainer;
+        
+        // flooding
+        public static GameObject FloodingWeatherContainer;
+        
+        // eclipse
+        public static GameObject EclipseWeatherContainer;
+        
+        // dust storm
+        public static GameObject DustStormWeatherContainer;
+        
+        // rainy
+        public static GameObject RainyWeatherContainer;
+        
+        
+        
         public static Vector3 GetRandomLocationAroundPosition(
             Vector3 origin,
             float radius = 35,

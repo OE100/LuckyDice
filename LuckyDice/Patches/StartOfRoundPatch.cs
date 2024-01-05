@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using HarmonyLib;
 using LuckyDice.custom.events;
 using LuckyDice.custom.monobehaviour.impl;
+using LuckyDice.custom.monobehaviour.impl.map;
 using UnityEngine;
 
 #endregion

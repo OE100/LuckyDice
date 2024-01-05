@@ -4,7 +4,7 @@ using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace LuckyDice.custom.monobehaviour.impl
+namespace LuckyDice.custom.monobehaviour.impl.map
 {
     public class RandomizeLocks : BaseEventBehaviour
     {

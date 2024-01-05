@@ -2,6 +2,7 @@
 
 using HarmonyLib;
 using LuckyDice.custom.monobehaviour.impl;
+using LuckyDice.custom.monobehaviour.impl.map;
 
 #endregion
 

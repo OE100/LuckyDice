@@ -5,6 +5,7 @@ using HarmonyLib;
 using LuckyDice.custom.events;
 using LuckyDice.custom.items.dice;
 using LuckyDice.custom.monobehaviour.impl;
+using LuckyDice.custom.monobehaviour.impl.map;
 using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;

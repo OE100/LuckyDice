@@ -5,6 +5,7 @@ using GameNetcodeStuff;
 using LuckyDice.custom.events;
 using LuckyDice.custom.events.implementation.player;
 using LuckyDice.custom.monobehaviour.def;
+using LuckyDice.Utilities;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -142,14 +143,13 @@ namespace LuckyDice.custom.network
         [ClientRpc]
         public void SetStormClientRPC(bool storm)
         {
-            GameObject stormyWeatherObject = GameObject.Find("Systems/GameSystems/TimeAndWeather/Stormy");
-            if (stormyWeatherObject == null)
+            if (Utils.StormyWeatherContainer == null || Utils.StormyRainContainer == null)
             {
                 Plugin.Log.LogError("Stormy weather not found, event not running!");
                 return;
             }
-            stormyWeatherObject.SetActive(true);
-            StormyWeather stormyWeather = stormyWeatherObject.GetComponent<StormyWeather>();
+            Utils.StormyWeatherContainer.SetActive(storm);
+            Utils.StormyRainContainer.SetActive(storm);
         }
         
         [ClientRpc]
