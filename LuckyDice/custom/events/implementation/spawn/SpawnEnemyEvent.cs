@@ -78,8 +78,8 @@ namespace LuckyDice.custom.events.implementation.spawn
                                     
                                     while (count > 0)
                                     {
-                                        bool found = Utilities.Utilities.ReturnClosestNavMeshPoint(
-                                            Utilities.Utilities.GetRandomLocationAroundPosition(
+                                        bool found = Utilities.Utils.ReturnClosestNavMeshPoint(
+                                            Utilities.Utils.GetRandomLocationAroundPosition(
                                                 item.Key.transform.position),
                                             out var position);
                                         if (found)

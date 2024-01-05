@@ -16,12 +16,5 @@ namespace LuckyDice.Patches
             if (StartOfRound.Instance.IsHost || StartOfRound.Instance.IsServer)
                 RandomizeLocks.doors.Add(__instance);
         }
-        
-        [HarmonyPatch("OnDestroy"), HarmonyPostfix]
-        private static void PatchOnDestroy(DoorLock __instance)
-        {
-            if (StartOfRound.Instance.IsHost || StartOfRound.Instance.IsServer)
-                RandomizeLocks.doors.Remove(__instance);
-        }
     }
 }

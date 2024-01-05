@@ -78,12 +78,12 @@ namespace LuckyDice.custom.events.implementation.spawn
 
                             while (count > 0)
                             {
-                                Vector3 randomPos = Utilities.Utilities.GetRandomLocationAroundPosition(
+                                Vector3 randomPos = Utilities.Utils.GetRandomLocationAroundPosition(
                                     item.Key.transform.position,
                                     radius: 5,
                                     randomHeight: true);
 
-                                bool found = Utilities.Utilities.ReturnClosestNavMeshPoint(
+                                bool found = Utilities.Utils.ReturnClosestNavMeshPoint(
                                     randomPos,
                                     out var closestPoint);
 

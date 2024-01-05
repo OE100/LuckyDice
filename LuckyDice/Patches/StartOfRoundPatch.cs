@@ -3,8 +3,7 @@
 using System.Collections.Generic;
 using HarmonyLib;
 using LuckyDice.custom.events;
-using LuckyDice.custom.events.implementation;
-using LuckyDice.custom.events.implementation.map;
+using LuckyDice.custom.monobehaviour.impl;
 using UnityEngine;
 
 #endregion
@@ -38,6 +37,8 @@ namespace LuckyDice.Patches
         private static void PatchShipLeave()
         {
             EventRegistry.EndOfRoundCleanup();
+            
+            RandomizeLocks.doors.Clear();
         }
     }
 }

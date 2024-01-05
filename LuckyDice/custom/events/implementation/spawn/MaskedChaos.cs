@@ -68,12 +68,12 @@ namespace LuckyDice.custom.events.implementation.spawn
                 int count = 2;
                 while (count > 0)
                 {
-                    Vector3 randomPos = Utilities.Utilities.GetRandomLocationAroundPosition(
+                    Vector3 randomPos = Utilities.Utils.GetRandomLocationAroundPosition(
                         player.transform.position,
                         radius: 5,
                         randomHeight: false);
 
-                    bool found = Utilities.Utilities.ReturnClosestNavMeshPoint(
+                    bool found = Utilities.Utils.ReturnClosestNavMeshPoint(
                         randomPos,
                         out var closestPoint);
 
@@ -107,12 +107,12 @@ namespace LuckyDice.custom.events.implementation.spawn
                 int count = 4;
                 while (count > 0)
                 {
-                    Vector3 position = Utilities.Utilities.GetRandomLocationAroundPosition(
+                    Vector3 position = Utilities.Utils.GetRandomLocationAroundPosition(
                         origin: player.transform.position,
                         radius: 20,
                         randomHeight: false);
 
-                    bool found = Utilities.Utilities.ReturnClosestNavMeshPoint(
+                    bool found = Utilities.Utils.ReturnClosestNavMeshPoint(
                         origin: position,
                         closestPoint:out var closestPoint);
 

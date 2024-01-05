@@ -119,7 +119,7 @@
         <Compile Include="Patches\TerminalPatch.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Utilities\Utilities.cs" />
+        <Compile Include="Utilities\Utils.cs" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="luckydice" />

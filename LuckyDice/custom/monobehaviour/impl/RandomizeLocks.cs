@@ -10,7 +10,7 @@ namespace LuckyDice.custom.monobehaviour.impl
     {
         public static List<DoorLock> doors = new List<DoorLock>();
         private float timeToNext = 0f;
-        private float timeBeforeSwitching = 3f;
+        private float timeBeforeSwitching = 1f;
         
         private void Awake()
         {
@@ -34,52 +34,27 @@ namespace LuckyDice.custom.monobehaviour.impl
                 Plugin.Log.LogDebug($"RandomizeLocks cleanup!");
                 Destroy(this);
             }
-
+            
             if (timeToNext < 0f)
             {
-                int i = Random.Range(0, doors.Count);
-                DoorLock door = doors[i];
-                if (Random.Range(0, 2) == 0)
+                for (int j = 0; j < 5; j++)
                 {
-                    if (!door.isLocked)
+                    int i = Random.Range(0, doors.Count);
+                    DoorLock door = doors[i];
+                    if (Random.Range(0, 2) == 0)
                     {
-                        LockDoorClientRPC(new NetworkObjectReference(door.GetComponentInParent<NetworkObject>()));
+                        if (!door.isLocked)
+                        {
+                            EventManager.Instance.LockDoorClientRPC(new NetworkObjectReference(door.GetComponentInParent<NetworkObject>()));
+                        }
                     }
-                }
-                else if (door.isLocked)
-                {
-                    UnlockDoorClientRPC(new NetworkObjectReference(door.GetComponentInParent<NetworkObject>()));
+                    else if (door.isLocked)
+                    {
+                        EventManager.Instance.UnlockDoorClientRPC(new NetworkObjectReference(door.GetComponentInParent<NetworkObject>()));
+                    }
                 }
                 
                 timeToNext = timeBeforeSwitching;
-            }
-        }
-        
-        [ClientRpc]
-        private void LockDoorClientRPC(NetworkObjectReference doorLockRef)
-        {
-            Plugin.Log.LogDebug($"Trying to lock door");
-            if (doorLockRef.TryGet(out NetworkObject networkObject))
-            {
-                DoorLock doorLock = networkObject.GetComponentInChildren<DoorLock>();
-                bool original = doorLock.isLocked;
-                doorLock.LockDoor();
-                doorLock.doorLockSFX.PlayOneShot(doorLock.unlockSFX);
-                Plugin.Log.LogDebug($"Door locked: {original} -> {doorLock.isLocked}");
-            }
-        }
-            
-        [ClientRpc]
-        private void UnlockDoorClientRPC(NetworkObjectReference doorLockRef)
-        {
-            Plugin.Log.LogDebug($"Trying to unlock door");
-            if (doorLockRef.TryGet(out NetworkObject networkObject))
-            {
-                DoorLock doorLock = networkObject.GetComponentInChildren<DoorLock>();
-                bool original = !doorLock.isLocked;
-                doorLock.UnlockDoor();
-                doorLock.doorLockSFX.PlayOneShot(doorLock.unlockSFX);
-                Plugin.Log.LogDebug($"Door unlocked: {original} -> {!doorLock.isLocked}");
             }
         }
     }

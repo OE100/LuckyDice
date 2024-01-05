@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 
 namespace LuckyDice.Utilities
 {
-    public class Utilities
+    public static class Utils
     {
         public static Vector3 GetRandomLocationAroundPosition(
             Vector3 origin,

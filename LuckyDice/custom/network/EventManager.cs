@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events;
 using LuckyDice.custom.events.implementation.player;
+using LuckyDice.custom.monobehaviour.def;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -59,6 +60,12 @@ namespace LuckyDice.custom.network
             EventRegistry.RunEventFromPool(pool, eventIndex);
         }
         
+        
+        
+        
+        
+        // RPCs
+        
         [ClientRpc]
         public void DisplayMessageClientRPC(NetworkObjectReference playerRef, string header, string body)
         {
@@ -72,7 +79,6 @@ namespace LuckyDice.custom.network
             HUDManager.Instance.DisplayTip(headerText: header, bodyText: body);
         }
         
-        // todo: move to event monobehaviour
         [ClientRpc]
         public void BleedPlayerClientRPC(NetworkObjectReference playerRef, bool bleed, int damage = 0)
         {
@@ -85,7 +91,6 @@ namespace LuckyDice.custom.network
             }
         }
         
-        // todo: move to event monobehaviour
         [ServerRpc(RequireOwnership = false)]
         public void SpawnItemAroundPositionServerRPC(Vector3 position, int itemId, int stackValue = 0)
         {
@@ -105,7 +110,6 @@ namespace LuckyDice.custom.network
             Plugin.Log.LogDebug($"Spawned item: {itemToSpawn.itemName}, with value: {stackValue}, at position: ({position.x}, {position.y}, {position.z})");
         }
 
-        // todo: move to event monobehaviour
         [ClientRpc]
         public void PlayJihadSoundFromPlayerClientRPC(NetworkObjectReference playerRef)
         {
@@ -118,7 +122,6 @@ namespace LuckyDice.custom.network
             }
         }
         
-        // todo: move to event monobehaviour
         [ClientRpc]
         public void SpawnExplosionOnPlayerClientRPC(NetworkObjectReference playerRef)
         {
@@ -135,8 +138,7 @@ namespace LuckyDice.custom.network
                 );
             }
         }
-
-        // todo: move to event monobehaviour
+        
         [ClientRpc]
         public void SetStormClientRPC(bool storm)
         {
@@ -148,6 +150,34 @@ namespace LuckyDice.custom.network
             }
             stormyWeatherObject.SetActive(true);
             StormyWeather stormyWeather = stormyWeatherObject.GetComponent<StormyWeather>();
+        }
+        
+        [ClientRpc]
+        public void LockDoorClientRPC(NetworkObjectReference doorLockRef)
+        {
+            Plugin.Log.LogDebug($"Trying to lock door");
+            if (doorLockRef.TryGet(out NetworkObject networkObject))
+            {
+                DoorLock doorLock = networkObject.GetComponentInChildren<DoorLock>();
+                bool original = doorLock.isLocked;
+                doorLock.LockDoor();
+                doorLock.doorLockSFX.PlayOneShot(doorLock.unlockSFX);
+                Plugin.Log.LogDebug($"Door locked: {original} -> {doorLock.isLocked}");
+            }
+        }
+            
+        [ClientRpc]
+        public void UnlockDoorClientRPC(NetworkObjectReference doorLockRef)
+        {
+            Plugin.Log.LogDebug($"Trying to unlock door");
+            if (doorLockRef.TryGet(out NetworkObject networkObject))
+            {
+                DoorLock doorLock = networkObject.GetComponentInChildren<DoorLock>();
+                bool original = !doorLock.isLocked;
+                doorLock.UnlockDoor();
+                doorLock.doorLockSFX.PlayOneShot(doorLock.unlockSFX);
+                Plugin.Log.LogDebug($"Door unlocked: {original} -> {!doorLock.isLocked}");
+            }
         }
     }
 }
