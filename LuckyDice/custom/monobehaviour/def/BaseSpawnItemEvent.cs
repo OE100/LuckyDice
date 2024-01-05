@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using GameNetcodeStuff;
+using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace LuckyDice.custom.monobehaviour.def
 {
+    [MountAtRegistry]
     public abstract class BaseSpawnItemEvent : BasePlayerEvent
     {
         protected abstract int AmountPerStack();

@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 
 namespace LuckyDice.custom.monobehaviour.def
 {
-    public class BasePlayerEvent : BaseMountAtRegistryEvent 
+    public class BasePlayerEvent : BaseEventBehaviour 
     {
         protected Dictionary<PlayerControllerB, int> playersToMult = new Dictionary<PlayerControllerB, int>();
         protected List<PlayerControllerB> playersToRemove = new List<PlayerControllerB>();

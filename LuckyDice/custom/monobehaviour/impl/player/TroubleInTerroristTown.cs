@@ -10,6 +10,7 @@ namespace LuckyDice.custom.monobehaviour.impl.player
     public class TroubleInTerroristTown : BasePlayerEvent
     {
         private float timeRemaining;
+        private bool started;
         private bool warningPlayed;
         
         private void Awake()
@@ -17,12 +18,6 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             Plugin.Log.LogDebug("TroubleInTerroristTown Awake!");
             NeedsRemoval = false;
             IsOneTimeEvent = true;
-            timeRemaining = 20f; // todo: replace with random in range from config
-            EventManager.Instance.DisplayMessageClientRPC(
-                new NetworkObjectReference(),
-                "Trouble in terrorist town!",
-                "You may or may not have bombs on you."
-            );
         }
 
         public override void AddPlayer(PlayerControllerB player)
@@ -48,6 +43,14 @@ namespace LuckyDice.custom.monobehaviour.impl.player
                     playersToMult[players[0]] = 1;
                 players.RemoveAt(0);
             }
+
+            started = true;
+            timeRemaining = 20f; // todo: replace with random in range from config
+            EventManager.Instance.DisplayMessageClientRPC(
+                new NetworkObjectReference(),
+                "Trouble in terrorist town!",
+                "You may or may not have bombs on you."
+            );
         }
 
         protected override void Update()
@@ -55,6 +58,9 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             if (IsPhaseForbidden())
                 Destroy(this);
 
+            if (!started)
+                return;
+            
             if (playersToMult.Count > 0)
             {
                 if (timeRemaining <= 15 && !warningPlayed)

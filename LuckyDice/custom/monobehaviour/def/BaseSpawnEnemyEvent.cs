@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using GameNetcodeStuff;
+using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.network;
 using LuckyDice.Utilities;
 using Unity.Netcode;
@@ -7,6 +8,7 @@ using UnityEngine;
 
 namespace LuckyDice.custom.monobehaviour.def
 {
+    [MountAtRegistry]
     public abstract class BaseSpawnEnemyEvent : BasePlayerEvent
     {
         protected int SpawnIndex = -1;

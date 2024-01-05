@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GameNetcodeStuff;
+using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
 using Unity.Netcode;
@@ -7,6 +8,7 @@ using UnityEngine;
 
 namespace LuckyDice.custom.monobehaviour.impl.player
 {
+    [MountAtRegistry]
     public class Bleed : BasePlayerEvent
     {
         private static float timeToBleed = 2.4f;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GameNetcodeStuff;
+using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -55,7 +56,7 @@ namespace LuckyDice.custom.events
             Plugin.Log.LogDebug($"Adding event: {eventMonoBehaviourType.Name}, to pool: {pool}");
             eventPools[pool].Add((eventMonoBehaviourType, mountingPoint));
             
-            if (typeof(BaseMountAtRegistryEvent).IsAssignableFrom(eventMonoBehaviourType))
+            if (Attribute.GetCustomAttribute(eventMonoBehaviourType, typeof(MountAtRegistry)) != null)
             {
                 Plugin.Log.LogDebug($"Event: {eventMonoBehaviourType.Name}, is a mount at registry event, mounting now");
                 MountEvent(mountingPoint, eventMonoBehaviourType);
@@ -118,7 +119,7 @@ namespace LuckyDice.custom.events
             }
             (Type, GameObject) eEvent = tuples[eventIndex];
             // check if the event is a mount at registry event and if skip mounting it
-            if (typeof(BaseMountAtRegistryEvent).IsAssignableFrom(eEvent.Item1))
+            if (Attribute.GetCustomAttribute(eEvent.Item1, typeof(MountAtRegistry)) != null)
             {
                 // check if the event is a one time event and if so remove it from the pool
                 BaseEventBehaviour component = (BaseEventBehaviour)eEvent.Item2.GetComponent(eEvent.Item1);
