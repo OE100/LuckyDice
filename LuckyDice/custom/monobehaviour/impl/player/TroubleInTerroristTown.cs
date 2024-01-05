@@ -7,21 +7,19 @@ using UnityEngine;
 
 namespace LuckyDice.custom.monobehaviour.impl.player
 {
-    public class TroubleInTerroristTown : BasePlayerEvent
+    public class TroubleInTerroristTown : BaseEventBehaviour
     {
         private float timeRemaining;
         private bool started;
         private bool warningPlayed;
+        private List<PlayerControllerB> terrorists;
         
         private void Awake()
         {
             Plugin.Log.LogDebug("TroubleInTerroristTown Awake!");
             NeedsRemoval = false;
             IsOneTimeEvent = true;
-        }
-
-        public override void AddPlayer(PlayerControllerB player)
-        {
+            Plugin.Log.LogDebug("TroubleInTerroristTown AddPlayer!");
             List<PlayerControllerB> players = new List<PlayerControllerB>(StartOfRound.Instance.allPlayerScripts);
             players.RemoveAll(p => p.isPlayerDead);
             if (players.Count <= 1)
@@ -32,15 +30,16 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             // select non-terrorist
             players.RemoveAt(Random.Range(0, players.Count));
             // select terrorist
+            terrorists = new List<PlayerControllerB>();
             int tInd = Random.Range(0, players.Count);
-            playersToMult[players[tInd]] = 1;
+            terrorists.Add(players[tInd]);
             players.RemoveAt(tInd);
             // randomly roll the rest
             while (players.Count > 0)
             {
                 // todo: replace with terrorist chance from config
                 if (Random.Range(0f, 1f) > 0.5f)
-                    playersToMult[players[0]] = 1;
+                    terrorists.Add(players[0]);
                 players.RemoveAt(0);
             }
 
@@ -52,7 +51,7 @@ namespace LuckyDice.custom.monobehaviour.impl.player
                 "You may or may not have bombs on you."
             );
         }
-
+        
         protected override void Update()
         {
             if (IsPhaseForbidden())
@@ -61,20 +60,17 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             if (!started)
                 return;
             
-            if (playersToMult.Count > 0)
+            if (terrorists.Count > 0)
             {
                 if (timeRemaining <= 15 && !warningPlayed)
                 {
                     warningPlayed = true;
-                    foreach (KeyValuePair<PlayerControllerB,int> pair in playersToMult)
+                    foreach (PlayerControllerB player in terrorists)
                     {
-                        if (pair.Value < 1)
-                            continue;
-
-                        pair.Key.voiceMuffledByEnemy = true;
+                        player.voiceMuffledByEnemy = true;
                         
                         EventManager.Instance.DisplayMessageClientRPC(
-                            new NetworkObjectReference(pair.Key.GetComponentInParent<NetworkObject>()),
+                            new NetworkObjectReference(player.GetComponentInParent<NetworkObject>()),
                             "You are a terrorist!",
                             "Try to blow everyone up."
                         );
@@ -82,9 +78,8 @@ namespace LuckyDice.custom.monobehaviour.impl.player
                 }
                 if (timeRemaining <= 0f)
                 {
-                    foreach (KeyValuePair<PlayerControllerB,int> pair in playersToMult)
-                        if (pair.Value > 0)
-                            Kaboom(pair.Key);
+                    foreach (PlayerControllerB player in terrorists)
+                        Kaboom(player);
                     
                     Destroy(this);
                 }
@@ -98,6 +93,7 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             player.voiceMuffledByEnemy = false;
             EventManager.Instance.SpawnExplosionOnPlayerClientRPC(
                 new NetworkObjectReference(player.GetComponentInParent<NetworkObject>()));
+            // todo: add value for kills and save ship inventory in case of everyones death by explosions
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Collections;
 using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace LuckyDice.custom.items.dice
 {
     public class DiceItem : GrabbableObject
     {
-        internal static AudioClip rollSound = null;
+        internal static AudioClip rollSound;
         protected AudioSource audioSource;
 
         public override void Start()

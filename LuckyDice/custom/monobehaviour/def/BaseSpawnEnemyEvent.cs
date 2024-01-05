@@ -26,7 +26,7 @@ namespace LuckyDice.custom.monobehaviour.def
             {
                 // find spawn index
                 SpawnIndex = RoundManager.Instance.currentLevel.Enemies
-                    .FindIndex(x => x.enemyType.name == name);
+                    .FindIndex(x => x.enemyType.name == Name());
             }
         }
 

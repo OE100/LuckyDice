@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events;
+using LuckyDice.Patches;
 using LuckyDice.Utilities;
 using Unity.Netcode;
 using UnityEngine;
@@ -32,7 +33,10 @@ namespace LuckyDice.custom.network
         public void TriggerEventFromPoolServerRPC(NetworkObjectReference triggerRef)
         {
             if (!(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
+            {
+                Plugin.Log.LogDebug("Only host can trigger events!");
                 return;
+            }
 
             if (!triggerRef.TryGet(out NetworkObject networkObject))
             {
@@ -176,6 +180,12 @@ namespace LuckyDice.custom.network
                 doorLock.doorLockSFX.PlayOneShot(doorLock.unlockSFX);
                 Plugin.Log.LogDebug($"Door unlocked: {original} -> {!doorLock.isLocked}");
             }
+        }
+
+        [ClientRpc]
+        public void SetMaskedEnemyChangesClientRPC(bool triggered)
+        {
+            MaskedEnemyChanges.Triggered = triggered;
         }
     }
 }

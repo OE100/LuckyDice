@@ -17,7 +17,7 @@ namespace LuckyDice.custom.monobehaviour.impl.tweak
             NeedsRemoval = false;
             IsOneTimeEvent = true;
             
-            MaskedEnemyChanges.Triggered = true;
+            EventManager.Instance.SetMaskedEnemyChangesClientRPC(true);
 
             StartCoroutine(EventStartup());
         }
@@ -26,7 +26,7 @@ namespace LuckyDice.custom.monobehaviour.impl.tweak
         {
             if (IsPhaseForbidden())
             {
-                MaskedEnemyChanges.Triggered = false;
+                EventManager.Instance.SetMaskedEnemyChangesClientRPC(false);
                 Destroy(this);
             }
         }

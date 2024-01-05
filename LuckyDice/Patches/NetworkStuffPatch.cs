@@ -47,7 +47,7 @@ namespace LuckyDice.Patches
         {
             if (EventManager.Instance == null || EventManager.Instance.gameObject == null)
             {
-                Plugin.Log.LogError($"We're fucked!!!");
+                Plugin.Log.LogError("We're fucked!!!");
                 return;
             }
             
