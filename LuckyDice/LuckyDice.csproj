@@ -92,13 +92,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="custom\events\EventRegistry.cs" />
-        <Compile Include="custom\events\implementation\player\Bleed.cs" />
         <Compile Include="custom\events\implementation\player\HolyJihad.cs" />
-        <Compile Include="custom\events\implementation\spawn\MaskedChaos.cs" />
-        <Compile Include="custom\events\implementation\spawn\SpawnEnemyEvent.cs" />
-        <Compile Include="custom\events\implementation\spawn\SpawnItemEvent.cs" />
-        <Compile Include="custom\events\implementation\spawn\SpawnItemForAllEvent.cs" />
-        <Compile Include="custom\events\implementation\weather\StormyWeatherEvent.cs" />
         <Compile Include="custom\events\prototype\BaseDiceEvent.cs" />
         <Compile Include="custom\events\prototype\IDiceEvent.cs" />
         <Compile Include="custom\events\prototype\MultiplierDiceEvent.cs" />
@@ -107,10 +101,29 @@
         <Compile Include="custom\items\dice\DiceItem.cs" />
         <Compile Include="custom\items\scrap\DiscoMonkey.cs" />
         <Compile Include="custom\monobehaviour\def\BaseEventBehaviour.cs" />
+        <Compile Include="custom\monobehaviour\def\BaseMountAtRegistryEvent.cs" />
+        <Compile Include="custom\monobehaviour\def\BasePlayerEvent.cs" />
+        <Compile Include="custom\monobehaviour\def\BaseSpawnEnemyEvent.cs" />
+        <Compile Include="custom\monobehaviour\def\BaseSpawnItemEvent.cs" />
+        <Compile Include="custom\monobehaviour\def\BaseSpawnItemForAllEvent.cs" />
         <Compile Include="custom\monobehaviour\impl\map\ExplodeLandmines.cs" />
         <Compile Include="custom\monobehaviour\impl\map\RandomizeLocks.cs" />
         <Compile Include="custom\monobehaviour\impl\map\StormyWeather.cs" />
         <Compile Include="custom\monobehaviour\impl\Player.cs" />
+        <Compile Include="custom\monobehaviour\impl\player\Bleed.cs" />
+        <Compile Include="custom\monobehaviour\impl\spawn\Enemies\SpawnCentipede.cs" />
+        <Compile Include="custom\monobehaviour\impl\spawn\Enemies\SpawnCoilhead.cs" />
+        <Compile Include="custom\monobehaviour\impl\spawn\Enemies\SpawnDressGirl.cs" />
+        <Compile Include="custom\monobehaviour\impl\spawn\Enemies\SpawnFlowerman.cs" />
+        <Compile Include="custom\monobehaviour\impl\spawn\Enemies\SpawnHoarderbug.cs" />
+        <Compile Include="custom\monobehaviour\impl\spawn\Enemies\SpawnJester.cs" />
+        <Compile Include="custom\monobehaviour\impl\spawn\Enemies\SpawnMasked.cs" />
+        <Compile Include="custom\monobehaviour\impl\spawn\Enemies\SpawnNutcracker.cs" />
+        <Compile Include="custom\monobehaviour\impl\spawn\Items\SpawnClownHorn.cs" />
+        <Compile Include="custom\monobehaviour\impl\spawn\Items\SpawnGoldBar.cs" />
+        <Compile Include="custom\monobehaviour\impl\spawn\Items\SpawnJarOfPickles.cs" />
+        <Compile Include="custom\monobehaviour\impl\spawn\Items\SpawnMetalSheet.cs" />
+        <Compile Include="custom\monobehaviour\impl\tweak\MaskedChaos.cs" />
         <Compile Include="custom\network\EventManager.cs" />
         <Compile Include="Patches\DoorLockPatch.cs" />
         <Compile Include="Patches\Enemies.cs" />

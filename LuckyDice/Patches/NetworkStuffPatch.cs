@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using HarmonyLib;
 using LuckyDice.custom.events;
 using LuckyDice.custom.items.dice;
-using LuckyDice.custom.monobehaviour.impl;
-using LuckyDice.custom.monobehaviour.impl.map;
+using LuckyDice.custom.monobehaviour.impl.player;
 using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
@@ -53,11 +52,11 @@ namespace LuckyDice.Patches
             
             // register d4 pool
             EventRegistry.RegisterItem(typeof(D4), "D4");
-            EventRegistry.RegisterEvent("D4", typeof(ExplodeLandmines), EventManager.Instance.gameObject);
+            EventRegistry.RegisterEvent("D4", typeof(Bleed), EventManager.Instance.gameObject);
             
             // register d20 pool
             EventRegistry.RegisterItem(typeof(D20), "D20");
-            EventRegistry.RegisterEvent("D20", typeof(ExplodeLandmines), EventManager.Instance.gameObject);
+            EventRegistry.RegisterEvent("D20", typeof(Bleed), EventManager.Instance.gameObject);
         }
     }
 }

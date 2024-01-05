@@ -1,7 +1,5 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
-using LuckyDice.custom.events.implementation;
-using LuckyDice.custom.events.implementation.spawn;
 using UnityEngine;
 
 namespace LuckyDice.Patches
@@ -9,6 +7,8 @@ namespace LuckyDice.Patches
     [HarmonyPatch]
     public class MaskedEnemyChanges
     {
+        public static bool Triggered = false;
+        
         [HarmonyPatch(typeof(EnemyAI), "CheckLineOfSightForClosestPlayer"), HarmonyPrefix]
         private static bool PatchCheckLineOfSightForClosestPlayerPrefix(
             EnemyAI __instance,
@@ -18,7 +18,7 @@ namespace LuckyDice.Patches
             float bufferDistance,
             ref PlayerControllerB __result)
         {
-            if (!MaskedChaos.triggered)
+            if (!Triggered)
                 return true;
             if (!(__instance is MaskedPlayerEnemy))
                 return true;
@@ -69,7 +69,7 @@ namespace LuckyDice.Patches
         private static bool PatchOnCollideWithPlayerPrefix(MaskedPlayerEnemy __instance, Collider other)
         {
             PlayerControllerB player;
-            if (MaskedChaos.triggered &&
+            if (Triggered &&
                 (player = other.GetComponentInParent<PlayerControllerB>()) != null &&
                 PlayerHas2Masks(player))
                 return false;

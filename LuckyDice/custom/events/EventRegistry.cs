@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameNetcodeStuff;
 using LuckyDice.custom.monobehaviour.def;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -53,6 +54,12 @@ namespace LuckyDice.custom.events
             }
             Plugin.Log.LogDebug($"Adding event: {eventMonoBehaviourType.Name}, to pool: {pool}");
             eventPools[pool].Add((eventMonoBehaviourType, mountingPoint));
+            
+            if (typeof(BaseMountAtRegistryEvent).IsAssignableFrom(eventMonoBehaviourType))
+            {
+                Plugin.Log.LogDebug($"Event: {eventMonoBehaviourType.Name}, is a mount at registry event, mounting now");
+                MountEvent(mountingPoint, eventMonoBehaviourType);
+            }
         }
         
         public static List<(Type, GameObject)> GetEventPool(string pool)
@@ -96,7 +103,7 @@ namespace LuckyDice.custom.events
             return Random.Range(0, types.Count);
         }
 
-        public static void RunEventFromPool(string pool, int eventIndex)
+        public static void RunEventFromPool(string pool, int eventIndex, PlayerControllerB player)
         {
             if (!eventPools.ContainsKey(pool))
             {
@@ -110,8 +117,26 @@ namespace LuckyDice.custom.events
                 return;
             }
             (Type, GameObject) eEvent = tuples[eventIndex];
-            if (MountEvent(eEvent.Item2, eEvent.Item1))
+            // check if the event is a mount at registry event and if skip mounting it
+            if (typeof(BaseMountAtRegistryEvent).IsAssignableFrom(eEvent.Item1))
             {
+                // check if the event is a one time event and if so remove it from the pool
+                BaseEventBehaviour component = (BaseEventBehaviour)eEvent.Item2.GetComponent(eEvent.Item1);
+                if (component != null && component.IsOneTimeEvent)
+                {
+                    Plugin.Log.LogDebug($"Event: {eEvent.Item1.Name}, is one time event, removing from pool: {pool}");
+                    tuples.RemoveAt(eventIndex);
+                    removedEventPools[pool].Add(eEvent);
+                }
+                if (typeof(BasePlayerEvent).IsAssignableFrom(eEvent.Item1))
+                {
+                    Plugin.Log.LogDebug($"Event: {eEvent.Item1.Name}, is a player event, adding player: {player.playerUsername}");
+                    ((BasePlayerEvent)component).AddPlayer(player);
+                }
+            }
+            else if (MountEvent(eEvent.Item2, eEvent.Item1))
+            {
+                // check if the event is a one time event and if so remove it from the pool
                 Plugin.Log.LogDebug($"Event: {eEvent.Item1.Name}, is one time event, removing from pool: {pool}");
                 tuples.RemoveAt(eventIndex);
                 removedEventPools[pool].Add(eEvent);
@@ -122,19 +147,21 @@ namespace LuckyDice.custom.events
         // returns true if event is one time
         public static bool MountEvent(GameObject gameObject, Type eventType)
         {
-            gameObject.AddComponent(eventType);
-            Component[] components = gameObject.GetComponents(typeof(BaseEventBehaviour));
-            Component found;
-            try
-            {
-                found = components.First(component => component.GetType() == eventType);
-            }
-            catch (InvalidOperationException)
-            {
-                return true;
-            }
+            // check if event already is mounted and if so return false so it won't try to clean it up later
+            Component component = gameObject.GetComponent(eventType);
+            if (component != null)
+                return false;
+            
+            // if it isn't mount it and check if it needs removal
+            component = gameObject.AddComponent(eventType);
 
-            BaseEventBehaviour baseEventBehaviour = ((BaseEventBehaviour)found);
+            if (component == null)
+            {
+                Plugin.Log.LogDebug($"Failed to mount event: {eventType.Name}, to: {gameObject.name}, this shouldn't happen!");
+                return false;
+            }
+            
+            BaseEventBehaviour baseEventBehaviour = (BaseEventBehaviour)component;
             if (baseEventBehaviour.NeedsRemoval)
                 mountedEvents.Add(gameObject, eventType);
             

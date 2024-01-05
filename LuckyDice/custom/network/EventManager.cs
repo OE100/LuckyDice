@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events;
 using LuckyDice.custom.events.implementation.player;
-using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.Utilities;
 using Unity.Netcode;
 using UnityEngine;
@@ -58,7 +57,7 @@ namespace LuckyDice.custom.network
                 return;
             }
 
-            EventRegistry.RunEventFromPool(pool, eventIndex);
+            EventRegistry.RunEventFromPool(pool, eventIndex, trigger.playerHeldBy);
         }
         
         

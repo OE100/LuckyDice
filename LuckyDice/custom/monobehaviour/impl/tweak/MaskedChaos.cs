@@ -1,65 +1,53 @@
 ﻿using System.Collections;
 using GameNetcodeStuff;
-using LuckyDice.custom.events.prototype;
+using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
 using LuckyDice.Patches;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace LuckyDice.custom.events.implementation.spawn
+namespace LuckyDice.custom.monobehaviour.impl.tweak
 {
-    public class MaskedChaos : BaseDiceEvent
+    public class MaskedChaos : BaseEventBehaviour
     {
-        internal static bool triggered = false;
-
-        public override bool IsOneTime() => true;
-
-        public override void Run()
+        private void Awake()
         {
-            base.Run();
-            Plugin.Log.LogDebug("Running Masked Chaos event.");
+            Plugin.Log.LogDebug("MaskedChaos Awake");
+            
+            NeedsRemoval = false;
+            IsOneTimeEvent = true;
+            
+            MaskedEnemyChanges.Triggered = true;
+
+            StartCoroutine(EventStartup());
         }
 
-        public override IEnumerator EventCoroutine()
+        protected override void Update()
         {
-            while (running)
+            if (IsPhaseForbidden())
             {
-                if (IsPhaseForbidden())
-                {
-                    if (triggered)
-                        StopEvent();
-                    yield return new WaitForSeconds(10);
-                }
-
-                if (!triggered && players.Count > 0)
-                {
-                    Plugin.Log.LogDebug("Triggering Masked Chaos event");
-                    triggered = true;
-                    EventManager.Instance.StartCoroutine(StartEvent());
-                }
-
-                yield return new WaitForSeconds(2);
+                MaskedEnemyChanges.Triggered = false;
+                Destroy(this);
             }
         }
 
-        private IEnumerator StartEvent()
+        private IEnumerator EventStartup()
         {
             int spawnIndex = RoundManager.Instance.currentLevel.Enemies
                 .FindIndex(x => x.enemyType.name == Enemies.MaskedPlayerEnemy);
-            if (spawnIndex == -1)
+
+            if (spawnIndex < 0)
             {
-                Plugin.Log.LogError(
-                    $"Couldn't find {Enemies.MaskedPlayerEnemy} in level enemy list, event will not be triggered!");
+                Plugin.Log.LogError($"Couldn't find {Enemies.MaskedPlayerEnemy} in level enemy list, event will not be triggered!");
                 yield break;
             }
+            
             EventManager.Instance.DisplayMessageClientRPC(
                 new NetworkObjectReference(),
                 "Masked Chaos",
                 "I suggest you grab the masks before... well before they grab you."
             );
             
-            Plugin.Log.LogDebug("Spawning masks beneath players");
-            // spawn 2 masks beneath each player alive
             foreach (PlayerControllerB player in StartOfRound.Instance.allPlayerScripts)
             {
                 if (player.isPlayerDead)
@@ -127,12 +115,6 @@ namespace LuckyDice.custom.events.implementation.spawn
                     count--;
                 }
             }
-        }
-        
-        private void StopEvent()
-        {
-            triggered = false;
-            players.Clear();
         }
     }
 }
