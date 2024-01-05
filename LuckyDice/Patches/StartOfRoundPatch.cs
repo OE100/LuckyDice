@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using HarmonyLib;
+using LuckyDice.custom.events;
 using LuckyDice.custom.events.implementation;
 using LuckyDice.custom.events.implementation.map;
 using UnityEngine;
@@ -36,7 +37,7 @@ namespace LuckyDice.Patches
         [HarmonyPatch("ShipLeave"), HarmonyPostfix]
         private static void PatchShipLeave()
         {
-            RandomizeLocks.doors.Clear();
+            EventRegistry.EndOfRoundCleanup();
         }
     }
 }

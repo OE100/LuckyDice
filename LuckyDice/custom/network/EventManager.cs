@@ -2,12 +2,8 @@
 
 using System.Collections.Generic;
 using GameNetcodeStuff;
-using LuckyDice.custom.events.implementation.map;
+using LuckyDice.custom.events;
 using LuckyDice.custom.events.implementation.player;
-using LuckyDice.custom.events.implementation.spawn;
-using LuckyDice.custom.events.implementation.weather;
-using LuckyDice.custom.events.prototype;
-using LuckyDice.Patches;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -18,43 +14,49 @@ namespace LuckyDice.custom.network
     public class EventManager : NetworkBehaviour
     {
         public static EventManager Instance { get; private set; }
-        private readonly IDiceEvent[] Events = {
-            new Bleed(),
-            new RandomizeLocks(),
-            new SpawnEnemyEvent(Enemies.SpringMan),
-            new SpawnEnemyEvent(Enemies.Flowerman),
-            new SpawnEnemyEvent(Enemies.MaskedPlayerEnemy),
-            new SpawnEnemyEvent(Enemies.Jester),
-            new SpawnEnemyEvent(Enemies.Centipede, amountPerStack: 4),
-            new SpawnItemEvent(stackValue: 50, numberOfItems: 2, itemId: 25), // clown horn
-            new SpawnItemEvent(stackValue: 200, numberOfItems: 1, itemId: 36), // gold bar
-            new SpawnItemEvent(stackValue: 50, numberOfItems: 10, itemId: 44), // pickle jar
-            new SpawnItemForAllEvent(stackValue: 100, numberOfItems: 1, itemId: 36), // gold bar for all
-            new HolyJihad(),
-            new MaskedChaos(),
-            new StormyWeatherEvent(),
-            new ExplodeLandmines()
-        };
         
         public override void OnNetworkSpawn()
         {
-            // initialize singleton
             base.OnNetworkSpawn();
             Instance = this;
-            
-            // start all events
-            foreach (IDiceEvent e in Events)
-                e.Run();
         }
         
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
-
             Instance = null;
+        }
+
+        // rolls event on server
+        [ServerRpc(RequireOwnership = false)]
+        public void TriggerEventFromPoolServerRPC(NetworkObjectReference triggerRef)
+        {
+            if (!(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
+                return;
+
+            if (!triggerRef.TryGet(out NetworkObject networkObject))
+            {
+                Plugin.Log.LogDebug($"Didn't find trigger object!");
+                return;
+            }
+
+            GrabbableObject trigger = networkObject.GetComponentInParent<GrabbableObject>();
+
+            string pool = EventRegistry.GetPoolFromItem(trigger.GetType());
+            if (pool == null)
+            {
+                Plugin.Log.LogWarning($"Item of type: {trigger.GetType()} has no event pool!");
+                return;
+            }
             
-            foreach (IDiceEvent e in Events)
-                e.Stop();
+            int eventIndex = EventRegistry.GetRandomEventIndexFromPool(pool);
+            if (eventIndex == -1)
+            {
+                Plugin.Log.LogError($"Event pool: {pool}, is empty!");
+                return;
+            }
+
+            EventRegistry.RunEventFromPool(pool, eventIndex);
         }
         
         [ClientRpc]
@@ -70,20 +72,7 @@ namespace LuckyDice.custom.network
             HUDManager.Instance.DisplayTip(headerText: header, bodyText: body);
         }
         
-        [ServerRpc(RequireOwnership = false)]
-        public void AddPlayerToEventServerRPC(Event e, NetworkObjectReference playerRef)
-        {
-            if (playerRef.TryGet(out NetworkObject networkObject))
-                Events[(int)e].AddPlayer(networkObject.GetComponentInChildren<PlayerControllerB>());
-        }
-        
-        [ServerRpc(RequireOwnership = false)]
-        public void RemovePlayerFromEventServerRPC(Event e, NetworkObjectReference playerRef)
-        {
-            if (playerRef.TryGet(out NetworkObject networkObject))
-                Events[(int)e].RemovePlayer(networkObject.GetComponentInChildren<PlayerControllerB>());
-        }
-        
+        // todo: move to event monobehaviour
         [ClientRpc]
         public void LockDoorClientRPC(NetworkObjectReference doorLockRef)
         {
@@ -98,6 +87,7 @@ namespace LuckyDice.custom.network
             }
         }
         
+        // todo: move to event monobehaviour
         [ClientRpc]
         public void UnlockDoorClientRPC(NetworkObjectReference doorLockRef)
         {
@@ -112,6 +102,7 @@ namespace LuckyDice.custom.network
             }
         }
         
+        // todo: move to event monobehaviour
         [ClientRpc]
         public void BleedPlayerClientRPC(NetworkObjectReference playerRef, bool bleed, int damage = 0)
         {
@@ -124,6 +115,7 @@ namespace LuckyDice.custom.network
             }
         }
         
+        // todo: move to event monobehaviour
         [ServerRpc(RequireOwnership = false)]
         public void SpawnItemAroundPositionServerRPC(Vector3 position, int itemId, int stackValue = 0)
         {
@@ -143,6 +135,7 @@ namespace LuckyDice.custom.network
             Plugin.Log.LogDebug($"Spawned item: {itemToSpawn.itemName}, with value: {stackValue}, at position: ({position.x}, {position.y}, {position.z})");
         }
 
+        // todo: move to event monobehaviour
         [ClientRpc]
         public void PlayJihadSoundFromPlayerClientRPC(NetworkObjectReference playerRef)
         {
@@ -155,6 +148,7 @@ namespace LuckyDice.custom.network
             }
         }
         
+        // todo: move to event monobehaviour
         [ClientRpc]
         public void SpawnExplosionOnPlayerClientRPC(NetworkObjectReference playerRef)
         {
@@ -172,6 +166,7 @@ namespace LuckyDice.custom.network
             }
         }
 
+        // todo: move to event monobehaviour
         [ClientRpc]
         public void SetStormClientRPC(bool storm)
         {
@@ -183,13 +178,6 @@ namespace LuckyDice.custom.network
             }
             stormyWeatherObject.SetActive(true);
             StormyWeather stormyWeather = stormyWeatherObject.GetComponent<StormyWeather>();
-        }
-        
-        [ClientRpc]
-        public void DetonateMineClientRPC(NetworkObjectReference landmineRef)
-        {
-            if (landmineRef.TryGet(out NetworkObject networkObject))
-                networkObject.GetComponentInChildren<Landmine>().Detonate();
         }
     }
 }

@@ -5,6 +5,11 @@ using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using LethalLib.Modules;
+using LuckyDice.custom.events;
+using LuckyDice.custom.items.dice;
+using LuckyDice.custom.monobehaviour;
+using LuckyDice.custom.network;
+using LuckyDice.Patches;
 using UnityEngine;
 
 #endregion
@@ -43,8 +48,12 @@ namespace LuckyDice
             }
             
             InitializeNetworkRoutine();
-            RegisterItems();
             
+            NetworkStuffPatch.networkPrefabs.Add(ab.LoadAsset<GameObject>("EventManagerObject.prefab"));
+            RegisterItem("assets/custom/luckydice/scrap/disco_monkey/DiscoMonkey.asset", 1, Levels.LevelTypes.All);
+            RegisterItem("assets/custom/luckydice/scrap/d4/D4.asset", 50, Levels.LevelTypes.All);
+            RegisterItem("assets/custom/luckydice/scrap/d20/D20.asset", 15, Levels.LevelTypes.All);
+
             harmony.PatchAll();
 
             Log.LogInfo($"'{NAME}' loaded!");
@@ -66,20 +75,19 @@ namespace LuckyDice
                 }
             }
         }
-        
-        private void RegisterItems()
+
+        private Item RegisterItem(string path, int rarity, Levels.LevelTypes levelTypes)
         {
-            Item d4 = ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d4/D4.asset");
-            if (d4 == null)
-                Log.LogError("Failed to load d4 from ab");
-            else 
-                Items.RegisterScrap(d4, 50, Levels.LevelTypes.All);
-            
-            Item d20 = ab.LoadAsset<Item>("assets/custom/luckydice/scrap/d20/D20.asset");
-            if (d20 == null)
-                Log.LogError("Failed to load d20 from ab");
+            Item item = ab.LoadAsset<Item>(path);
+            if (item == null)
+                Log.LogError($"Failed to load item: {path}");
             else
-                Items.RegisterScrap(d20, 15, Levels.LevelTypes.All);
+            {
+                Items.RegisterScrap(item, rarity, levelTypes);
+                NetworkStuffPatch.networkPrefabs.Add(item.spawnPrefab);
+            }
+
+            return item;
         }
     }
 }

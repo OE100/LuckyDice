@@ -91,7 +91,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="custom\events\implementation\map\ExplodeLandmines.cs" />
+        <Compile Include="custom\events\EventRegistry.cs" />
         <Compile Include="custom\events\implementation\map\RandomizeLocks.cs" />
         <Compile Include="custom\events\implementation\player\Bleed.cs" />
         <Compile Include="custom\events\implementation\player\HolyJihad.cs" />
@@ -106,7 +106,10 @@
         <Compile Include="custom\items\dice\D20.cs" />
         <Compile Include="custom\items\dice\D4.cs" />
         <Compile Include="custom\items\dice\DiceItem.cs" />
-        <Compile Include="custom\network\Event.cs" />
+        <Compile Include="custom\items\scrap\DiscoMonkey.cs" />
+        <Compile Include="custom\monobehaviour\def\BaseEventBehaviour.cs" />
+        <Compile Include="custom\monobehaviour\impl\ExplodeLandmines.cs" />
+        <Compile Include="custom\monobehaviour\impl\Player.cs" />
         <Compile Include="custom\network\EventManager.cs" />
         <Compile Include="Patches\DoorLockPatch.cs" />
         <Compile Include="Patches\Enemies.cs" />

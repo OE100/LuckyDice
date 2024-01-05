@@ -1,11 +1,8 @@
 ﻿#region
 
-using System.Collections.Generic;
 using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
-using Random = UnityEngine.Random;
-using Event = LuckyDice.custom.network.Event;
 
 #endregion
 
@@ -14,7 +11,6 @@ namespace LuckyDice.custom.items.dice
     public class DiceItem : GrabbableObject
     {
         internal static AudioClip rollSound = null;
-        protected List<Event> outcomes = new List<Event>();
         protected AudioSource audioSource;
 
         public override void Start()
@@ -49,46 +45,17 @@ namespace LuckyDice.custom.items.dice
         private void ItemActivateServerRPC(bool used, bool buttonDown = true)
         {
             // roll dice and despawn it
-            if (NetworkManager.Singleton.IsHost)
+            if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
             {
-                Roll();
+                EventManager.Instance.TriggerEventFromPoolServerRPC(new NetworkObjectReference(GetComponentInParent<NetworkObject>()));
+                ItemActivateClientRPC(used, buttonDown);
             }
-            ItemActivateClientRPC(used, buttonDown);
         }
         
         [ClientRpc]
         private void ItemActivateClientRPC(bool used, bool buttonDown = true)
         {
             playerHeldBy.DespawnHeldObject();
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        private void TriggerEventServerRPC(int side)
-        {
-            EventManager.Instance.AddPlayerToEventServerRPC(outcomes[side], new NetworkObjectReference(playerHeldBy.GetComponentInParent<NetworkObject>()));
-            TriggerEventClientRPC(side);
-        }
-        
-        [ClientRpc]
-        private void TriggerEventClientRPC(int side)
-        {
-            audioSource.Play();
-            TriggerEvent(side);
-        }
-        
-        protected virtual void TriggerEvent(int side)
-        {
-            if (side >= outcomes.Count || side < 0)
-            {
-                return;
-            }
-            Plugin.Log.LogDebug($"Rolled event: {outcomes[side].ToString()}");
-        }
-    
-        protected virtual void Roll()
-        {
-            int side = Random.Range(0, outcomes.Count);
-            TriggerEventServerRPC(side);
         }
     }
 }
