@@ -62,7 +62,7 @@
           <HintPath>..\packages\BepInEx.AssemblyPublicizer.MSBuild.0.4.1\lib\net472\BepInEx.AssemblyPublicizer.MSBuild.dll</HintPath>
         </Reference>
         <Reference Include="LethalLib">
-          <HintPath>LethalLib.dll</HintPath>
+          <HintPath>deps\LethalLib.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
