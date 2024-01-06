@@ -10,7 +10,7 @@ namespace LuckyDice.custom.monobehaviour.impl.player
     public class TroubleInTerroristTown : BaseEventBehaviour
     {
         private float timeRemaining;
-        private bool started;
+        private bool started = true;
         private bool warningPlayed;
         private List<PlayerControllerB> terrorists;
         
@@ -25,7 +25,8 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             if (players.Count <= 1)
             {
                 Plugin.Log.LogDebug("One player alive, cancelling trouble in terrorist town.");
-                Destroy(this);
+                started = false;
+                return;
             }
             // select non-terrorist
             int nInd = Random.Range(0, players.Count);
@@ -66,7 +67,7 @@ namespace LuckyDice.custom.monobehaviour.impl.player
                 Destroy(this);
 
             if (!started)
-                return;
+                Destroy(this);
             
             if (terrorists.Count > 0)
             {
