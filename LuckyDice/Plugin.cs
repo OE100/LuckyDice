@@ -19,13 +19,14 @@ using UnityEngine;
 namespace LuckyDice
 {
     [BepInPlugin(GUID, NAME, VERSION)]
+    [BepInDependency(LethalLib.Plugin.ModGUID, LethalLib.Plugin.ModVersion)]
     public class Plugin : BaseUnityPlugin
     {
         private readonly Harmony harmony = new Harmony(GUID);
 
         private const string GUID = "oe.tweaks.luckydice";
         private const string NAME = "Lucky Dice";
-        private const string VERSION = "1.0.0";
+        private const string VERSION = "0.0.1";
 
         internal static Plugin Instance;
 
@@ -131,7 +132,7 @@ namespace LuckyDice
             // todo: register give 1 weather credit event
             
             // register d12 pool
-            string d12Pool = EventRegistry.UnRegisterItem<D12>();
+            string d12Pool = EventRegistry.RegisterItem<D12>();
             EventRegistry.RegisterEvent<MaskedChaos>(d12Pool);
             EventRegistry.RegisterEvent<SpawnDressGirl>(d12Pool);
             EventRegistry.RegisterEvent<SpawnCoilhead>(d12Pool);
