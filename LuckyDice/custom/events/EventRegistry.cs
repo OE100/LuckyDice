@@ -4,6 +4,7 @@ using System.Linq;
 using GameNetcodeStuff;
 using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
+using LuckyDice.custom.network;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -17,6 +18,18 @@ namespace LuckyDice.custom.events
         private static Dictionary<string, List<(Type, GameObject)>> removedEventPools = new Dictionary<string, List<(Type, GameObject)>>();
         private static Dictionary<GameObject, Type> mountedEvents = new Dictionary<GameObject, Type>();
 
+        public static string UnRegisterItem<TItem>() where TItem : GrabbableObject
+        {
+            if (!itemToPool.TryGetValue(typeof(TItem), out string pool))
+            {
+                Plugin.Log.LogDebug($"Item {typeof(TItem).Name} wasn't even registered");
+                return null;
+            }
+            itemToPool.Remove(typeof(TItem));
+            Plugin.Log.LogDebug($"Item {typeof(TItem).Name} was unregistered from pool {pool}");
+            return pool;
+        }
+        
         public static string RegisterItem<TItem>(string pool = null) where TItem : GrabbableObject
         {
             if (pool == null)
@@ -38,6 +51,11 @@ namespace LuckyDice.custom.events
             string poolFromItem = itemToPool[item];
             Plugin.Log.LogDebug($"Pool for item: {item.Name}, is: {poolFromItem}");
             return poolFromItem;
+        }
+
+        public static void RegisterEvent<TEvent>(string pool) where TEvent : BaseEventBehaviour
+        {
+            RegisterEvent<TEvent>(pool: pool, mountingPoint: EventManager.Instance.gameObject);
         }
         
         public static void RegisterEvent<TEvent>(string pool, GameObject mountingPoint) where TEvent : BaseEventBehaviour

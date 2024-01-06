@@ -9,6 +9,7 @@ using LuckyDice.custom.events;
 using LuckyDice.custom.items.dice;
 using LuckyDice.custom.monobehaviour;
 using LuckyDice.custom.monobehaviour.impl.player;
+using LuckyDice.custom.monobehaviour.impl.spawn.Enemies;
 using LuckyDice.custom.monobehaviour.impl.tweak;
 using LuckyDice.custom.network;
 using LuckyDice.Patches;
@@ -102,11 +103,12 @@ namespace LuckyDice
             
             // register d4 pool
             string d4Pool = EventRegistry.RegisterItem<D4>();
-            EventRegistry.RegisterEvent<MaskedChaos>(d4Pool, EventManager.Instance.gameObject);
+            EventRegistry.RegisterEvent<SpawnCentipede>(d4Pool);
+            EventRegistry.RegisterEvent<Bleed>(d4Pool);
             
             // register d20 pool
             string d20Pool = EventRegistry.RegisterItem<D20>();
-            EventRegistry.RegisterEvent<TroubleInTerroristTown>(d20Pool, EventManager.Instance.gameObject);
+            EventRegistry.RegisterEvent<TroubleInTerroristTown>(d20Pool);
         }
     }
 }
