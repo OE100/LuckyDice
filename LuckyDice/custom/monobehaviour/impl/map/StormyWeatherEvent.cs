@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace LuckyDice.custom.monobehaviour.impl.map
 {
-    public class StormyWeather : BaseEventBehaviour
+    public class StormyWeatherEvent : BaseEventBehaviour
     {
         private void Awake()
         {

@@ -1,8 +1,8 @@
 ﻿using LuckyDice.custom.monobehaviour.def;
 
-namespace LuckyDice.custom.monobehaviour.impl.spawn.Enemies
+namespace LuckyDice.custom.monobehaviour.impl.spawn.Enemies.all
 {
-    public class SpawnDressGirl : BaseSpawnEnemyEvent
+    public class SpawnDressGirlForAll : BaseSpawnEnemyForAll
     {
         protected override string Name()
         {

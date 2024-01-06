@@ -2,7 +2,7 @@
 
 namespace LuckyDice.custom.monobehaviour.def
 {
-    public abstract class BaseSpawnItemForAllEvent : BaseSpawnItemEvent
+    public abstract class BaseSpawnEnemyForAll : BaseSpawnEnemyEvent
     {
         public override void AddPlayer(PlayerControllerB player)
         {

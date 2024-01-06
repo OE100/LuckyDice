@@ -1,21 +1,20 @@
-﻿#region
-
-using System.Reflection;
+﻿using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using LethalLib.Modules;
 using LuckyDice.custom.events;
 using LuckyDice.custom.items.dice;
-using LuckyDice.custom.monobehaviour;
+using LuckyDice.custom.monobehaviour.impl.map;
 using LuckyDice.custom.monobehaviour.impl.player;
-using LuckyDice.custom.monobehaviour.impl.spawn.Enemies;
+using LuckyDice.custom.monobehaviour.impl.spawn.Enemies.all;
+using LuckyDice.custom.monobehaviour.impl.spawn.Enemies.single;
+using LuckyDice.custom.monobehaviour.impl.spawn.Items.all;
+using LuckyDice.custom.monobehaviour.impl.spawn.Items.single;
 using LuckyDice.custom.monobehaviour.impl.tweak;
 using LuckyDice.custom.network;
 using LuckyDice.Patches;
 using UnityEngine;
-
-#endregion
 
 namespace LuckyDice
 {
@@ -32,11 +31,11 @@ namespace LuckyDice
 
         internal static ManualLogSource Log;
 
-        internal static AssetBundle ab = null;
+        internal static AssetBundle ab;
 
         private void Awake()
         {
-            Log = this.Logger;
+            Log = Logger;
             Log.LogInfo($"'{NAME}' is loading...");
 
             if (Instance == null)
@@ -54,8 +53,11 @@ namespace LuckyDice
             
             NetworkStuffPatch.networkPrefabs.Add(ab.LoadAsset<GameObject>("EventManagerObject.prefab"));
             RegisterItem("assets/custom/luckydice/scrap/disco_monkey/DiscoMonkey.asset", 1, Levels.LevelTypes.All);
-            RegisterItem("assets/custom/luckydice/scrap/d4/D4.asset", 50, Levels.LevelTypes.All);
-            RegisterItem("assets/custom/luckydice/scrap/d20/D20.asset", 15, Levels.LevelTypes.All);
+            RegisterItem("assets/custom/luckydice/scrap/d4/D4.asset", 25, Levels.LevelTypes.All);
+            RegisterItem("assets/custom/luckydice/scrap/d6/D6.asset", 20, Levels.LevelTypes.All);
+            RegisterItem("assets/custom/luckydice/scrap/d8/D8.asset", 15, Levels.LevelTypes.All);
+            RegisterItem("assets/custom/luckydice/scrap/d12/D12.asset", 10, Levels.LevelTypes.All);
+            RegisterItem("assets/custom/luckydice/scrap/d20/D20.asset", 5, Levels.LevelTypes.All);
 
             harmony.PatchAll();
 
@@ -105,10 +107,70 @@ namespace LuckyDice
             string d4Pool = EventRegistry.RegisterItem<D4>();
             EventRegistry.RegisterEvent<SpawnCentipede>(d4Pool);
             EventRegistry.RegisterEvent<Bleed>(d4Pool);
+            EventRegistry.RegisterEvent<SpawnClownHorn>(d4Pool);
+            EventRegistry.RegisterEvent<SpawnJarOfPickles>(d4Pool);
+            
+            // register d6 pool
+            string d6Pool = EventRegistry.RegisterItem<D6>();
+            EventRegistry.RegisterEvent<SpawnCrawler>(d6Pool);
+            EventRegistry.RegisterEvent<SpawnHoarderbug>(d6Pool);
+            EventRegistry.RegisterEvent<RandomizeLocks>(d6Pool);
+            EventRegistry.RegisterEvent<Bleed>(d6Pool);
+            EventRegistry.RegisterEvent<SpawnJarOfPickles>(d6Pool);
+            EventRegistry.RegisterEvent<SpawnMetalSheet>(d6Pool);
+            
+            // register d8 pool
+            string d8Pool = EventRegistry.RegisterItem<D8>();
+            EventRegistry.RegisterEvent<StormyWeatherEvent>(d8Pool);
+            EventRegistry.RegisterEvent<SpawnFlowerman>(d8Pool);
+            EventRegistry.RegisterEvent<RandomizeLocks>(d8Pool);
+            EventRegistry.RegisterEvent<ExplodeLandmines>(d8Pool);
+            EventRegistry.RegisterEvent<TroubleInTerroristTown>(d8Pool);
+            EventRegistry.RegisterEvent<SpawnMetalSheet>(d8Pool);
+            EventRegistry.RegisterEvent<SpawnMetalSheetForAll>(d8Pool);
+            // todo: register give 1 weather credit event
+            
+            // register d12 pool
+            string d12Pool = EventRegistry.UnRegisterItem<D12>();
+            EventRegistry.RegisterEvent<MaskedChaos>(d12Pool);
+            EventRegistry.RegisterEvent<SpawnDressGirl>(d12Pool);
+            EventRegistry.RegisterEvent<SpawnCoilhead>(d12Pool);
+            EventRegistry.RegisterEvent<StormyWeatherEvent>(d12Pool);
+            EventRegistry.RegisterEvent<SpawnCrawlerForAll>(d12Pool);
+            EventRegistry.RegisterEvent<SpawnNutcracker>(d12Pool);
+            EventRegistry.RegisterEvent<ExplodeLandmines>(d12Pool);
+            EventRegistry.RegisterEvent<TroubleInTerroristTown>(d12Pool);
+            EventRegistry.RegisterEvent<SpawnMetalSheet>(d12Pool);
+            EventRegistry.RegisterEvent<SpawnGoldBar>(d12Pool);
+            // todo: register give 2 weather credit event
+            EventRegistry.RegisterEvent<SpawnJarOfPicklesForAll>(d12Pool);
             
             // register d20 pool
             string d20Pool = EventRegistry.RegisterItem<D20>();
+            EventRegistry.RegisterEvent<MaskedChaos>(d20Pool);
+            EventRegistry.RegisterEvent<SpawnDressGirlForAll>(d20Pool);
+            EventRegistry.RegisterEvent<SpawnDressGirlForAll>(d20Pool);
+            EventRegistry.RegisterEvent<SpawnDressGirl>(d20Pool);
+            
+            EventRegistry.RegisterEvent<StormyWeatherEvent>(d20Pool);
+            EventRegistry.RegisterEvent<SpawnCoilheadForAll>(d20Pool);
+            EventRegistry.RegisterEvent<SpawnCoilheadForAll>(d20Pool);
+            EventRegistry.RegisterEvent<ExplodeLandmines>(d20Pool);
+            
+            EventRegistry.RegisterEvent<SpawnJesterForAll>(d20Pool);
+            EventRegistry.RegisterEvent<SpawnJesterForAll>(d20Pool);
             EventRegistry.RegisterEvent<TroubleInTerroristTown>(d20Pool);
+            EventRegistry.RegisterEvent<TroubleInTerroristTown>(d20Pool);
+            
+            EventRegistry.RegisterEvent<SpawnGoldBar>(d20Pool);
+            EventRegistry.RegisterEvent<SpawnJarOfPicklesForAll>(d20Pool);
+            EventRegistry.RegisterEvent<SpawnJarOfPicklesForAll>(d20Pool);
+            // todo: register give 1 weather credit event
+            
+            // todo: register give 2 weather credit event
+            EventRegistry.RegisterEvent<SpawnGoldBarForAll>(d20Pool);
+            // todo: register 3 weather credits
+            // todo: register give special disco monkey to everyone
         }
     }
 }

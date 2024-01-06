@@ -1,17 +1,17 @@
 ﻿using LuckyDice.custom.monobehaviour.def;
 
-namespace LuckyDice.custom.monobehaviour.impl.spawn.Enemies
+namespace LuckyDice.custom.monobehaviour.impl.spawn.Enemies.single
 {
-    public class SpawnCentipede : BaseSpawnEnemyEvent
+    public class SpawnFlowerman : BaseSpawnEnemyEvent
     {
         protected override string Name()
         {
-            return Patches.Enemies.Centipede;
+            return Patches.Enemies.Flowerman;
         }
 
         protected override int AmountPerStack()
         {
-            return 4;
+            return 1;
         }
     }
 }

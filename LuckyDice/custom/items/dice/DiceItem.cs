@@ -1,34 +1,13 @@
-﻿#region
-
-using System.Collections;
-using LuckyDice.custom.network;
+﻿using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
-
-#endregion
 
 namespace LuckyDice.custom.items.dice
 {
     public class DiceItem : GrabbableObject
     {
-        internal static AudioClip rollSound;
+        [SerializeField]
         protected AudioSource audioSource;
-
-        public override void Start()
-        {
-            base.Start();
-            audioSource = GetComponent<AudioSource>();
-            if (rollSound == null)
-            {
-                Plugin.Log.LogDebug("Loading dice sound from ab");
-                if ((rollSound = Plugin.ab.LoadAsset<AudioClip>("assets/custom/luckydice/sounds/rolling_dice.mp3")) != null)
-                    Plugin.Log.LogDebug("Loaded dice sound from ab");
-                else 
-                    Plugin.Log.LogError("Failed to load dice sound from ab");
-            }
-
-            audioSource.clip = rollSound;
-        }
         
         public override void ItemActivate(bool used, bool buttonDown = true)
         {

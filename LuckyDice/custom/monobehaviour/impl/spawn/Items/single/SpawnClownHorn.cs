@@ -1,6 +1,6 @@
 ﻿using LuckyDice.custom.monobehaviour.def;
 
-namespace LuckyDice.custom.monobehaviour.impl.spawn.Items
+namespace LuckyDice.custom.monobehaviour.impl.spawn.Items.single
 {
     public class SpawnClownHorn : BaseSpawnItemEvent
     {

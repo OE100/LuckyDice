@@ -1,12 +1,12 @@
 ﻿using LuckyDice.custom.monobehaviour.def;
 
-namespace LuckyDice.custom.monobehaviour.impl.spawn.Enemies
+namespace LuckyDice.custom.monobehaviour.impl.spawn.Enemies.all
 {
-    public class SpawnNutcracker : BaseSpawnEnemyEvent
+    public class SpawnCrawlerForAll : BaseSpawnEnemyForAll
     {
         protected override string Name()
         {
-            return Patches.Enemies.Nutcracker;
+            return Patches.Enemies.Crawler;
         }
 
         protected override int AmountPerStack()

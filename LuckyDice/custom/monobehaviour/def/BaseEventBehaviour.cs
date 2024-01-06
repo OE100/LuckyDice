@@ -9,7 +9,7 @@ namespace LuckyDice.custom.monobehaviour.def
 
         public bool NeedsRemoval;
 
-        public virtual bool IsPhaseForbidden()
+        protected virtual bool IsPhaseForbidden()
         {
             return StartOfRound.Instance.inShipPhase || StartOfRound.Instance.currentLevelID == 3;
         }

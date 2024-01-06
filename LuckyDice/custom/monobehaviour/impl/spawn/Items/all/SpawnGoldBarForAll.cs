@@ -1,22 +1,22 @@
 ﻿using LuckyDice.custom.monobehaviour.def;
 
-namespace LuckyDice.custom.monobehaviour.impl.spawn.Items
+namespace LuckyDice.custom.monobehaviour.impl.spawn.Items.all
 {
-    public class SpawnJarOfPickles : BaseSpawnItemEvent
+    public class SpawnGoldBarForAll : BaseSpawnItemForAllEvent
     {
         protected override int AmountPerStack()
         {
-            return 10;
+            return 1;
         }
 
         protected override int ItemId()
         {
-            return 44;
+            return 36;
         }
 
         protected override int ItemValue()
         {
-            return 25;
+            return 200;
         }
     }
 }
