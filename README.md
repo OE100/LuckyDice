@@ -18,6 +18,9 @@ The dice items (that I made) are not usable in the ship phase or on the company 
 
 # Releases
 
+# Version 0.0.2
+- Fixed a bug that caused items spawned by events to not show on scan.
+
 # Version 0.0.1
 - Early Beta
 - Added extendable dice items (with regular solids already implemented)
