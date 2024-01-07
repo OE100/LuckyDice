@@ -18,6 +18,10 @@ The dice items (that I made) are not usable in the ship phase or on the company 
 
 # Releases
 
+# Version 0.1.0
+- Added config options to set dice spawn chance, if dice can spawn at all, if dice should be activatable or just scrap.
+- Changed event api to use custom attributes. (not backwards compatible)
+
 # Version 0.0.2
 - Fixed a bug that caused items spawned by events to not show on scan.
 

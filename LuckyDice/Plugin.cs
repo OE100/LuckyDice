@@ -27,7 +27,7 @@ namespace LuckyDice
 
         private const string GUID = "oe.tweaks.luckydice";
         private const string NAME = "Lucky Dice";
-        private const string VERSION = "0.0.2";
+        private const string VERSION = "0.1.0";
 
         internal static Plugin Instance;
 
