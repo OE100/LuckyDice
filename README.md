@@ -11,12 +11,19 @@ When a dice is used (left mouse) it "rolls" an event from it's pool.
 
 The dice items (that I made) are not usable in the ship phase or on the company moon to prevent cheesing.
 
+# Example mod that extends Lucky Dice:
+https://github.com/OE100/ExampleEventExtensionMod
+
 # Todo:
 - Guide on extending the event/item system of the mod (the api is already in there, just needs documentation)
 - Implement some events that I didn't have time to make just yet
 - Write what each event does
 
-# Releases
+# Releases:
+
+# Version 0.1.1
+- Added an example for how to make a mod that extends lucky dice.
+- Some minor variable visibility changes.
 
 # Version 0.1.0
 - Added config options to set dice spawn chance, if dice can spawn at all, if dice should be activatable or just scrap.
