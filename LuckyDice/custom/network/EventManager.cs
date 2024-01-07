@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Collections;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.events;
@@ -99,19 +100,41 @@ namespace LuckyDice.custom.network
         {
             List<Item> itemsList = StartOfRound.Instance.allItemsList.itemsList;
             Item itemToSpawn = itemId == -1 ? itemsList[Random.Range(0, itemsList.Count)] : itemsList[itemId];
-        
-            GameObject gameObject = Instantiate(
+            
+            Transform parent = RoundManager.Instance.spawnedScrapContainer == null ? StartOfRound.Instance.elevatorTransform : RoundManager.Instance.spawnedScrapContainer;
+            position.y += 1;
+            
+            GameObject itemObject = Instantiate(
                 itemToSpawn.spawnPrefab, 
                 position, 
-                Random.rotation
+                Random.rotation,
+                parent
             );
-            gameObject.AddComponent<ScanNodeProperties>().scrapValue = stackValue;
-            GrabbableObject component = gameObject.GetComponent<GrabbableObject>();
-            component.SetScrapValue(stackValue);
-            gameObject.GetComponent<NetworkObject>().Spawn();
+            
+            GrabbableObject component = itemObject.GetComponent<GrabbableObject>();
+            component.NetworkObject.Spawn();
 
-            Plugin.Log.LogDebug($"Spawned item: {itemToSpawn.itemName}, with value: {stackValue}, at position: ({position.x}, {position.y}, {position.z})");
+            InitializeItemClientRPC(new NetworkObjectReference(component.NetworkObject), stackValue);
         }
+
+        private IEnumerator delayedItemSpawn(NetworkObjectReference itemRef, int value)
+        {
+            Plugin.Log.LogDebug("Waiting for item to spawn");
+            NetworkObject networkObject = null;
+            yield return new WaitUntil(() => itemRef.TryGet(out networkObject));
+            Plugin.Log.LogDebug("Item spawned, syncing to clients");
+
+            GrabbableObject component = networkObject.GetComponentInParent<GrabbableObject>();
+            yield return new WaitForEndOfFrame();
+            component.SetScrapValue(value);
+            Plugin.Log.LogDebug($"Spawned item: {component.GetType().Name}, with value: {value}, at position: {component.transform.position}");
+        }
+        
+        [ClientRpc]
+        private void InitializeItemClientRPC(NetworkObjectReference itemRef, int value)
+        {
+            StartCoroutine(delayedItemSpawn(itemRef, value));
+        } 
 
         [ClientRpc]
         public void PlayTerroristSoundFromPlayerClientRPC(NetworkObjectReference playerRef)
