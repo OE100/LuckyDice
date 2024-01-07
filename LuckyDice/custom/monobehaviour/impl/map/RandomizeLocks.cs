@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
 using Unity.Netcode;
@@ -6,6 +7,7 @@ using UnityEngine;
 
 namespace LuckyDice.custom.monobehaviour.impl.map
 {
+    [OneTimeEvent]
     public class RandomizeLocks : BaseEventBehaviour
     {
         public static List<DoorLock> doors = new List<DoorLock>();
@@ -15,8 +17,6 @@ namespace LuckyDice.custom.monobehaviour.impl.map
         private void Awake()
         {
             Plugin.Log.LogDebug($"RandomizeLocks event Awake!");
-            IsOneTimeEvent = true;
-            NeedsRemoval = false;
             
             EventManager.Instance.DisplayMessageClientRPC(
                 new NetworkObjectReference(),

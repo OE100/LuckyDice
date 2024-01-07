@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GameNetcodeStuff;
+using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
 using Unity.Netcode;
@@ -7,6 +8,7 @@ using UnityEngine;
 
 namespace LuckyDice.custom.monobehaviour.impl.player
 {
+    [OneTimeEvent]
     public class TroubleInTerroristTown : BaseEventBehaviour
     {
         private float timeRemaining;
@@ -17,8 +19,6 @@ namespace LuckyDice.custom.monobehaviour.impl.player
         private void Awake()
         {
             Plugin.Log.LogDebug("TroubleInTerroristTown Awake!");
-            NeedsRemoval = false;
-            IsOneTimeEvent = true;
             // roll terrorists
             List<PlayerControllerB> players = new List<PlayerControllerB>(StartOfRound.Instance.allPlayerScripts);
             players.RemoveAll(p => p.isPlayerDead || !p.isPlayerControlled);

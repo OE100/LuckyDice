@@ -5,10 +5,5 @@ namespace LuckyDice.custom.monobehaviour.attributes
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
     public class MountAtRegistry : Attribute
     {
-        private bool mount;
-        public MountAtRegistry(bool mount = true)
-        {
-            this.mount = mount;
-        }
     }
 }

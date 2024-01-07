@@ -6,6 +6,16 @@ namespace LuckyDice.Utilities
 {
     public static class Utils
     {
+        // Dice
+        public static Item D4 = null;
+        public static Item D6 = null;
+        public static Item D8 = null;
+        public static Item D12 = null;
+        public static Item D20 = null;
+        
+        // Random items
+        public static Item DiscoMonkey = null;
+        
         // weather container
         public static GameObject TimeAndWeather;
         

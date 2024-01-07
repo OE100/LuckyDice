@@ -34,7 +34,8 @@ namespace LuckyDice.Patches
             {
                 var networkHandlerHost = Object.Instantiate(networkPrefabs[0], Vector3.zero, Quaternion.identity);
                 networkHandlerHost.GetComponent<NetworkObject>().Spawn(destroyWithScene: false);
-                Plugin.RegisterEventsAndItems();
+                if (ModConfig.RegisterDiceToEventPools.Value)
+                    Plugin.RegisterEventsAndItems();
             }
         }
     }

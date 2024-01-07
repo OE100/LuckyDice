@@ -5,10 +5,6 @@ namespace LuckyDice.custom.monobehaviour.def
 {
     public class BaseEventBehaviour : MonoBehaviour
     {
-        public bool IsOneTimeEvent;
-
-        public bool NeedsRemoval;
-
         protected virtual bool IsPhaseForbidden()
         {
             return StartOfRound.Instance.inShipPhase || StartOfRound.Instance.currentLevelID == 3;

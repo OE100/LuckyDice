@@ -14,6 +14,7 @@ using LuckyDice.custom.monobehaviour.impl.spawn.Items.single;
 using LuckyDice.custom.monobehaviour.impl.tweak;
 using LuckyDice.custom.network;
 using LuckyDice.Patches;
+using LuckyDice.Utilities;
 using UnityEngine;
 
 namespace LuckyDice
@@ -49,16 +50,18 @@ namespace LuckyDice
             {
                 Log.LogError("Failed to load asset bundle");
             }
+
+            ModConfig.Init(Config);
             
             InitializeNetworkRoutine();
             
             NetworkStuffPatch.networkPrefabs.Add(ab.LoadAsset<GameObject>("EventManagerObject.prefab"));
-            RegisterItem("assets/custom/luckydice/scrap/disco_monkey/DiscoMonkey.asset", 1, Levels.LevelTypes.All);
-            RegisterItem("assets/custom/luckydice/scrap/d4/D4.asset", 25, Levels.LevelTypes.All);
-            RegisterItem("assets/custom/luckydice/scrap/d6/D6.asset", 20, Levels.LevelTypes.All);
-            RegisterItem("assets/custom/luckydice/scrap/d8/D8.asset", 15, Levels.LevelTypes.All);
-            RegisterItem("assets/custom/luckydice/scrap/d12/D12.asset", 10, Levels.LevelTypes.All);
-            RegisterItem("assets/custom/luckydice/scrap/d20/D20.asset", 5, Levels.LevelTypes.All);
+            Utils.DiscoMonkey = RegisterItem("assets/custom/luckydice/scrap/disco_monkey/DiscoMonkey.asset", 1, Levels.LevelTypes.All);
+            Utils.D4 = RegisterItem("assets/custom/luckydice/scrap/d4/D4.asset", ModConfig.D4Rarity.Value, Levels.LevelTypes.All);
+            Utils.D6 = RegisterItem("assets/custom/luckydice/scrap/d6/D6.asset", ModConfig.D6Rarity.Value, Levels.LevelTypes.All);
+            Utils.D8 = RegisterItem("assets/custom/luckydice/scrap/d8/D8.asset", ModConfig.D8Rarity.Value, Levels.LevelTypes.All);
+            Utils.D12 = RegisterItem("assets/custom/luckydice/scrap/d12/D12.asset", ModConfig.D12Rarity.Value, Levels.LevelTypes.All);
+            Utils.D20 = RegisterItem("assets/custom/luckydice/scrap/d20/D20.asset", ModConfig.D20Rarity.Value, Levels.LevelTypes.All);
 
             harmony.PatchAll();
 
@@ -89,7 +92,8 @@ namespace LuckyDice
                 Log.LogError($"Failed to load item: {path}");
             else
             {
-                Items.RegisterScrap(item, rarity, levelTypes);
+                if (ModConfig.EnableDiceSpawning.Value)
+                    Items.RegisterScrap(item, rarity, levelTypes);
                 NetworkStuffPatch.networkPrefabs.Add(item.spawnPrefab);
             }
 

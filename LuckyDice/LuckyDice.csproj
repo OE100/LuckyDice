@@ -99,6 +99,8 @@
         <Compile Include="custom\items\dice\D8.cs" />
         <Compile Include="custom\items\dice\DiceItem.cs" />
         <Compile Include="custom\items\scrap\DiscoMonkey.cs" />
+        <Compile Include="custom\monobehaviour\attributes\NeedsRemoval.cs" />
+        <Compile Include="custom\monobehaviour\attributes\OneTimeEvent.cs" />
         <Compile Include="custom\monobehaviour\def\BaseEventBehaviour.cs" />
         <Compile Include="custom\monobehaviour\def\BasePlayerEvent.cs" />
         <Compile Include="custom\monobehaviour\def\BaseSpawnEnemyEvent.cs" />
@@ -133,6 +135,7 @@
         <Compile Include="custom\monobehaviour\impl\tweak\MaskedChaos.cs" />
         <Compile Include="custom\monobehaviour\attributes\MountAtRegistry.cs" />
         <Compile Include="custom\network\EventManager.cs" />
+        <Compile Include="ModConfig.cs" />
         <Compile Include="Patches\DoorLockPatch.cs" />
         <Compile Include="Patches\Enemies.cs" />
         <Compile Include="Patches\MaskedEnemyChanges.cs" />

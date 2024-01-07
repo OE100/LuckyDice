@@ -13,6 +13,8 @@ namespace LuckyDice.custom.monobehaviour.def
         protected abstract int AmountPerStack();
         protected abstract int ItemId();
         protected abstract int ItemValue();
+        protected virtual string EventMessageHeader() => "The air begins to shift";
+        protected virtual string EventMessageBody() => "The molecules around you start to shift and rearrange...";
 
         protected override void Update()
         {
@@ -22,8 +24,8 @@ namespace LuckyDice.custom.monobehaviour.def
         {
             EventManager.Instance.DisplayMessageClientRPC(
                 new NetworkObjectReference(player.GetComponentInParent<NetworkObject>()),
-                "The air begins to shift",
-                "The molecules around you start to shift and rearrange...");
+                EventMessageHeader(),
+                EventMessageBody());
             StartCoroutine(SpawnItemsAroundPlayer(player));
         }
 

@@ -1,10 +1,12 @@
-﻿using LuckyDice.custom.monobehaviour.def;
+﻿using LuckyDice.custom.monobehaviour.attributes;
+using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace LuckyDice.custom.monobehaviour.impl.map
 {
+    [OneTimeEvent]
     public class ExplodeLandmines : BaseEventBehaviour
     {
         private float time;
@@ -13,8 +15,6 @@ namespace LuckyDice.custom.monobehaviour.impl.map
         private void Awake()
         {
             Plugin.Log.LogDebug($"ExplodeLandmines event Awake!");
-            IsOneTimeEvent = true;
-            NeedsRemoval = false;
             mines = FindObjectsOfType<Landmine>();
             if (mines.Length == 0)
                 EventManager.Instance.DisplayMessageClientRPC(

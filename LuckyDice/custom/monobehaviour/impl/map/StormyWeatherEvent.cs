@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using GameNetcodeStuff;
+using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
 using LuckyDice.Utilities;
@@ -8,12 +9,11 @@ using UnityEngine;
 
 namespace LuckyDice.custom.monobehaviour.impl.map
 {
+    [OneTimeEvent]
     public class StormyWeatherEvent : BaseEventBehaviour
     {
         private void Awake()
         {
-            IsOneTimeEvent = true;
-            NeedsRemoval = false;
             EventManager.Instance.DisplayMessageClientRPC(
                 new NetworkObjectReference(),
                 "A storm is brewing...",

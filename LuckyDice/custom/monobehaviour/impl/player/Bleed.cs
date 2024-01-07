@@ -13,14 +13,7 @@ namespace LuckyDice.custom.monobehaviour.impl.player
     {
         private static float timeToBleed = 2.4f;
         private float timeSinceBleed = 0f;
-
-        private void Awake()
-        {
-            Plugin.Log.LogDebug("Bleed event Awake!");
-            NeedsRemoval = false;
-            IsOneTimeEvent = false;
-        }
-
+        
         protected override void Update()
         {
             base.Update();

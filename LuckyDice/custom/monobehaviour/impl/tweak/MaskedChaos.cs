@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using GameNetcodeStuff;
+using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
 using LuckyDice.Patches;
@@ -8,14 +9,12 @@ using UnityEngine;
 
 namespace LuckyDice.custom.monobehaviour.impl.tweak
 {
+    [OneTimeEvent]
     public class MaskedChaos : BaseEventBehaviour
     {
         private void Awake()
         {
             Plugin.Log.LogDebug("MaskedChaos Awake");
-            
-            NeedsRemoval = false;
-            IsOneTimeEvent = true;
             
             EventManager.Instance.SetMaskedEnemyChangesClientRPC(true);
 

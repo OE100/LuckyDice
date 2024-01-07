@@ -17,6 +17,7 @@ namespace LuckyDice.custom.events
         private static Dictionary<string, List<(Type, GameObject)>> eventPools = new Dictionary<string, List<(Type, GameObject)>>();
         private static Dictionary<string, List<(Type, GameObject)>> removedEventPools = new Dictionary<string, List<(Type, GameObject)>>();
         private static Dictionary<GameObject, Type> mountedEvents = new Dictionary<GameObject, Type>();
+        private static List<Type> removedOneTimeEvents = new List<Type>();
 
         public static string UnRegisterItem<TItem>() where TItem : GrabbableObject
         {
@@ -148,7 +149,25 @@ namespace LuckyDice.custom.events
                 return -1;
             }
             List<(Type, GameObject)> types = eventPools[pool];
-            return Random.Range(0, types.Count);
+            bool found = false;
+            int index = -1;
+            while (!found && types.Count > 0)
+            {
+                index = Random.Range(0, types.Count);
+                (Type, GameObject) tuple = types[index];
+                if (Attribute.GetCustomAttribute(tuple.Item1, typeof(OneTimeEvent)) != null &&
+                    removedOneTimeEvents.Contains(tuple.Item1))
+                {
+                    removedEventPools[pool].Add(tuple);
+                    types.RemoveAt(index);
+                }
+                else
+                    found = true;
+            }
+
+            if (types.Count == 0)
+                return -1;
+            return index;
         }
 
         public static void RunEventFromPool(string pool, int eventIndex, PlayerControllerB player)
@@ -170,7 +189,7 @@ namespace LuckyDice.custom.events
             {
                 // check if the event is a one time event and if so remove it from the pool
                 BaseEventBehaviour component = (BaseEventBehaviour)eEvent.Item2.GetComponent(eEvent.Item1);
-                if (component != null && component.IsOneTimeEvent)
+                if (Attribute.GetCustomAttribute(eEvent.Item1, typeof(OneTimeEvent)) != null)
                 {
                     Plugin.Log.LogDebug($"Event: {eEvent.Item1.Name}, is one time event, removing from pool: {pool}");
                     tuples.RemoveAt(eventIndex);
@@ -209,11 +228,10 @@ namespace LuckyDice.custom.events
                 return false;
             }
             
-            BaseEventBehaviour baseEventBehaviour = (BaseEventBehaviour)component;
-            if (baseEventBehaviour.NeedsRemoval)
+            if (Attribute.GetCustomAttribute(eventType, typeof(NeedsRemoval)) != null)
                 mountedEvents.Add(gameObject, eventType);
             
-            return baseEventBehaviour.IsOneTimeEvent;
+            return Attribute.GetCustomAttribute(eventType, typeof(OneTimeEvent)) != null;
         }
 
         
@@ -239,6 +257,7 @@ namespace LuckyDice.custom.events
                 foreach (KeyValuePair<GameObject,Type> pair in mountedEvents)
                     UnMountEvent(pair.Key, pair.Value);
             
+            removedOneTimeEvents.Clear();
             RestoreEventPools();
         }
     }
