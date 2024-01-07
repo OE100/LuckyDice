@@ -25,15 +25,15 @@ namespace LuckyDice
     {
         private readonly Harmony harmony = new Harmony(GUID);
 
-        private const string GUID = "oe.tweaks.luckydice";
-        private const string NAME = "Lucky Dice";
-        private const string VERSION = "0.1.0";
+        public const string GUID = "oe.tweaks.luckydice";
+        public const string NAME = "Lucky Dice";
+        public const string VERSION = "0.1.0";
 
-        internal static Plugin Instance;
+        public static Plugin Instance;
 
         internal static ManualLogSource Log;
 
-        internal static AssetBundle ab;
+        public static AssetBundle ab;
 
         private void Awake()
         {
