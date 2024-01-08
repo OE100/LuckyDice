@@ -2,16 +2,8 @@
 
 namespace LuckyDice.custom.monobehaviour.impl.spawn.Enemies.single
 {
-    public class SpawnCentipede : BaseSpawnEnemyEvent
+    public class SpawnCentipede : BaseSpawnEnemyEvent<CentipedeAI>
     {
-        protected override string Name()
-        {
-            return Patches.Enemies.Centipede;
-        }
-
-        protected override int AmountPerStack()
-        {
-            return 4;
-        }
+        protected override int AmountPerStack() => 4;
     }
 }

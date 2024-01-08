@@ -9,39 +9,24 @@ using UnityEngine;
 namespace LuckyDice.custom.monobehaviour.def
 {
     [MountAtRegistry]
-    public abstract class BaseSpawnEnemyEvent : BasePlayerEvent
+    public class BaseSpawnEnemyEvent<TEnemy> : BasePlayerEvent where TEnemy : EnemyAI
     {
-        protected int SpawnIndex = -1;
-        protected abstract string Name();
-        protected abstract int AmountPerStack();
+        protected virtual GameObject EnemyPrefab() => EnemiesRegistry.GetEnemyPrefab<TEnemy>();
+        protected virtual int AmountPerStack() => 1;
         protected virtual string EventMessageHeader() => "The air begins to shift";
         protected virtual string EventMessageBody() => "The molecules around you start to shift and rearrange...";
 
         protected override void Update()
         {
-            if (IsPhaseForbidden())
-            {
-                SpawnIndex = -1;
-                return;
-            }
-            if (SpawnIndex == -1)
-            {
-                // find spawn index
-                SpawnIndex = RoundManager.Instance.currentLevel.Enemies
-                    .FindIndex(x => x.enemyType.name == Name());
-            }
         }
 
         public override void AddPlayer(PlayerControllerB player)
         {
-            if (SpawnIndex != -1)
-            {
-                EventManager.Instance.DisplayMessageClientRPC(
-                    new NetworkObjectReference(player.GetComponentInParent<NetworkObject>()),
-                    EventMessageHeader(),
-                    EventMessageBody());
-                StartCoroutine(SpawnEnemiesAroundPlayer(player));
-            }
+            EventManager.Instance.DisplayMessageClientRPC(
+                new NetworkObjectReference(player.GetComponentInParent<NetworkObject>()),
+                EventMessageHeader(),
+                EventMessageBody());
+            StartCoroutine(SpawnEnemiesAroundPlayer(player));
         }
 
         private IEnumerator SpawnEnemiesAroundPlayer(PlayerControllerB player)
@@ -52,17 +37,19 @@ namespace LuckyDice.custom.monobehaviour.def
             int count = AmountPerStack();
             while (count > 0)
             {
+                if (IsPhaseForbidden())
+                    break;
+                
                 bool found = Utils.ReturnClosestNavMeshPoint(
                     Utils.GetRandomLocationAroundPosition(
                         player.transform.position),
                     out var position);
                 if (found)
                 {
-                    RoundManager.Instance.SpawnEnemyOnServer(
-                        position,
-                        player.transform.rotation.y,
-                        SpawnIndex);
-                                            
+                    GameObject enemy = Instantiate(EnemyPrefab(), position, Random.rotation);
+                    enemy.GetComponent<NetworkObject>().Spawn(destroyWithScene:true);
+                    RoundManager.Instance.SpawnedEnemies.Add(enemy.GetComponent<EnemyAI>());
+                    
                     count--;
                 }
                 else

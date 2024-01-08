@@ -2,16 +2,7 @@
 
 namespace LuckyDice.custom.monobehaviour.impl.spawn.Enemies.all
 {
-    public class SpawnCoilheadForAll : BaseSpawnEnemyForAll
+    public class SpawnCoilheadForAll : BaseSpawnEnemyForAll<SpringManAI>
     {
-        protected override string Name()
-        {
-            return Patches.Enemies.SpringMan;
-        }
-
-        protected override int AmountPerStack()
-        {
-            return 1;
-        }
     }
 }

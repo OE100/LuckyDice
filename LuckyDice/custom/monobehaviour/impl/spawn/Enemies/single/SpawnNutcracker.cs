@@ -2,16 +2,7 @@
 
 namespace LuckyDice.custom.monobehaviour.impl.spawn.Enemies.single
 {
-    public class SpawnNutcracker : BaseSpawnEnemyEvent
+    public class SpawnNutcracker : BaseSpawnEnemyEvent<NutcrackerEnemyAI>
     {
-        protected override string Name()
-        {
-            return Patches.Enemies.Nutcracker;
-        }
-
-        protected override int AmountPerStack()
-        {
-            return 1;
-        }
     }
 }

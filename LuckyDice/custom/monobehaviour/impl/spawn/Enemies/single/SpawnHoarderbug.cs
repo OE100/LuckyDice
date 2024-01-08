@@ -2,16 +2,8 @@
 
 namespace LuckyDice.custom.monobehaviour.impl.spawn.Enemies.single
 {
-    public class SpawnHoarderbug : BaseSpawnEnemyEvent
+    public class SpawnHoarderbug : BaseSpawnEnemyEvent<HoarderBugAI>
     {
-        protected override string Name()
-        {
-            return Patches.Enemies.HoarderBug;
-        }
-
-        protected override int AmountPerStack()
-        {
-            return 3;
-        }
+        protected override int AmountPerStack() => 3;
     }
 }

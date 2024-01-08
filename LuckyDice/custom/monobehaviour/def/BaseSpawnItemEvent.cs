@@ -37,6 +37,9 @@ namespace LuckyDice.custom.monobehaviour.def
             
             while (count > 0)
             {
+                if (IsPhaseForbidden())
+                    break;
+                
                 Vector3 randomPos = Utilities.Utils.GetRandomLocationAroundPosition(
                     player.transform.position,
                     radius: 5,

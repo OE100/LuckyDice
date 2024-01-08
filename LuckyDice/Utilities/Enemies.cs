@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace LuckyDice.Patches
+namespace LuckyDice.Utilities
 {
     public static class Enemies
     {

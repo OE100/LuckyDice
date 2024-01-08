@@ -1,8 +1,10 @@
 ﻿#region
 
+using System.Collections;
 using System.Collections.Generic;
 using HarmonyLib;
 using LuckyDice.Utilities;
+using Unity.Netcode;
 using UnityEngine;
 
 #endregion
@@ -12,27 +14,12 @@ namespace LuckyDice.Patches
     [HarmonyPatch(typeof(Terminal))]
     public class TerminalPatch
     {
-        internal static Dictionary<string, SpawnableEnemyWithRarity> Enemies = new Dictionary<string, SpawnableEnemyWithRarity>();
-        
         [HarmonyPatch("Start"), HarmonyPostfix]
         private static void PatchStart(Terminal __instance)
         {
             // Enemies
-            for (int i = 0; i < __instance.moonsCatalogueList.Length; i++)
-            {
-                SelectableLevel level = __instance.moonsCatalogueList[i];
-                for (int j = 0; j < level.Enemies.Count; j++)
-                {
-                    SpawnableEnemyWithRarity spawnableEnemyWithRarity = level.Enemies[j];
-                    SpawnableEnemyWithRarity clean = new SpawnableEnemyWithRarity();
-                    clean.rarity = 0;
-                    clean.enemyType = spawnableEnemyWithRarity.enemyType;
-                    if (!Enemies.ContainsKey(spawnableEnemyWithRarity.enemyType.name))
-                    {
-                        Enemies.Add(spawnableEnemyWithRarity.enemyType.name, clean);
-                    }
-                }
-            }
+            if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
+                __instance.StartCoroutine(delayedRegistry(__instance.moonsCatalogueList));
             
             // Get weather
             Utils.TimeAndWeather = GameObject.Find("Systems/GameSystems/TimeAndWeather");
@@ -50,6 +37,20 @@ namespace LuckyDice.Patches
             Utils.DustStormWeatherContainer = Utils.TimeAndWeather.transform.Find("DustStorm").gameObject;
             // rainy
             Utils.RainyWeatherContainer = Utils.TimeAndWeather.transform.Find("RainParticleContainer").gameObject;
+        }
+
+        private static IEnumerator delayedRegistry(SelectableLevel[] catalogue)
+        {
+            for (int i = 0; i < catalogue.Length; i++)
+            {
+                SelectableLevel level = catalogue[i];
+                for (int j = 0; j < level.Enemies.Count; j++)
+                {
+                    GameObject enemyPrefab = level.Enemies[j].enemyType.enemyPrefab;
+                    EnemiesRegistry.RegisterEnemy(enemyPrefab.GetComponent<EnemyAI>().GetType(), enemyPrefab);
+                }
+            }
+            yield break;
         }
     }
 }

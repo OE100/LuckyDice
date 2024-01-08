@@ -2,16 +2,7 @@
 
 namespace LuckyDice.custom.monobehaviour.impl.spawn.Enemies.single
 {
-    public class SpawnCrawler : BaseSpawnEnemyEvent
+    public class SpawnCrawler : BaseSpawnEnemyEvent<CrawlerAI>
     {
-        protected override string Name()
-        {
-            return Patches.Enemies.Crawler;
-        }
-
-        protected override int AmountPerStack()
-        {
-            return 1;
-        }
     }
 }

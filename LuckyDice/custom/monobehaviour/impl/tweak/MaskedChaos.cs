@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
-using LuckyDice.Patches;
+using LuckyDice.Utilities;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -32,15 +32,6 @@ namespace LuckyDice.custom.monobehaviour.impl.tweak
 
         private IEnumerator EventStartup()
         {
-            int spawnIndex = RoundManager.Instance.currentLevel.Enemies
-                .FindIndex(x => x.enemyType.name == Enemies.MaskedPlayerEnemy);
-
-            if (spawnIndex < 0)
-            {
-                Plugin.Log.LogError($"Couldn't find {Enemies.MaskedPlayerEnemy} in level enemy list, event will not be triggered!");
-                yield break;
-            }
-            
             EventManager.Instance.DisplayMessageClientRPC(
                 new NetworkObjectReference(),
                 "Masked Chaos",
@@ -55,12 +46,12 @@ namespace LuckyDice.custom.monobehaviour.impl.tweak
                 int count = 2;
                 while (count > 0)
                 {
-                    Vector3 randomPos = Utilities.Utils.GetRandomLocationAroundPosition(
+                    Vector3 randomPos = Utils.GetRandomLocationAroundPosition(
                         player.transform.position,
                         radius: 5,
                         randomHeight: false);
 
-                    bool found = Utilities.Utils.ReturnClosestNavMeshPoint(
+                    bool found = Utils.ReturnClosestNavMeshPoint(
                         randomPos,
                         out var closestPoint);
 
@@ -94,22 +85,21 @@ namespace LuckyDice.custom.monobehaviour.impl.tweak
                 int count = 4;
                 while (count > 0)
                 {
-                    Vector3 position = Utilities.Utils.GetRandomLocationAroundPosition(
+                    Vector3 position = Utils.GetRandomLocationAroundPosition(
                         origin: player.transform.position,
                         radius: 20,
                         randomHeight: false);
 
-                    bool found = Utilities.Utils.ReturnClosestNavMeshPoint(
+                    bool found = Utils.ReturnClosestNavMeshPoint(
                         origin: position,
                         closestPoint:out var closestPoint);
 
                     if (!found)
                         continue;
                     
-                    RoundManager.Instance.SpawnEnemyOnServer(
-                        closestPoint, 
-                        player.transform.rotation.y, 
-                        spawnIndex);
+                    GameObject enemy = Instantiate(EnemiesRegistry.GetEnemyPrefab<MaskedPlayerEnemy>(), closestPoint, Random.rotation);
+                    enemy.GetComponent<NetworkObject>().Spawn(destroyWithScene:true);
+                    RoundManager.Instance.SpawnedEnemies.Add(enemy.GetComponent<EnemyAI>());
 
                     count--;
                 }

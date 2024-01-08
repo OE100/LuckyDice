@@ -2,16 +2,7 @@
 
 namespace LuckyDice.custom.monobehaviour.impl.spawn.Enemies.single
 {
-    public class SpawnMasked : BaseSpawnEnemyEvent
+    public class SpawnMasked : BaseSpawnEnemyEvent<MaskedPlayerEnemy>
     {
-        protected override string Name()
-        {
-            return Patches.Enemies.MaskedPlayerEnemy;
-        }
-
-        protected override int AmountPerStack()
-        {
-            return 1;
-        }
     }
 }

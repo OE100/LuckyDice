@@ -2,16 +2,7 @@
 
 namespace LuckyDice.custom.monobehaviour.impl.spawn.Enemies.all
 {
-    public class SpawnDressGirlForAll : BaseSpawnEnemyForAll
+    public class SpawnDressGirlForAll : BaseSpawnEnemyForAll<DressGirlAI>
     {
-        protected override string Name()
-        {
-            return Patches.Enemies.DressGirl;
-        }
-
-        protected override int AmountPerStack()
-        {
-            return 1;
-        }
     }
 }
