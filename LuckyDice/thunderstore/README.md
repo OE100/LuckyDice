@@ -21,6 +21,12 @@ https://github.com/OE100/ExampleEventExtensionMod
 
 # Releases:
 
+# Version 0.2.0
+- Fix: Flying to moons no longer breaks clients. (lol, my bad)
+- Fix: Spawn enemy events should work even if the enemy isn't spawnable on the moon in vanilla.
+- API: Added an enemy registry that maps the EnemyAI type to its prefab for easier access. (for an example of how to use it see my enemy spawn event)
+- API: Changed my enemy spawn events to use generics for ease of use. (not backwards compatible)
+
 # Version 0.1.1
 - Added an example for how to make a mod that extends lucky dice.
 - Some minor variable visibility changes.
