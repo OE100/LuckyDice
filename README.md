@@ -21,24 +21,28 @@ https://github.com/OE100/ExampleEventExtensionMod
 
 # Releases:
 
-# Version 0.2.0
+# 0.2.1 - Fixes
+- Fix: Trying to solve a bug causing non-host players to not be able to activate the dice.
+- Fix: Trying to make the "drop \[item\]" prompt
+
+# 0.2.0 - API & Fixes
 - Fix: Flying to moons no longer breaks clients. (lol, my bad)
 - Fix: Spawn enemy events should work even if the enemy isn't spawnable on the moon in vanilla.
 - API: Added an enemy registry that maps the EnemyAI type to its prefab for easier access. (for an example of how to use it see my enemy spawn event)
 - API: Changed my enemy spawn events to use generics for ease of use. (not backwards compatible)
 
-# Version 0.1.1
+# 0.1.1 - API & Examples
 - Added an example for how to make a mod that extends lucky dice.
 - Some minor variable visibility changes.
 
-# Version 0.1.0
+# 0.1.0 - Changes & Additions
 - Added config options to set dice spawn chance, if dice can spawn at all, if dice should be activatable or just scrap.
 - Changed event api to use custom attributes. (not backwards compatible)
 
-# Version 0.0.2
+# 0.0.2 - Fixes
 - Fixed a bug that caused items spawned by events to not show on scan.
 
-# Version 0.0.1
+# 0.0.1 - Initial Beta
 - Early Beta
 - Added extendable dice items (with regular solids already implemented)
 - Added extendable event system (with some base event types and events already implemented)

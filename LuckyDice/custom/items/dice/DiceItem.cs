@@ -13,9 +13,7 @@ namespace LuckyDice.custom.items.dice
         {
             // if in ship phase or on company moon don't roll
             if (StartOfRound.Instance.inShipPhase || StartOfRound.Instance.currentLevelID == 3)
-            {
                 return;
-            }
             // else activate item and despawn it
             base.ItemActivate(used, buttonDown);
             ItemActivateServerRPC(used, buttonDown);
@@ -26,16 +24,14 @@ namespace LuckyDice.custom.items.dice
         {
             // roll dice and despawn it
             if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
-            {
                 EventManager.Instance.TriggerEventFromPoolServerRPC(new NetworkObjectReference(GetComponentInParent<NetworkObject>()));
-                ItemActivateClientRPC(used, buttonDown);
-            }
+            ItemActivateClientRPC(used, buttonDown);
         }
         
         [ClientRpc]
         private void ItemActivateClientRPC(bool used, bool buttonDown = true)
         {
-            playerHeldBy.DespawnHeldObject();
+            DestroyObjectInHand(playerHeldBy);
         }
     }
 }
