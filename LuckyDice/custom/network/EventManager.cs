@@ -222,12 +222,6 @@ namespace LuckyDice.custom.network
         
         public EnemyAI SpawnEnemyPrefab(GameObject enemyPrefab, Vector3 position, Quaternion rotation, bool isOutside)
         {
-            Vector3 finalPosition;
-            // if (isOutside)
-            //     finalPosition = Utils.GetClosestOutsideNodeToPosition(position);
-            // else 
-            //     finalPosition = position;
-            
             GameObject enemy = Instantiate(enemyPrefab, position, Random.rotation);
             NetworkObject enemyNetworkObject = enemy.GetComponent<NetworkObject>();
             enemyNetworkObject.Spawn(destroyWithScene:true);

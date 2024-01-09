@@ -33,7 +33,9 @@ namespace LuckyDice.custom.items.dice
         [ClientRpc]
         private void ItemActivateClientRPC(bool used, bool buttonDown = true)
         {
+            playerHeldBy.activatingItem = false;
             DestroyObjectInHand(playerHeldBy);
+            Destroy(gameObject);
         }
     }
 }

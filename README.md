@@ -21,6 +21,11 @@ https://github.com/OE100/ExampleEventExtensionMod
 
 # Releases:
 
+# 0.3.0 - Game version v47 & Fixes
+- Fix: Enemies spawned outside should now behave correctly even if they aren't meant to be spawned outside.
+- Transpiler: Special fix for jesters that are spawned outside.
+- Fix: TTT event now cancels correctly when there's 1 player instead of crashing the game. (for the single players)
+
 # 0.2.1 - Fixes
 - Fix: Trying to solve a bug causing non-host players to not be able to activate the dice.
 - Fix: Trying to make the "drop \[item\]" prompt
