@@ -1,5 +1,5 @@
-# WIP!!!!!!!
-Some things might be (probably are) very broken, please report any errors you encounter on the mod github page (link above) with the following information:
+# (A little tiny bit less) WIP!!
+Some things might be broken and some events aren't implemented yet, please report any errors you encounter on the mod github page (link above) with the following information:
 1) What was the error?
 2) What other mods you have installed?
 3) What are the steps to reproduce the error?
@@ -20,6 +20,11 @@ https://github.com/OE100/ExampleEventExtensionMod
 - Write what each event does
 
 # Releases:
+
+# 0.3.2 - API & Fixes
+- Fix: fixed bug where if a client was activating the dice he would get stuck.
+- API: added utility function to get all living, controller players.
+- API: added utility function to get the closest player to a position.
 
 # 0.3.1 - API
 - API: added IsOneTimeUse() to DiceItem to be able to set if it should destroy itself after use or not.

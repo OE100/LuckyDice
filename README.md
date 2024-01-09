@@ -21,7 +21,7 @@ https://github.com/OE100/ExampleEventExtensionMod
 
 # Releases:
 
-# ?.?.? - API & Fixes
+# 0.3.2 - API & Fixes
 - Fix: fixed bug where if a client was activating the dice he would get stuck.
 - API: added utility function to get all living, controller players.
 - API: added utility function to get the closest player to a position.
