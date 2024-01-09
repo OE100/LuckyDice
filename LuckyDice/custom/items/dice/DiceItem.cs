@@ -19,23 +19,37 @@ namespace LuckyDice.custom.items.dice
             ItemActivateServerRPC(used, buttonDown);
         }
 
+        protected virtual bool IsOneTimeUse() => true;
+        
+        protected virtual void OnItemActivateServerRPCEvent() {}
+        
+        protected virtual void OnItemActivateClientRPCEvent() {}
+        
         [ServerRpc(RequireOwnership = false)]
         private void ItemActivateServerRPC(bool used, bool buttonDown = true)
         {
             // roll dice and despawn it
             if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
+            {
+                OnItemActivateServerRPCEvent();
                 EventManager.Instance.TriggerEventFromPoolServerRPC(
                     new NetworkObjectReference(GetComponentInParent<NetworkObject>()),
                     new NetworkObjectReference(playerHeldBy.GetComponentInParent<NetworkObject>()));
+            }
+            
             ItemActivateClientRPC(used, buttonDown);
         }
         
         [ClientRpc]
         private void ItemActivateClientRPC(bool used, bool buttonDown = true)
         {
+            OnItemActivateClientRPCEvent();
             playerHeldBy.activatingItem = false;
-            DestroyObjectInHand(playerHeldBy);
-            Destroy(gameObject);
+            if (IsOneTimeUse())
+            {
+                DestroyObjectInHand(playerHeldBy);
+                Destroy(gameObject);
+            }
         }
     }
 }
