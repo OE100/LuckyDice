@@ -1,4 +1,4 @@
-# WIP!!
+# WIP!!!!!!!
 Some things might be (probably are) very broken, please report any errors you encounter on the mod github page (link above) with the following information:
 1) What was the error?
 2) What other mods you have installed?
@@ -25,6 +25,7 @@ https://github.com/OE100/ExampleEventExtensionMod
 - Fix: Enemies spawned outside should now behave correctly even if they aren't meant to be spawned outside.
 - Transpiler: Special fix for jesters that are spawned outside.
 - Fix: TTT event now cancels correctly when there's 1 player instead of crashing the game. (for the single players)
+- Fix: Bug where the light would remain after a dice was used.
 
 # 0.2.1 - Fixes
 - Fix: Trying to solve a bug causing non-host players to not be able to activate the dice.
