@@ -46,24 +46,13 @@ namespace LuckyDice.custom.monobehaviour.def
                     out var position);
                 if (found)
                 {
-                    EnemyAI enemyAI = EventManager.Instance.SpawnEnemyPrefab(EnemyPrefab(),
-                        position, Random.rotation, !player.isInsideFactory);
-                    enemyAI.StartCoroutine(DelayedSetOutside(enemyAI, !player.isInsideFactory));
+                    EnemyAI enemyAI = Utils.SpawnEnemyPrefab(EnemyPrefab(),
+                        position, Random.rotation);
+                    enemyAI.StartCoroutine(Utils.DelayedSetOutside(enemyAI, !player.isInsideFactory));
                     count--;
                 }
                 else
                     Plugin.Log.LogDebug($"Didn't find NavMesh position around player {player.playerUsername}, searching again...");
-            }
-        }
-
-        private IEnumerator DelayedSetOutside(EnemyAI enemyAI, bool isOutside)
-        {
-            while (enemyAI.isOutside != isOutside)
-            {
-                enemyAI.isOutside = isOutside;
-                enemyAI.allAINodes = isOutside ? Utils.OutsideAINodes : Utils.InsideAINodes;
-                enemyAI.SyncPositionToClients();
-                yield return new WaitForSeconds(0.5f);
             }
         }
     }

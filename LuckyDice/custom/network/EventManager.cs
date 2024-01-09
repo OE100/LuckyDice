@@ -219,15 +219,31 @@ namespace LuckyDice.custom.network
         {
             MaskedEnemyChanges.Triggered = triggered;
         }
-        
-        public EnemyAI SpawnEnemyPrefab(GameObject enemyPrefab, Vector3 position, Quaternion rotation, bool isOutside)
+
+        [ClientRpc]
+        public void TeleportPlayerClientRPC(NetworkObjectReference playerRef, Vector3 position)
         {
-            GameObject enemy = Instantiate(enemyPrefab, position, Random.rotation);
-            NetworkObject enemyNetworkObject = enemy.GetComponent<NetworkObject>();
-            enemyNetworkObject.Spawn(destroyWithScene:true);
-            EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
-            RoundManager.Instance.SpawnedEnemies.Add(enemyAI);
-            return enemyAI;
+            if (!playerRef.TryGet(out NetworkObject networkObject))
+            {
+                Plugin.Log.LogError("Couldn't find player object!");
+                return;
+            }
+            
+            PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
+            player.TeleportPlayer(position);
+        }
+        
+        [ClientRpc]
+        public void TeleportEntityClientRPC(NetworkObjectReference entityRef, Vector3 position)
+        {
+            if (!entityRef.TryGet(out NetworkObject networkObject))
+            {
+                Plugin.Log.LogError("Couldn't find entity object!");
+                return;
+            }
+            
+            NavMeshAgent agent = networkObject.GetComponentInChildren<NavMeshAgent>();
+            agent.Warp(position);
         }
     }
 }

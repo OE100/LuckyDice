@@ -13,7 +13,7 @@ namespace LuckyDice.Patches
     public class NetworkStuffPatch
     {
         internal static List<GameObject> networkPrefabs = new List<GameObject>();
-        private static bool done = false;
+        private static bool done;
         
         [HarmonyPatch(typeof(GameNetworkManager), "Start"), HarmonyPostfix]
         public static void PatchGameNetworkManagerStart()

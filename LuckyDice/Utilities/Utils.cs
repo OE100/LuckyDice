@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using GameNetcodeStuff;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -126,6 +128,27 @@ namespace LuckyDice.Utilities
             }
 
             return nearest;
+        }
+        
+        public static EnemyAI SpawnEnemyPrefab(GameObject enemyPrefab, Vector3 position, Quaternion rotation)
+        {
+            GameObject enemy = Object.Instantiate(enemyPrefab, position, rotation);
+            NetworkObject enemyNetworkObject = enemy.GetComponent<NetworkObject>();
+            enemyNetworkObject.Spawn(destroyWithScene:true);
+            EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
+            RoundManager.Instance.SpawnedEnemies.Add(enemyAI);
+            return enemyAI;
+        }
+        
+        public static IEnumerator DelayedSetOutside(EnemyAI enemyAI, bool isOutside)
+        {
+            while (enemyAI.isOutside != isOutside)
+            {
+                enemyAI.isOutside = isOutside;
+                enemyAI.allAINodes = isOutside ? OutsideAINodes : InsideAINodes;
+                enemyAI.SyncPositionToClients();
+                yield return new WaitForSeconds(0.5f);
+            }
         }
     }
 }
