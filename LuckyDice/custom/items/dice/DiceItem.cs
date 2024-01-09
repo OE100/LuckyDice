@@ -44,7 +44,7 @@ namespace LuckyDice.custom.items.dice
         private void ItemActivateClientRPC(bool used, bool buttonDown = true)
         {
             OnItemActivateClientRPCEvent();
-            playerHeldBy.activatingItem = false;
+            UseItemOnClient(false);
             if (IsOneTimeUse())
             {
                 DestroyObjectInHand(playerHeldBy);

@@ -40,7 +40,7 @@ namespace LuckyDice.custom.monobehaviour.def
                 if (IsPhaseForbidden())
                     break;
                 
-                bool found = Utils.ReturnClosestNavMeshPoint(
+                bool found = Utils.ClosestNavMeshToPosition(
                     Utils.GetRandomLocationAroundPosition(
                         player.transform.position),
                     out var position);

@@ -3,6 +3,7 @@ using GameNetcodeStuff;
 using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
+using LuckyDice.Utilities;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -20,8 +21,7 @@ namespace LuckyDice.custom.monobehaviour.impl.player
         {
             Plugin.Log.LogDebug("TroubleInTerroristTown Awake!");
             // roll terrorists
-            List<PlayerControllerB> players = new List<PlayerControllerB>(StartOfRound.Instance.allPlayerScripts);
-            players.RemoveAll(p => p.isPlayerDead || !p.isPlayerControlled);
+            List<PlayerControllerB> players = Utils.GetAllLivingPlayers();
             if (players.Count <= 1)
             {
                 Plugin.Log.LogDebug("One player alive, cancelling trouble in terrorist town.");

@@ -51,7 +51,7 @@ namespace LuckyDice.custom.monobehaviour.impl.tweak
                         radius: 5,
                         randomHeight: false);
 
-                    bool found = Utils.ReturnClosestNavMeshPoint(
+                    bool found = Utils.ClosestNavMeshToPosition(
                         randomPos,
                         out var closestPoint);
 
@@ -86,12 +86,12 @@ namespace LuckyDice.custom.monobehaviour.impl.tweak
                 while (count > 0)
                 {
                     Vector3 position = Utils.GetRandomLocationAroundPosition(
-                        origin: player.transform.position,
+                        position: player.transform.position,
                         radius: 20,
                         randomHeight: false);
 
-                    bool found = Utils.ReturnClosestNavMeshPoint(
-                        origin: position,
+                    bool found = Utils.ClosestNavMeshToPosition(
+                        position: position,
                         closestPoint:out var closestPoint);
 
                     if (!found)

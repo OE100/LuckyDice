@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using GameNetcodeStuff;
+using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
@@ -46,7 +48,7 @@ namespace LuckyDice.Utilities
         
         
         public static Vector3 GetRandomLocationAroundPosition(
-            Vector3 origin,
+            Vector3 position,
             float radius = 35,
             bool randomHeight = false
             )
@@ -54,16 +56,16 @@ namespace LuckyDice.Utilities
             Vector3 random = Random.insideUnitSphere * radius;
             if (!randomHeight)
                 random.y = 0;
-            Vector3 finalPos = random + origin;
+            Vector3 finalPos = random + position;
             Plugin.Log.LogDebug($"Utilities, get position: {finalPos}");
             return finalPos;
         }
 
-        public static bool ReturnClosestNavMeshPoint(Vector3 origin,
+        public static bool ClosestNavMeshToPosition(Vector3 position,
             out Vector3 closestPoint,
             float radius = Mathf.Infinity)
         {
-            bool found = NavMesh.SamplePosition(origin, out NavMeshHit hit, radius, NavMesh.AllAreas);
+            bool found = NavMesh.SamplePosition(position, out NavMeshHit hit, radius, NavMesh.AllAreas);
             if (hit.hit)
                 closestPoint = hit.position;
             else
@@ -72,18 +74,47 @@ namespace LuckyDice.Utilities
             return found;
         }
 
-        public static Vector3 GetClosestOutsideNodeToPosition(Vector3 position)
+        public static List<PlayerControllerB> GetAllLivingPlayers()
         {
-            if (OutsideAINodes == null)
+            List<PlayerControllerB> players = new List<PlayerControllerB>(StartOfRound.Instance.allPlayerScripts);
+            players.RemoveAll(player => !player.isPlayerControlled || player.isPlayerDead);
+            return players;
+        }
+
+        public static PlayerControllerB GetClosestPlayerToPosition(Vector3 position,
+            List<PlayerControllerB> players, 
+            bool inside = true)
+        {
+            float distance = Mathf.Infinity;
+            PlayerControllerB nearestPlayer = null;
+            
+            foreach(PlayerControllerB player in players)
             {
-                Plugin.Log.LogError("Outside AI nodes not found!");
+                Vector3 diff = player.transform.position - position;
+                float curDistance = diff.sqrMagnitude; 
+                if(curDistance < distance)
+                {
+                    nearestPlayer = player;
+                    distance = curDistance;
+                }
+            }
+
+            return nearestPlayer;
+        }
+        
+        public static Vector3 GetClosestAINodeToPosition(Vector3 position, bool inside = false)
+        {
+            if (inside ? InsideAINodes == null : OutsideAINodes == null)
+            {
+                Plugin.Log.LogError($"{(inside ? "Inside" : "Outside")} AI nodes not found!");
                 return Vector3.positiveInfinity;
             }
             
             float distance = Mathf.Infinity;
             Vector3 nearest = Vector3.positiveInfinity;
     
-            foreach(GameObject thisObject in OutsideAINodes)
+            GameObject[] aiNodes = inside ? InsideAINodes : OutsideAINodes;
+            foreach(GameObject thisObject in aiNodes)
             {
                 Vector3 diff = thisObject.transform.position - position;
                 float curDistance = diff.sqrMagnitude; 

@@ -45,7 +45,7 @@ namespace LuckyDice.custom.monobehaviour.def
                     radius: 5,
                     randomHeight: true);
 
-                bool found = Utilities.Utils.ReturnClosestNavMeshPoint(
+                bool found = Utilities.Utils.ClosestNavMeshToPosition(
                     randomPos,
                     out var closestPoint);
 

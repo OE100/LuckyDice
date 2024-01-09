@@ -21,6 +21,10 @@ https://github.com/OE100/ExampleEventExtensionMod
 
 # Releases:
 
+# ?.?.? - API
+- API: added utility function to get all living, controller players.
+- API: added utility function to get the closest player to a position.
+
 # 0.3.1 - API
 - API: added IsOneTimeUse() to DiceItem to be able to set if it should destroy itself after use or not.
 - API: added OnRPC virtual functions to make modifying the inherent behaviour a bit easier.

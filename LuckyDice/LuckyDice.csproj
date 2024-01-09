@@ -110,6 +110,7 @@
         <Compile Include="custom\monobehaviour\impl\map\ExplodeLandmines.cs" />
         <Compile Include="custom\monobehaviour\impl\map\RandomizeLocks.cs" />
         <Compile Include="custom\monobehaviour\impl\map\StormyWeatherEvent.cs" />
+        <Compile Include="custom\monobehaviour\impl\map\TeleportAllPlayers.cs" />
         <Compile Include="custom\monobehaviour\impl\player\Bleed.cs" />
         <Compile Include="custom\monobehaviour\impl\player\TroubleInTerroristTown.cs" />
         <Compile Include="custom\monobehaviour\impl\spawn\Enemies\all\SpawnCoilheadForAll.cs" />
