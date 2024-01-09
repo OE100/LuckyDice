@@ -22,13 +22,13 @@ https://github.com/OE100/ExampleEventExtensionMod
 # Releases:
 
 # 0.3.2 - API & Fixes
-- Fix: fixed bug where if a client was activating the dice he would get stuck.
-- API: added utility function to get all living, controller players.
-- API: added utility function to get the closest player to a position.
+- Fix: Bug where if a client was activating the dice he would get stuck.
+- API: Added utility function to get all living, controller players.
+- API: Added utility function to get the closest player to a position.
 
 # 0.3.1 - API
-- API: added IsOneTimeUse() to DiceItem to be able to set if it should destroy itself after use or not.
-- API: added OnRPC virtual functions to make modifying the inherent behaviour a bit easier.
+- API: Added IsOneTimeUse() to DiceItem to be able to set if it should destroy itself after use or not.
+- API: Added OnRPC virtual functions to make modifying the inherent behaviour a bit easier.
 
 # 0.3.0 - Game version v47 & Fixes
 - Fix: Enemies spawned outside should now behave correctly even if they aren't meant to be spawned outside.
@@ -47,15 +47,15 @@ https://github.com/OE100/ExampleEventExtensionMod
 - API: Changed my enemy spawn events to use generics for ease of use. (not backwards compatible)
 
 # 0.1.1 - API & Examples
-- Added an example for how to make a mod that extends lucky dice.
-- Some minor variable visibility changes.
+- Add: An example for how to make a mod that extends lucky dice.
+- API: Some minor variable visibility changes.
 
 # 0.1.0 - Changes & Additions
-- Added config options to set dice spawn chance, if dice can spawn at all, if dice should be activatable or just scrap.
-- Changed event api to use custom attributes. (not backwards compatible)
+- Add: config options to set dice spawn chance, if dice can spawn at all, if dice should be activatable or just scrap.
+- Change: event api to use custom attributes. (not backwards compatible)
 
 # 0.0.2 - Fixes
-- Fixed a bug that caused items spawned by events to not show on scan.
+- Fix: Bug that caused items spawned by events to not show on scan.
 
 # 0.0.1 - Initial Beta
 - Early Beta
