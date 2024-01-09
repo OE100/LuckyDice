@@ -24,7 +24,9 @@ namespace LuckyDice.custom.items.dice
         {
             // roll dice and despawn it
             if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
-                EventManager.Instance.TriggerEventFromPoolServerRPC(new NetworkObjectReference(GetComponentInParent<NetworkObject>()));
+                EventManager.Instance.TriggerEventFromPoolServerRPC(
+                    new NetworkObjectReference(GetComponentInParent<NetworkObject>()),
+                    new NetworkObjectReference(playerHeldBy.GetComponentInParent<NetworkObject>()));
             ItemActivateClientRPC(used, buttonDown);
         }
         

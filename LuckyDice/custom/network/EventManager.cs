@@ -8,6 +8,7 @@ using LuckyDice.Patches;
 using LuckyDice.Utilities;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.AI;
 
 #endregion
 
@@ -31,7 +32,7 @@ namespace LuckyDice.custom.network
 
         // rolls event on server
         [ServerRpc(RequireOwnership = false)]
-        public void TriggerEventFromPoolServerRPC(NetworkObjectReference triggerRef)
+        public void TriggerEventFromPoolServerRPC(NetworkObjectReference triggerRef, NetworkObjectReference playerRef)
         {
             if (!(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
             {
@@ -41,7 +42,7 @@ namespace LuckyDice.custom.network
 
             if (!triggerRef.TryGet(out NetworkObject networkObject))
             {
-                Plugin.Log.LogDebug($"Didn't find trigger object!");
+                Plugin.Log.LogDebug("Didn't find trigger object!");
                 return;
             }
 
@@ -61,7 +62,15 @@ namespace LuckyDice.custom.network
                 return;
             }
 
-            EventRegistry.RunEventFromPool(pool, eventIndex, trigger.playerHeldBy);
+            if (!playerRef.TryGet(out NetworkObject playerNetworkObject))
+            {
+                Plugin.Log.LogError("Didn't find player object!");
+                return;
+            }
+            
+            PlayerControllerB playerHeldBy = playerNetworkObject.GetComponentInChildren<PlayerControllerB>();
+            
+            EventRegistry.RunEventFromPool(pool, eventIndex, playerHeldBy);
         }
         
         
@@ -209,6 +218,22 @@ namespace LuckyDice.custom.network
         public void SetMaskedEnemyChangesClientRPC(bool triggered)
         {
             MaskedEnemyChanges.Triggered = triggered;
+        }
+        
+        public EnemyAI SpawnEnemyPrefab(GameObject enemyPrefab, Vector3 position, Quaternion rotation, bool isOutside)
+        {
+            Vector3 finalPosition;
+            // if (isOutside)
+            //     finalPosition = Utils.GetClosestOutsideNodeToPosition(position);
+            // else 
+            //     finalPosition = position;
+            
+            GameObject enemy = Instantiate(enemyPrefab, position, Random.rotation);
+            NetworkObject enemyNetworkObject = enemy.GetComponent<NetworkObject>();
+            enemyNetworkObject.Spawn(destroyWithScene:true);
+            EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
+            RoundManager.Instance.SpawnedEnemies.Add(enemyAI);
+            return enemyAI;
         }
     }
 }

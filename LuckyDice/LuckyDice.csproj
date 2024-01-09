@@ -137,6 +137,7 @@
         <Compile Include="custom\network\EventManager.cs" />
         <Compile Include="ModConfig.cs" />
         <Compile Include="Patches\DoorLockPatch.cs" />
+        <Compile Include="Patches\JesterAIPatch.cs" />
         <Compile Include="Patches\MaskedEnemyChanges.cs" />
         <Compile Include="Patches\NetworkStuffPatch.cs" />
         <Compile Include="Patches\StartOfRoundPatch.cs" />

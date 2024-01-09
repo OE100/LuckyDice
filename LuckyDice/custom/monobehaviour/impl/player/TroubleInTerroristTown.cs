@@ -12,7 +12,7 @@ namespace LuckyDice.custom.monobehaviour.impl.player
     public class TroubleInTerroristTown : BaseEventBehaviour
     {
         private float timeRemaining;
-        private bool started = true;
+        private bool started;
         private bool warningPlayed;
         private List<PlayerControllerB> terrorists;
         
@@ -28,6 +28,9 @@ namespace LuckyDice.custom.monobehaviour.impl.player
                 started = false;
                 return;
             }
+
+            started = true;
+            warningPlayed = false;
             // select non-terrorist
             int nInd = Random.Range(0, players.Count);
             Plugin.Log.LogDebug($"Chosen {players[nInd].playerUsername} as non-terrorist");
@@ -63,12 +66,21 @@ namespace LuckyDice.custom.monobehaviour.impl.player
         
         protected override void Update()
         {
+            Plugin.Log.LogDebug($"Checking for forbidden phase: {IsPhaseForbidden()}");
             if (IsPhaseForbidden())
+            {
                 Destroy(this);
+                return;
+            }
 
+            Plugin.Log.LogDebug($"Checking for not starting the event: {!started}");
             if (!started)
+            {
                 Destroy(this);
+                return;
+            }
             
+            Plugin.Log.LogDebug($"Checking for terrorists count: {terrorists.Count}");
             if (terrorists.Count > 0)
             {
                 if (timeRemaining <= 15 && !warningPlayed)
@@ -92,6 +104,15 @@ namespace LuckyDice.custom.monobehaviour.impl.player
                     
                     Destroy(this);
                 }
+            }
+            else
+            {
+                EventManager.Instance.DisplayMessageClientRPC(
+                    new NetworkObjectReference(),
+                    "Congratulations!",
+                    "All the terrorists have died, you are safe now, well at least safer..."
+                    );
+                Destroy(this);
             }
             
             timeRemaining -= Time.deltaTime;

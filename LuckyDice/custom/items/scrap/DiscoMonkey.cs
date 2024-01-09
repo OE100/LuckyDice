@@ -8,9 +8,9 @@ namespace LuckyDice.custom.items.scrap
     {
         public AudioSource monkeyAudio; 
         
-        private Light light;
+        private Light discoLight;
         private IEnumerator current;
-        private Renderer renderer;
+        private Renderer discoRenderer;
         
         static List<Color> from = new List<Color>
         {
@@ -25,8 +25,8 @@ namespace LuckyDice.custom.items.scrap
         public override void Start()
         {
             base.Start();
-            light = gameObject.GetComponentInChildren<Light>();
-            renderer = gameObject.GetComponentInChildren<Renderer>();
+            discoLight = gameObject.GetComponentInChildren<Light>();
+            discoRenderer = gameObject.GetComponentInChildren<Renderer>();
         }
 
         public override void ItemActivate(bool used, bool buttonDown = true)
@@ -46,8 +46,8 @@ namespace LuckyDice.custom.items.scrap
         
         private void SwitchLight()
         {
-            light.enabled = !light.enabled;
-            if (light.enabled)
+            discoLight.enabled = !discoLight.enabled;
+            if (discoLight.enabled)
             {
                 current = ChangeColor();
                 StartCoroutine(current);
@@ -62,18 +62,18 @@ namespace LuckyDice.custom.items.scrap
         private IEnumerator ChangeColor()
         {
             Color initial = PickRandomPresetColor();
-            light.color = initial;
-            renderer.material.color = initial;
+            discoLight.color = initial;
+            discoRenderer.material.color = initial;
             
-            while (light.enabled)
+            while (discoLight.enabled)
             {
                 Color newColor = PickRandomPresetColor();
                 float transition = 0;
                 while (transition < 1)
                 {
                     Color materialColor = Color.Lerp(initial, newColor, transition);
-                    light.color = materialColor;
-                    renderer.material.color = materialColor;
+                    discoLight.color = materialColor;
+                    discoRenderer.material.color = materialColor;
                     transition += 0.03f;
                     yield return new WaitForEndOfFrame();
                 }

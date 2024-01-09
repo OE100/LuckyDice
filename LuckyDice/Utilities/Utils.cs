@@ -16,6 +16,10 @@ namespace LuckyDice.Utilities
         // Random items
         public static Item DiscoMonkey = null;
         
+        // Outside AI nodes
+        public static GameObject[] OutsideAINodes = null;
+        public static GameObject[] InsideAINodes = null;
+        
         // weather container
         public static GameObject TimeAndWeather;
         
@@ -66,6 +70,31 @@ namespace LuckyDice.Utilities
                 closestPoint = default;
             Plugin.Log.LogDebug($"Utilities found NavMesh: {found}, position: {closestPoint}");
             return found;
+        }
+
+        public static Vector3 GetClosestOutsideNodeToPosition(Vector3 position)
+        {
+            if (OutsideAINodes == null)
+            {
+                Plugin.Log.LogError("Outside AI nodes not found!");
+                return Vector3.positiveInfinity;
+            }
+            
+            float distance = Mathf.Infinity;
+            Vector3 nearest = Vector3.positiveInfinity;
+    
+            foreach(GameObject thisObject in OutsideAINodes)
+            {
+                Vector3 diff = thisObject.transform.position - position;
+                float curDistance = diff.sqrMagnitude; 
+                if(curDistance < distance)
+                {
+                    nearest = thisObject.transform.position;
+                    distance = curDistance;
+                }
+            }
+
+            return nearest;
         }
     }
 }

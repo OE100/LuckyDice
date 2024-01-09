@@ -5,6 +5,7 @@ using HarmonyLib;
 using LuckyDice.custom.events;
 using LuckyDice.custom.monobehaviour.impl;
 using LuckyDice.custom.monobehaviour.impl.map;
+using LuckyDice.Utilities;
 using UnityEngine;
 
 #endregion
@@ -20,6 +21,13 @@ namespace LuckyDice.Patches
             EventRegistry.EndOfRoundCleanup();
             
             RandomizeLocks.doors.Clear();
+        }
+        
+        [HarmonyPatch(nameof(StartOfRound.OnShipLandedMiscEvents)), HarmonyPostfix]
+        private static void PatchOnShipLandedMiscEvents()
+        {
+            Utils.OutsideAINodes = GameObject.FindGameObjectsWithTag("OutsideAINode");
+            Utils.InsideAINodes = GameObject.FindGameObjectsWithTag("AINode");
         }
     }
 }
