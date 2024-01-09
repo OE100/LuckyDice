@@ -21,6 +21,10 @@ https://github.com/OE100/ExampleEventExtensionMod
 
 # Releases:
 
+# 0.3.1 - API
+- API: added IsOneTimeUse() to DiceItem to be able to set if it should destroy itself after use or not.
+- API: added OnRPC virtual functions to make modifying the inherent behaviour a bit easier.
+
 # 0.3.0 - Game version v47 & Fixes
 - Fix: Enemies spawned outside should now behave correctly even if they aren't meant to be spawned outside.
 - Transpiler: Special fix for jesters that are spawned outside.
