@@ -41,7 +41,7 @@
         <HintPath>deps\bepinex\BepInEx.dll</HintPath>
       </Reference>
       <Reference Include="LethalLib">
-        <HintPath>deps\LethalLib.dll</HintPath>
+        <HintPath>deps\lethallib\LethalLib.dll</HintPath>
       </Reference>
       <Reference Include="Unity.Netcode.Runtime">
         <HintPath>deps\managed\Unity.Netcode.Runtime.dll</HintPath>

@@ -1,0 +1,2 @@
+BepInEx.dll
+0Harmony.dll
