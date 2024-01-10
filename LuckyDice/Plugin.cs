@@ -87,9 +87,9 @@ namespace LuckyDice
             }
         }
 
-        private Item? RegisterItem(string path, int rarity, Levels.LevelTypes levelTypes)
+        private static Item RegisterItem(string path, int rarity, Levels.LevelTypes levelTypes)
         {
-            Item? item = ABundle.LoadAsset<Item>(path);
+            Item item = ABundle.LoadAsset<Item>(path);
             if (item == null)
                 Log.LogError($"Failed to load item: {path}");
             else

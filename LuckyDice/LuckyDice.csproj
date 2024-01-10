@@ -9,6 +9,10 @@
         <RootNamespace>LuckyDice</RootNamespace>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
     <ItemGroup>
       <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1">
         <PrivateAssets>all</PrivateAssets>
@@ -48,7 +52,10 @@
         <HintPath>deps\bepinex\BepInEx.dll</HintPath>
       </Reference>
       <Reference Include="LethalLib">
-        <HintPath>deps\lethallib\LethalLib.dll</HintPath>
+        <HintPath>deps\apis\LethalLib.dll</HintPath>
+      </Reference>
+      <Reference Include="TerminalApi">
+        <HintPath>deps\apis\TerminalApi.dll</HintPath>
       </Reference>
       <Reference Include="Unity.Netcode.Runtime">
         <HintPath>deps\managed\Unity.Netcode.Runtime.dll</HintPath>
