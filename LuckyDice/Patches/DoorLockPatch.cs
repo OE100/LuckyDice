@@ -15,7 +15,7 @@ namespace LuckyDice.Patches
         private static void PatchAwake(DoorLock __instance)
         {
             if (StartOfRound.Instance.IsHost || StartOfRound.Instance.IsServer)
-                RandomizeLocks.doors.Add(__instance);
+                RandomizeLocks.Doors.Add(__instance);
         }
     }
 }

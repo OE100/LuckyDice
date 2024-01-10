@@ -23,13 +23,13 @@ namespace LuckyDice.custom.monobehaviour.impl.map
             StartCoroutine(TurnItemsMetal());
         }
 
-        private IEnumerator TurnItemsMetal()
+        protected virtual IEnumerator TurnItemsMetal()
         {
             while (true)
             {
-                foreach (PlayerControllerB player in StartOfRound.Instance.allPlayerScripts)
+                foreach (var player in StartOfRound.Instance.allPlayerScripts)
                 {
-                    GrabbableObject heldObjectServer = player.currentlyHeldObjectServer;
+                    var heldObjectServer = player.currentlyHeldObjectServer;
                     
                     if (heldObjectServer == null || EventRegistry.GetPoolFromItem(heldObjectServer.GetType()) != null)
                         continue;

@@ -28,16 +28,18 @@ namespace LuckyDice.custom.network
                 Plugin.Log.LogDebug("Only host can trigger events!");
                 return;
             }
+            
+            Plugin.Log.LogDebug($"Player: {StartOfRound.Instance.localPlayerController.playerUsername} is the host!");
 
-            if (!triggerRef.TryGet(out NetworkObject networkObject))
+            if (!triggerRef.TryGet(out var networkObject))
             {
                 Plugin.Log.LogDebug("Didn't find trigger object!");
                 return;
             }
 
-            GrabbableObject trigger = networkObject.GetComponentInParent<GrabbableObject>();
+            var trigger = networkObject.GetComponentInParent<GrabbableObject>();
 
-            string? pool = EventRegistry.GetPoolFromItem(trigger.GetType());
+            var pool = EventRegistry.GetPoolFromItem(trigger.GetType());
             if (pool == null)
             {
                 Plugin.Log.LogWarning($"Item of type: {trigger.GetType()} has no event pool!");
@@ -51,13 +53,13 @@ namespace LuckyDice.custom.network
                 return;
             }
 
-            if (!playerRef.TryGet(out NetworkObject playerNetworkObject))
+            if (!playerRef.TryGet(out var playerNetworkObject))
             {
                 Plugin.Log.LogError("Didn't find player object!");
                 return;
             }
             
-            PlayerControllerB playerHeldBy = playerNetworkObject.GetComponentInChildren<PlayerControllerB>();
+            var playerHeldBy = playerNetworkObject.GetComponentInChildren<PlayerControllerB>();
             
             EventRegistry.RunEventFromPool(pool, eventIndex, playerHeldBy);
         }
@@ -68,7 +70,7 @@ namespace LuckyDice.custom.network
         [ClientRpc]
         public void DisplayMessageClientRPC(NetworkObjectReference playerRef, string header, string body)
         {
-            if (playerRef.TryGet(out NetworkObject networkObject))
+            if (playerRef.TryGet(out var networkObject))
             {
                 PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
                 if (player == StartOfRound.Instance.localPlayerController)
@@ -81,7 +83,7 @@ namespace LuckyDice.custom.network
         [ClientRpc]
         public void BleedPlayerClientRPC(NetworkObjectReference playerRef, bool bleed, int damage = 0)
         {
-            if (playerRef.TryGet(out NetworkObject networkObject))
+            if (playerRef.TryGet(out var networkObject))
             {
                 PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
                 player.bleedingHeavily = bleed;
@@ -93,20 +95,20 @@ namespace LuckyDice.custom.network
         [ServerRpc(RequireOwnership = false)]
         public void SpawnItemAroundPositionServerRPC(Vector3 position, int itemId, int stackValue = 0)
         {
-            List<Item> itemsList = StartOfRound.Instance.allItemsList.itemsList;
-            Item itemToSpawn = itemId == -1 ? itemsList[Random.Range(0, itemsList.Count)] : itemsList[itemId];
+            var itemsList = StartOfRound.Instance.allItemsList.itemsList;
+            var itemToSpawn = itemId == -1 ? itemsList[Random.Range(0, itemsList.Count)] : itemsList[itemId];
             
-            Transform parent = RoundManager.Instance.spawnedScrapContainer == null ? StartOfRound.Instance.elevatorTransform : RoundManager.Instance.spawnedScrapContainer;
+            var parent = RoundManager.Instance.spawnedScrapContainer == null ? StartOfRound.Instance.elevatorTransform : RoundManager.Instance.spawnedScrapContainer;
             position.y += 1;
             
-            GameObject itemObject = Instantiate(
+            var itemObject = Instantiate(
                 itemToSpawn.spawnPrefab, 
                 position, 
                 Random.rotation,
                 parent
             );
             
-            GrabbableObject component = itemObject.GetComponent<GrabbableObject>();
+            var component = itemObject.GetComponent<GrabbableObject>();
             component.NetworkObject.Spawn();
 
             InitializeItemClientRPC(new NetworkObjectReference(component.NetworkObject), stackValue);
@@ -136,7 +138,7 @@ namespace LuckyDice.custom.network
         {
             if (playerRef.TryGet(out NetworkObject networkObject))
             {
-                PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
+                var player = networkObject.GetComponentInChildren<PlayerControllerB>();
                 player.voiceMuffledByEnemy = true;
                 // player.currentVoiceChatAudioSource.PlayOneShot(HolyJihad.beepClip, 1f); // todo: fix this
                 // WalkieTalkie.TransmitOneShotAudio(player.currentVoiceChatAudioSource, HolyJihad.beepClip); // todo: fix this
@@ -148,7 +150,7 @@ namespace LuckyDice.custom.network
         {
             if (playerRef.TryGet(out NetworkObject networkObject))
             {
-                PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
+                var player = networkObject.GetComponentInChildren<PlayerControllerB>();
                 // player.currentVoiceChatAudioSource.PlayOneShot(HolyJihad.jihadClip); // todo: fix this
                 // WalkieTalkie.TransmitOneShotAudio(player.currentVoiceChatAudioSource, HolyJihad.jihadClip); // todo: fix this
                 Landmine.SpawnExplosion(
@@ -176,10 +178,10 @@ namespace LuckyDice.custom.network
         public void LockDoorClientRPC(NetworkObjectReference doorLockRef)
         {
             Plugin.Log.LogDebug($"Trying to lock door");
-            if (doorLockRef.TryGet(out NetworkObject networkObject))
+            if (doorLockRef.TryGet(out var networkObject))
             {
-                DoorLock doorLock = networkObject.GetComponentInChildren<DoorLock>();
-                bool original = doorLock.isLocked;
+                var doorLock = networkObject.GetComponentInChildren<DoorLock>();
+                var original = doorLock.isLocked;
                 doorLock.LockDoor();
                 doorLock.doorLockSFX.PlayOneShot(doorLock.unlockSFX);
                 Plugin.Log.LogDebug($"Door locked: {original} -> {doorLock.isLocked}");
@@ -190,10 +192,10 @@ namespace LuckyDice.custom.network
         public void UnlockDoorClientRPC(NetworkObjectReference doorLockRef)
         {
             Plugin.Log.LogDebug($"Trying to unlock door");
-            if (doorLockRef.TryGet(out NetworkObject networkObject))
+            if (doorLockRef.TryGet(out var networkObject))
             {
-                DoorLock doorLock = networkObject.GetComponentInChildren<DoorLock>();
-                bool original = !doorLock.isLocked;
+                var doorLock = networkObject.GetComponentInChildren<DoorLock>();
+                var original = !doorLock.isLocked;
                 doorLock.UnlockDoor();
                 doorLock.doorLockSFX.PlayOneShot(doorLock.unlockSFX);
                 Plugin.Log.LogDebug($"Door unlocked: {original} -> {!doorLock.isLocked}");
@@ -209,26 +211,26 @@ namespace LuckyDice.custom.network
         [ClientRpc]
         public void TeleportPlayerClientRPC(NetworkObjectReference playerRef, Vector3 position)
         {
-            if (!playerRef.TryGet(out NetworkObject networkObject))
+            if (!playerRef.TryGet(out var networkObject))
             {
                 Plugin.Log.LogError("Couldn't find player object!");
                 return;
             }
             
-            PlayerControllerB player = networkObject.GetComponentInChildren<PlayerControllerB>();
+            var player = networkObject.GetComponentInChildren<PlayerControllerB>();
             player.TeleportPlayer(position);
         }
         
         [ClientRpc]
         public void TeleportEntityClientRPC(NetworkObjectReference entityRef, Vector3 position)
         {
-            if (!entityRef.TryGet(out NetworkObject networkObject))
+            if (!entityRef.TryGet(out var networkObject))
             {
                 Plugin.Log.LogError("Couldn't find entity object!");
                 return;
             }
             
-            NavMeshAgent agent = networkObject.GetComponentInChildren<NavMeshAgent>();
+            var agent = networkObject.GetComponentInChildren<NavMeshAgent>();
             agent.Warp(position);
         }
     }

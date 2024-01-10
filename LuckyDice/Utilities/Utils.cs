@@ -3,7 +3,6 @@ using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
-using Debug = System.Diagnostics.Debug;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
@@ -12,43 +11,41 @@ namespace LuckyDice.Utilities
     public static class Utils
     {
         // Dice
-        public static Item? D4 = null!;
-        public static Item? D6 = null!;
-        public static Item? D8 = null!;
-        public static Item? D12 = null!;
-        public static Item? D20 = null!;
+        public static Item D4;
+        public static Item D6;
+        public static Item D8;
+        public static Item D12;
+        public static Item D20;
         
         // Random items
-        public static Item? DiscoMonkey = null!;
+        public static Item DiscoMonkey;
         
         // Outside AI nodes
-        public static GameObject[] OutsideAINodes = null!;
-        public static GameObject[] InsideAINodes = null!;
+        public static GameObject[] OutsideAINodes;
+        public static GameObject[] InsideAINodes;
         
         // weather container
-        public static GameObject TimeAndWeather = null!;
+        public static GameObject TimeAndWeather;
         
         // stormy
-        public static GameObject StormyWeatherContainer = null!;
-        public static StormyWeather StormyWeather = null!;
-        public static GameObject StormyRainContainer = null!;
+        public static GameObject StormyWeatherContainer;
+        public static StormyWeather StormyWeather;
+        public static GameObject StormyRainContainer;
         
         // foggy
-        public static GameObject FoggyWeatherContainer = null!;
+        public static GameObject FoggyWeatherContainer;
         
         // flooding
-        public static GameObject FloodingWeatherContainer = null!;
+        public static GameObject FloodingWeatherContainer;
         
         // eclipse
-        public static GameObject EclipseWeatherContainer = null!;
+        public static GameObject EclipseWeatherContainer;
         
         // dust storm
-        public static GameObject DustStormWeatherContainer = null!;
+        public static GameObject DustStormWeatherContainer;
         
         // rainy
-        public static GameObject RainyWeatherContainer = null!;
-        
-        
+        public static GameObject RainyWeatherContainer;
         
         public static Vector3 GetRandomLocationAroundPosition(
             Vector3 position,
@@ -56,10 +53,10 @@ namespace LuckyDice.Utilities
             bool randomHeight = false
             )
         {
-            Vector3 random = Random.insideUnitSphere * radius;
+            var random = Random.insideUnitSphere * radius;
             if (!randomHeight)
                 random.y = 0;
-            Vector3 finalPos = random + position;
+            var finalPos = random + position;
             Plugin.Log.LogDebug($"Utilities, get position: {finalPos}");
             return finalPos;
         }
@@ -68,38 +65,33 @@ namespace LuckyDice.Utilities
             out Vector3 closestPoint,
             float radius = Mathf.Infinity)
         {
-            bool found = NavMesh.SamplePosition(position, out NavMeshHit hit, radius, NavMesh.AllAreas);
-            if (hit.hit)
-                closestPoint = hit.position;
-            else
-                closestPoint = default;
+            var found = NavMesh.SamplePosition(position, out var hit, radius, NavMesh.AllAreas);
+            closestPoint = hit.hit ? hit.position : default;
             Plugin.Log.LogDebug($"Utilities found NavMesh: {found}, position: {closestPoint}");
             return found;
         }
 
         public static List<PlayerControllerB> GetAllLivingPlayers()
         {
-            List<PlayerControllerB> players = new List<PlayerControllerB>(StartOfRound.Instance.allPlayerScripts);
+            List<PlayerControllerB> players = [..StartOfRound.Instance.allPlayerScripts];
             players.RemoveAll(player => !player.isPlayerControlled || player.isPlayerDead);
             return players;
         }
 
-        public static PlayerControllerB? GetClosestPlayerToPosition(Vector3 position,
-            List<PlayerControllerB?> players, 
+        public static PlayerControllerB GetClosestPlayerToPosition(Vector3 position,
+            List<PlayerControllerB> players, 
             bool inside = true)
         {
             float distance = Mathf.Infinity;
-            PlayerControllerB? nearestPlayer = null;
+            PlayerControllerB nearestPlayer = null;
             
-            foreach(PlayerControllerB? player in players)
+            foreach(var player in players)
             {
-                Vector3 diff = player!.transform.position - position;
-                float curDistance = diff.sqrMagnitude; 
-                if(curDistance < distance)
-                {
-                    nearestPlayer = player;
-                    distance = curDistance;
-                }
+                var diff = player!.transform.position - position;
+                float curDistance = diff.sqrMagnitude;
+                if (curDistance >= distance) continue;
+                nearestPlayer = player;
+                distance = curDistance;
             }
 
             return nearestPlayer;
@@ -114,18 +106,16 @@ namespace LuckyDice.Utilities
             }
             
             float distance = Mathf.Infinity;
-            Vector3 nearest = Vector3.positiveInfinity;
+            var nearest = Vector3.positiveInfinity;
     
-            GameObject[] aiNodes = inside ? InsideAINodes : OutsideAINodes;
-            foreach(GameObject thisObject in aiNodes)
+            var aiNodes = inside ? InsideAINodes : OutsideAINodes;
+            foreach(var thisObject in aiNodes)
             {
-                Vector3 diff = thisObject.transform.position - position;
-                float curDistance = diff.sqrMagnitude; 
-                if(curDistance < distance)
-                {
-                    nearest = thisObject.transform.position;
-                    distance = curDistance;
-                }
+                var diff = thisObject.transform.position - position;
+                float curDistance = diff.sqrMagnitude;
+                if (curDistance >= distance) continue;
+                nearest = thisObject.transform.position;
+                distance = curDistance;
             }
 
             return nearest;
@@ -133,10 +123,10 @@ namespace LuckyDice.Utilities
         
         public static EnemyAI SpawnEnemyPrefab(GameObject enemyPrefab, Vector3 position, Quaternion rotation)
         {
-            GameObject enemy = Object.Instantiate(enemyPrefab, position, rotation);
-            NetworkObject enemyNetworkObject = enemy.GetComponent<NetworkObject>();
+            var enemy = Object.Instantiate(enemyPrefab, position, rotation);
+            var enemyNetworkObject = enemy.GetComponent<NetworkObject>();
             enemyNetworkObject.Spawn(destroyWithScene:true);
-            EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
+            var enemyAI = enemy.GetComponent<EnemyAI>();
             RoundManager.Instance.SpawnedEnemies.Add(enemyAI);
             return enemyAI;
         }

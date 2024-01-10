@@ -20,7 +20,7 @@ namespace LuckyDice.Patches
         {
             if (!Triggered)
                 return true;
-            if (!(__instance is MaskedPlayerEnemy))
+            if (__instance is not MaskedPlayerEnemy)
                 return true;
             
             if (__instance.isOutside && !__instance.enemyType.canSeeThroughFog && TimeOfDay.Instance.currentLevelWeather == LevelWeatherType.Foggy)
@@ -69,19 +69,14 @@ namespace LuckyDice.Patches
         private static bool PatchOnCollideWithPlayerPrefix(MaskedPlayerEnemy __instance, Collider other)
         {
             PlayerControllerB player;
-            if (Triggered &&
-                (player = other.GetComponentInParent<PlayerControllerB>()) != null &&
-                PlayerHas2Masks(player))
-                return false;
-            return true;
+            return !Triggered ||
+                   (player = other.GetComponentInParent<PlayerControllerB>()) == null ||
+                   !PlayerHas2Masks(player);
         }
         
         private static bool PlayerHas2Masks(PlayerControllerB player)
         {
-            int maskCount = 0;
-            foreach (GrabbableObject item in player.ItemSlots)
-                if (item is HauntedMaskItem)
-                    maskCount++;
+            var maskCount = player.ItemSlots.OfType<HauntedMaskItem>().Count();
             return maskCount >= 2;
         } 
     }

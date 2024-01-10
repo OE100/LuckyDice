@@ -8,19 +8,19 @@ namespace LuckyDice.custom.items.scrap
     {
         public AudioSource monkeyAudio = null!; 
         
-        protected Light DiscoLight = null!;
-        protected IEnumerator? Current;
-        protected Renderer DiscoRenderer = null!;
+        protected Light DiscoLight;
+        protected IEnumerator Current;
+        protected Renderer DiscoRenderer;
         
-        protected static readonly List<Color> From = new()
-        {
+        protected static readonly List<Color> From =
+        [
             Color.blue,
             Color.cyan,
             Color.green,
             Color.magenta,
             Color.red,
             Color.yellow
-        };
+        ];
         
         public override void Start()
         {
@@ -59,19 +59,19 @@ namespace LuckyDice.custom.items.scrap
             }
         }
 
-        private IEnumerator? ChangeColor()
+        private IEnumerator ChangeColor()
         {
-            Color initial = PickRandomPresetColor();
+            var initial = PickRandomPresetColor();
             DiscoLight.color = initial;
             DiscoRenderer.material.color = initial;
             
             while (DiscoLight.enabled)
             {
-                Color newColor = PickRandomPresetColor();
+                var newColor = PickRandomPresetColor();
                 float transition = 0;
                 while (transition < 1)
                 {
-                    Color materialColor = Color.Lerp(initial, newColor, transition);
+                    var materialColor = Color.Lerp(initial, newColor, transition);
                     DiscoLight.color = materialColor;
                     DiscoRenderer.material.color = materialColor;
                     transition += 0.03f;

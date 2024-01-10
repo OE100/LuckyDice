@@ -20,7 +20,7 @@ namespace LuckyDice.Patches
         {
             EventRegistry.EndOfRoundCleanup();
             
-            RandomizeLocks.doors.Clear();
+            RandomizeLocks.Doors.Clear();
         }
         
         [HarmonyPatch(nameof(StartOfRound.OnShipLandedMiscEvents)), HarmonyPostfix]

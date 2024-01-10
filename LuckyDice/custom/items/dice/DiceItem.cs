@@ -10,14 +10,14 @@ namespace LuckyDice.custom.items.dice
     public class DiceItem : GrabbableObject
     {
         [SerializeField]
-        protected AudioSource audioSource = null!;
+        protected AudioSource audioSource;
 
         protected virtual string UseTooltip() => "Roll Dice [LMB]";
 
         public override void Start()
         {
             base.Start();
-            itemProperties.toolTips.AddToArray(UseTooltip());
+            itemProperties.toolTips = [..itemProperties.toolTips, UseTooltip()];
         }
 
         public override void ItemActivate(bool used, bool buttonDown = true)

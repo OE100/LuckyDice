@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using GameNetcodeStuff;
+using JetBrains.Annotations;
 using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.network;
 using Unity.Netcode;
@@ -33,19 +34,18 @@ namespace LuckyDice.custom.monobehaviour.def
         {
             yield return new WaitForSeconds(5);
 
-            int count = AmountPerStack();
-            
+            var count = AmountPerStack();
+
+            var randomPos = Utilities.Utils.GetRandomLocationAroundPosition(
+                player.transform.position,
+                radius: 5,
+                randomHeight: true);
             while (count > 0)
             {
                 if (IsPhaseForbidden())
                     break;
-                
-                Vector3 randomPos = Utilities.Utils.GetRandomLocationAroundPosition(
-                    player.transform.position,
-                    radius: 5,
-                    randomHeight: true);
 
-                bool found = Utilities.Utils.ClosestNavMeshToPosition(
+                var found = Utilities.Utils.ClosestNavMeshToPosition(
                     randomPos,
                     out var closestPoint);
 

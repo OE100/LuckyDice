@@ -41,15 +41,15 @@ namespace LuckyDice.Patches
 
         private static IEnumerator delayedRegistry(SelectableLevel[] catalogue)
         {
-            for (int i = 0; i < catalogue.Length; i++)
+            foreach (var level in catalogue)
             {
-                SelectableLevel level = catalogue[i];
-                for (int j = 0; j < level.Enemies.Count; j++)
+                foreach (var t in level.Enemies)
                 {
-                    GameObject enemyPrefab = level.Enemies[j].enemyType.enemyPrefab;
+                    var enemyPrefab = t.enemyType.enemyPrefab;
                     EnemiesRegistry.RegisterEnemy(enemyPrefab.GetComponent<EnemyAI>().GetType(), enemyPrefab);
                 }
             }
+
             yield break;
         }
     }

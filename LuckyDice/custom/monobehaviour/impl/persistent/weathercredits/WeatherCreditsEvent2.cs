@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LuckyDice.custom.monobehaviour.impl.persistent.weathercredits
+﻿namespace LuckyDice.custom.monobehaviour.impl.persistent.weathercredits
 {
     public class WeatherCreditsEvent2 : WeatherCreditsEvent
     {

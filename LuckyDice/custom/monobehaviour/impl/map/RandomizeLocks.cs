@@ -2,6 +2,7 @@
 using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
 using Unity.Netcode;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace LuckyDice.custom.monobehaviour.impl.map
@@ -9,10 +10,10 @@ namespace LuckyDice.custom.monobehaviour.impl.map
     [OneTimeEvent]
     public class RandomizeLocks : BaseEventBehaviour
     {
-        public static List<DoorLock> doors = new List<DoorLock>();
-        private float timeToNext = 0f;
-        private float timeBeforeSwitching = 1f;
-        
+        public static List<DoorLock> Doors = [];
+        protected float TimeToNext = 0f;
+        protected const float TimeBeforeSwitching = 10f; // todo: read from config
+
         private void Awake()
         {
             Plugin.Log.LogDebug($"RandomizeLocks event Awake!");
@@ -23,7 +24,7 @@ namespace LuckyDice.custom.monobehaviour.impl.map
                 "Hope you brought a lock pick!"
             );
 
-            timeToNext = timeBeforeSwitching;
+            TimeToNext = TimeBeforeSwitching;
         }
         
         protected override void Update()
@@ -34,12 +35,14 @@ namespace LuckyDice.custom.monobehaviour.impl.map
                 Destroy(this);
             }
             
-            if (timeToNext < 0f)
+            TimeToNext -= Time.deltaTime;
+            
+            if (TimeToNext < 0f)
             {
-                for (int j = 0; j < 5; j++)
+                for (var j = 0; j < 5; j++)
                 {
-                    int i = Random.Range(0, doors.Count);
-                    DoorLock door = doors[i];
+                    int i = Random.Range(0, Doors.Count);
+                    DoorLock door = Doors[i];
                     if (Random.Range(0, 2) == 0)
                     {
                         if (!door.isLocked)
@@ -53,7 +56,7 @@ namespace LuckyDice.custom.monobehaviour.impl.map
                     }
                 }
                 
-                timeToNext = timeBeforeSwitching;
+                TimeToNext = TimeBeforeSwitching;
             }
         }
     }

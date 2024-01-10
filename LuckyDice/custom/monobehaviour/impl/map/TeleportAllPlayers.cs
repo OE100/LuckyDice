@@ -24,7 +24,7 @@ namespace LuckyDice.custom.monobehaviour.impl.map
             if (!Triggered && TimeToNextCheck <= 0f)
             {
                 Players = Utils.GetAllLivingPlayers();
-                Enemies = new List<EnemyAI>(RoundManager.Instance.SpawnedEnemies);
+                Enemies = [..RoundManager.Instance.SpawnedEnemies];
                 Enemies.RemoveAll(enemy => enemy.isOutside || enemy.isEnemyDead || !enemy.agent.isOnNavMesh);
                 
                 if (Players.Count <= Enemies.Count)
@@ -42,12 +42,12 @@ namespace LuckyDice.custom.monobehaviour.impl.map
         {
             while (Players.Count > 0)
             {
-                PlayerControllerB player = Players[0];
-                int enemyIndex = Random.Range(0, Enemies.Count);
+                var player = Players[0];
+                var enemyIndex = Random.Range(0, Enemies.Count);
                         
-                Vector3 position = player.transform.position;
+                var position = player.transform.position;
                         
-                EnemyAI enemy = Enemies[enemyIndex];
+                var enemy = Enemies[enemyIndex];
                         
                 if (player.isInsideFactory == enemy.isOutside)
                     enemy.StartCoroutine(Utils.DelayedSetOutside(enemyAI: enemy,

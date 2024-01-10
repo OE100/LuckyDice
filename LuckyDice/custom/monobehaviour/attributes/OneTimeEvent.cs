@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LuckyDice.custom.monobehaviour.attributes
+﻿namespace LuckyDice.custom.monobehaviour.attributes
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public class OneTimeEvent : Attribute

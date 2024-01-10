@@ -39,20 +39,20 @@ namespace LuckyDice.custom.monobehaviour.impl.tweak
                 "I suggest you grab the masks before... well before they grab you."
             );
             
-            foreach (PlayerControllerB player in StartOfRound.Instance.allPlayerScripts)
+            foreach (var player in StartOfRound.Instance.allPlayerScripts)
             {
                 if (player.isPlayerDead)
                     continue;
 
-                int count = 2;
+                var count = 2;
                 while (count > 0)
                 {
-                    Vector3 randomPos = Utils.GetRandomLocationAroundPosition(
+                    var randomPos = Utils.GetRandomLocationAroundPosition(
                         player.transform.position,
                         radius: 5,
                         randomHeight: false);
 
-                    bool found = Utils.ClosestNavMeshToPosition(
+                    var found = Utils.ClosestNavMeshToPosition(
                         randomPos,
                         out var closestPoint);
 
@@ -63,7 +63,7 @@ namespace LuckyDice.custom.monobehaviour.impl.tweak
                         continue;
                     }
                     
-                    int mask = Random.Range(0, 2); // 0 = Tragedy, 1 = Comedy
+                    var mask = Random.Range(0, 2); // 0 = Tragedy, 1 = Comedy
                     EventManager.Instance.SpawnItemAroundPositionServerRPC(
                         closestPoint,
                         itemId: mask + 65,
@@ -83,22 +83,22 @@ namespace LuckyDice.custom.monobehaviour.impl.tweak
                 if (player.isPlayerDead)
                     continue;
 
-                int count = 4;
+                var count = 4;
                 while (count > 0)
                 {
-                    Vector3 position = Utils.GetRandomLocationAroundPosition(
+                    var position = Utils.GetRandomLocationAroundPosition(
                         position: player.transform.position,
                         radius: 20,
                         randomHeight: false);
 
-                    bool found = Utils.ClosestNavMeshToPosition(
+                    var found = Utils.ClosestNavMeshToPosition(
                         position: position,
                         closestPoint:out var closestPoint);
 
                     if (!found)
                         continue;
                     
-                    GameObject enemy = Instantiate(EnemiesRegistry.GetEnemyPrefab<MaskedPlayerEnemy>(), closestPoint, Random.rotation);
+                    var enemy = Instantiate(EnemiesRegistry.GetEnemyPrefab<MaskedPlayerEnemy>(), closestPoint, Random.rotation);
                     enemy.GetComponent<NetworkObject>().Spawn(destroyWithScene:true);
                     RoundManager.Instance.SpawnedEnemies.Add(enemy.GetComponent<EnemyAI>());
 

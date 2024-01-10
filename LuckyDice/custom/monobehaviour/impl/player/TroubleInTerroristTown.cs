@@ -15,13 +15,13 @@ namespace LuckyDice.custom.monobehaviour.impl.player
         protected float TimeRemaining;
         protected bool Started;
         protected bool WarningPlayed;
-        protected List<PlayerControllerB> Terrorists = null!;
+        protected List<PlayerControllerB> Terrorists;
         
         private void Awake()
         {
             Plugin.Log.LogDebug("TroubleInTerroristTown Awake!");
             // roll terrorists
-            List<PlayerControllerB> players = Utils.GetAllLivingPlayers();
+            var players = Utils.GetAllLivingPlayers();
             if (players.Count <= 1)
             {
                 Plugin.Log.LogDebug("One player alive, cancelling trouble in terrorist town.");
@@ -32,12 +32,12 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             Started = true;
             WarningPlayed = false;
             // select non-terrorist
-            int nInd = Random.Range(0, players.Count);
+            var nInd = Random.Range(0, players.Count);
             Plugin.Log.LogDebug($"Chosen {players[nInd].playerUsername} as non-terrorist");
             players.RemoveAt(nInd);
             // select terrorist
-            Terrorists = new List<PlayerControllerB>();
-            int tInd = Random.Range(0, players.Count);
+            Terrorists = [];
+            var tInd = Random.Range(0, players.Count);
             Plugin.Log.LogDebug($"Chosen {players[tInd].playerUsername} as terrorist");
             Terrorists.Add(players[tInd]);
             players.RemoveAt(tInd);
@@ -99,7 +99,7 @@ namespace LuckyDice.custom.monobehaviour.impl.player
                 }
                 if (TimeRemaining <= 0f)
                 {
-                    foreach (PlayerControllerB player in Terrorists)
+                    foreach (var player in Terrorists)
                         Kaboom(player);
                     
                     Destroy(this);
@@ -117,8 +117,8 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             
             TimeRemaining -= Time.deltaTime;
         }
-        
-        private void Kaboom(PlayerControllerB player)
+
+        protected virtual void Kaboom(PlayerControllerB player)
         {
             player.voiceMuffledByEnemy = false;
             EventManager.Instance.SpawnExplosionOnPlayerClientRPC(

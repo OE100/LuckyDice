@@ -13,43 +13,42 @@ namespace LuckyDice.custom.events
 {
     public static class EventRegistry
     {
-        private static Dictionary<Type, string> itemToPool = new Dictionary<Type, string>();
-        private static Dictionary<string, List<(Type, GameObject)>> eventPools = new Dictionary<string, List<(Type, GameObject)>>();
-        private static Dictionary<string, List<(Type, GameObject)>> removedEventPools = new Dictionary<string, List<(Type, GameObject)>>();
-        private static Dictionary<GameObject, Type> mountedEvents = new Dictionary<GameObject, Type>();
-        private static List<Type> removedOneTimeEvents = new List<Type>();
+        private static Dictionary<Type, string> _itemToPool = new();
+        private static Dictionary<string, List<(Type, GameObject)>> _eventPools = new();
+        private static Dictionary<string, List<(Type, GameObject)>> _removedEventPools = new();
+        private static Dictionary<GameObject, Type> _mountedEvents = new();
+        private static List<Type> _removedOneTimeEvents = new();
 
-        public static string? UnRegisterItem<TItem>() where TItem : GrabbableObject
+        public static string UnRegisterItem<TItem>() where TItem : GrabbableObject
         {
-            if (!itemToPool.TryGetValue(typeof(TItem), out string pool))
+            if (!_itemToPool.TryGetValue(typeof(TItem), out var pool))
             {
                 Plugin.Log.LogDebug($"Item {typeof(TItem).Name} wasn't even registered");
                 return null;
             }
-            itemToPool.Remove(typeof(TItem));
+            _itemToPool.Remove(typeof(TItem));
             Plugin.Log.LogDebug($"Item {typeof(TItem).Name} was unregistered from pool {pool}");
             return pool;
         }
         
-        public static string RegisterItem<TItem>(string? pool = null) where TItem : GrabbableObject
+        public static string RegisterItem<TItem>(string pool = null) where TItem : GrabbableObject
         {
-            if (pool == null)
-                pool = typeof(TItem).Name;
+            pool ??= typeof(TItem).Name;
             Plugin.Log.LogDebug($"Associating item: {typeof(TItem).Name}, with pool: {pool}");
-            itemToPool[typeof(TItem)] = pool;
+            _itemToPool[typeof(TItem)] = pool;
             return pool;
         }
         
-        public static string? GetPoolFromItem(Type item)
+        public static string GetPoolFromItem(Type item)
         {
             Plugin.Log.LogDebug($"Getting pool for item: {item.Name}");
-            if (!itemToPool.ContainsKey(item))
+            if (!_itemToPool.ContainsKey(item))
             {
                 Plugin.Log.LogError($"Item: {item.Name}, does not have a pool!");
                 return null;
             }
 
-            string poolFromItem = itemToPool[item];
+            string poolFromItem = _itemToPool[item];
             Plugin.Log.LogDebug($"Pool for item: {item.Name}, is: {poolFromItem}");
             return poolFromItem;
         }
@@ -69,14 +68,14 @@ namespace LuckyDice.custom.events
                 return;
             }
             
-            if (!eventPools.ContainsKey(pool))
+            if (!_eventPools.ContainsKey(pool))
             {
                 Plugin.Log.LogDebug($"Creating new event pool: {pool}");
-                eventPools.Add(pool, new List<(Type, GameObject)>());
-                removedEventPools.Add(pool, new List<(Type, GameObject)>());
+                _eventPools.Add(pool, []);
+                _removedEventPools.Add(pool, []);
             }
             Plugin.Log.LogDebug($"Adding event: {typeof(TEvent).Name}, to pool: {pool}");
-            eventPools[pool].Add((typeof(TEvent), mountingPoint));
+            _eventPools[pool].Add((typeof(TEvent), mountingPoint));
             
             if (Attribute.GetCustomAttribute(typeof(TEvent), typeof(MountAtRegistry)) != null)
             {
@@ -95,14 +94,14 @@ namespace LuckyDice.custom.events
                 return;
             }
             
-            if (!eventPools.ContainsKey(pool))
+            if (!_eventPools.ContainsKey(pool))
             {
                 Plugin.Log.LogDebug($"Creating new event pool: {pool}");
-                eventPools.Add(pool, new List<(Type, GameObject)>());
-                removedEventPools.Add(pool, new List<(Type, GameObject)>());
+                _eventPools.Add(pool, []);
+                _removedEventPools.Add(pool, []);
             }
             Plugin.Log.LogDebug($"Adding event: {eventMonoBehaviourType.Name}, to pool: {pool}");
-            eventPools[pool].Add((eventMonoBehaviourType, mountingPoint));
+            _eventPools[pool].Add((eventMonoBehaviourType, mountingPoint));
             
             if (Attribute.GetCustomAttribute(eventMonoBehaviourType, typeof(MountAtRegistry)) != null)
             {
@@ -113,28 +112,27 @@ namespace LuckyDice.custom.events
         
         public static List<(Type, GameObject)> GetEventPool(string pool)
         {
-            if (!eventPools.ContainsKey(pool))
+            if (!_eventPools.ContainsKey(pool))
             {
                 Plugin.Log.LogError($"Event pool: {pool}, does not exist");
-                return new List<(Type, GameObject)>();
+                return [];
             }
-            return eventPools[pool];
+            return _eventPools[pool];
         }
 
         // restore events from used lists to pools
         private static void RestoreEventPools()
         {
             Plugin.Log.LogDebug("Restoring event pools");
-            if (removedEventPools.Count > 0)
+            if (_removedEventPools.Count > 0)
             {
-                foreach (KeyValuePair<string, List<(Type, GameObject)>> pool in removedEventPools)
+                foreach (var (key, list) in _removedEventPools)
                 {
-                    Plugin.Log.LogDebug($"Restoring event pool: {pool.Key}");
-                    List<(Type, GameObject)> tuples = pool.Value;
-                    if (tuples.Count > 0)
+                    Plugin.Log.LogDebug($"Restoring event pool: {key}");
+                    if (list.Count > 0)
                     {
-                        tuples.ForEach(tuple => RegisterEvent(pool.Key, tuple.Item1, tuple.Item2));
-                        tuples.Clear();
+                        list.ForEach(tuple => RegisterEvent(key, tuple.Item1, tuple.Item2));
+                        list.Clear();
                     }
                 }
             }
@@ -143,12 +141,12 @@ namespace LuckyDice.custom.events
         // remove event from pool and add it to used list
         public static int GetRandomEventIndexFromPool(string pool)
         {
-            if (!eventPools.ContainsKey(pool))
+            if (!_eventPools.ContainsKey(pool))
             {
                 Plugin.Log.LogError($"Event pool: {pool}, does not exist");
                 return -1;
             }
-            List<(Type, GameObject)> types = eventPools[pool];
+            List<(Type, GameObject)> types = _eventPools[pool];
             bool found = false;
             int index = -1;
             while (!found && types.Count > 0)
@@ -156,9 +154,9 @@ namespace LuckyDice.custom.events
                 index = Random.Range(0, types.Count);
                 (Type, GameObject) tuple = types[index];
                 if (Attribute.GetCustomAttribute(tuple.Item1, typeof(OneTimeEvent)) != null &&
-                    removedOneTimeEvents.Contains(tuple.Item1))
+                    _removedOneTimeEvents.Contains(tuple.Item1))
                 {
-                    removedEventPools[pool].Add(tuple);
+                    _removedEventPools[pool].Add(tuple);
                     types.RemoveAt(index);
                 }
                 else
@@ -172,12 +170,12 @@ namespace LuckyDice.custom.events
 
         public static void RunEventFromPool(string pool, int eventIndex, PlayerControllerB player)
         {
-            if (!eventPools.ContainsKey(pool))
+            if (!_eventPools.ContainsKey(pool))
             {
                 Plugin.Log.LogError($"Event pool: {pool}, does not exist");
                 return;
             }
-            List<(Type, GameObject)> tuples = eventPools[pool];
+            List<(Type, GameObject)> tuples = _eventPools[pool];
             if (eventIndex < 0 || eventIndex >= tuples.Count)
             {
                 Plugin.Log.LogError($"Event index: {eventIndex}, is out of range for pool: {pool}");
@@ -193,7 +191,7 @@ namespace LuckyDice.custom.events
                 {
                     Plugin.Log.LogDebug($"Event: {eEvent.Item1.Name}, is one time event, removing from pool: {pool}");
                     tuples.RemoveAt(eventIndex);
-                    removedEventPools[pool].Add(eEvent);
+                    _removedEventPools[pool].Add(eEvent);
                 }
                 if (typeof(BasePlayerEvent).IsAssignableFrom(eEvent.Item1))
                 {
@@ -206,7 +204,7 @@ namespace LuckyDice.custom.events
                 // check if the event is a one time event and if so remove it from the pool
                 Plugin.Log.LogDebug($"Event: {eEvent.Item1.Name}, is one time event, removing from pool: {pool}");
                 tuples.RemoveAt(eventIndex);
-                removedEventPools[pool].Add(eEvent);
+                _removedEventPools[pool].Add(eEvent);
             }
         }
         
@@ -229,7 +227,7 @@ namespace LuckyDice.custom.events
             }
             
             if (Attribute.GetCustomAttribute(eventType, typeof(NeedsRemoval)) != null)
-                mountedEvents.Add(gameObject, eventType);
+                _mountedEvents.Add(gameObject, eventType);
             
             return Attribute.GetCustomAttribute(eventType, typeof(OneTimeEvent)) != null;
         }
@@ -253,11 +251,11 @@ namespace LuckyDice.custom.events
 
         public static void EndOfRoundCleanup()
         {
-            if (mountedEvents.Count > 0)
-                foreach (KeyValuePair<GameObject,Type> pair in mountedEvents)
+            if (_mountedEvents.Count > 0)
+                foreach (KeyValuePair<GameObject,Type> pair in _mountedEvents)
                     UnMountEvent(pair.Key, pair.Value);
             
-            removedOneTimeEvents.Clear();
+            _removedOneTimeEvents.Clear();
             RestoreEventPools();
         }
     }

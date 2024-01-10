@@ -9,14 +9,14 @@ namespace LuckyDice.custom.monobehaviour.impl.map
     [OneTimeEvent]
     public class ExplodeLandmines : BaseEventBehaviour
     {
-        private float time;
-        private Landmine[] mines = null!;
+        protected float TimeToBlow;
+        protected Landmine[] Mines = null!;
         
         private void Awake()
         {
             Plugin.Log.LogDebug($"ExplodeLandmines event Awake!");
-            mines = FindObjectsOfType<Landmine>();
-            if (mines.Length == 0)
+            Mines = FindObjectsOfType<Landmine>();
+            if (Mines.Length == 0)
                 EventManager.Instance.DisplayMessageClientRPC(
                     new NetworkObjectReference(),
                     "No landmines found!",
@@ -26,31 +26,31 @@ namespace LuckyDice.custom.monobehaviour.impl.map
                     new NetworkObjectReference(),
                     "Are those landmines?",
                     "Well, a little explosion never hurt anyone...");
-            time = 3f;
+            TimeToBlow = 3f;
         }
 
         protected override void Update()
         {
-            if (time < 0f)
+            if (TimeToBlow < 0f)
             {
-                Plugin.Log.LogDebug($"ExplodeLandmines event time reached 0!");
+                Plugin.Log.LogDebug("ExplodeLandmines event time reached 0!");
                 ExplodeMines();
                 Destroy(this);
             }
             
-            time -= Time.deltaTime;
+            TimeToBlow -= Time.deltaTime;
             
         }
         
         private void ExplodeMines()
         {
-            if (mines.Length == 0)
+            if (Mines.Length == 0)
             {
                 Plugin.Log.LogDebug($"No landmines found!");
                 return;
             }
             Plugin.Log.LogDebug($"Starting to explode landmines!");
-            foreach (Landmine mine in mines)
+            foreach (var mine in Mines)
                 mine.ExplodeMineServerRpc();
         }
     }

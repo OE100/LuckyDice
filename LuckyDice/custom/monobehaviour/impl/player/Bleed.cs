@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using GameNetcodeStuff;
+﻿using GameNetcodeStuff;
 using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
@@ -11,8 +10,8 @@ namespace LuckyDice.custom.monobehaviour.impl.player
     [MountAtRegistry]
     public class Bleed : BasePlayerEvent
     {
-        private static float timeToBleed = 2.4f;
-        private float timeSinceBleed = 0f;
+        protected const float TimeToBleed = 2.4f; // todo: read from config
+        protected float TimeSinceBleed = 0f;
         
         protected override void Update()
         {
@@ -24,21 +23,21 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             if (IsPhaseForbidden())
                 playersToMult.Clear();
             
-            timeSinceBleed += Time.deltaTime;
+            TimeSinceBleed += Time.deltaTime;
             
-            if (timeSinceBleed >= timeToBleed)
+            if (TimeSinceBleed >= TimeToBleed)
             {
-                timeSinceBleed = 0;
+                TimeSinceBleed = 0;
 
-                foreach (KeyValuePair<PlayerControllerB,int> pair in playersToMult)
+                foreach (var (key, value) in playersToMult)
                 {
-                    if (pair.Key.isInElevator || pair.Key.isInHangarShipRoom)
-                        playersToRemove.Add(pair.Key);
+                    if (key.isInElevator || key.isInHangarShipRoom)
+                        playersToRemove.Add(key);
                     else
                         EventManager.Instance.BleedPlayerClientRPC(
-                            new NetworkObjectReference(pair.Key.GetComponentInParent<NetworkObject>()),
+                            new NetworkObjectReference(key.GetComponentInParent<NetworkObject>()),
                             true,
-                            pair.Value * 2);
+                            value * 2);
                 }
             }
         }

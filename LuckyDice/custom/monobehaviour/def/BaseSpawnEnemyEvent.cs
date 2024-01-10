@@ -35,19 +35,19 @@ namespace LuckyDice.custom.monobehaviour.def
             // wait 5 seconds and spawn monsters
             yield return new WaitForSeconds(5f);
             
-            int count = AmountPerStack();
+            var count = AmountPerStack();
             while (count > 0)
             {
                 if (IsPhaseForbidden())
                     break;
                 
-                bool found = Utils.ClosestNavMeshToPosition(
+                var found = Utils.ClosestNavMeshToPosition(
                     Utils.GetRandomLocationAroundPosition(
                         player.transform.position),
                     out var position);
                 if (found)
                 {
-                    EnemyAI enemyAI = Utils.SpawnEnemyPrefab(EnemyPrefab(),
+                    var enemyAI = Utils.SpawnEnemyPrefab(EnemyPrefab(),
                         position, Random.rotation);
                     enemyAI.StartCoroutine(Utils.DelayedSetOutside(enemyAI, !player.isInsideFactory));
                     count--;

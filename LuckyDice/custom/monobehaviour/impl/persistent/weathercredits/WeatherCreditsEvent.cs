@@ -9,16 +9,16 @@ namespace LuckyDice.custom.monobehaviour.impl.persistent.weathercredits
     {
         public static int Credits = 0;
 
-        private float timeUntilTrigger = 2f;
+        protected float TimeUntilTrigger = 2f;
         
         public int CreditsPerTrigger = 1;
         
         private void LateUpdate()
         {
             // delayed trigger
-            if (timeUntilTrigger > 0)
+            if (TimeUntilTrigger > 0)
             {
-                timeUntilTrigger -= Time.deltaTime;
+                TimeUntilTrigger -= Time.deltaTime;
                 return;
             }
             Credits += CreditsPerTrigger;
