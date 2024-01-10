@@ -20,7 +20,6 @@
       </PackageReference>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Evaisa.NetcodePatcher.MSBuild" Version="3.*" PrivateAssets="all" />
         <NetcodePatch Include="$(TargetPath)" />
     </ItemGroup>
 
@@ -72,6 +71,12 @@
       <Reference Include="UnityEngine.PhysicsModule">
         <HintPath>deps\managed\UnityEngine.PhysicsModule.dll</HintPath>
       </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\README.md">
+        <Link>README.md</Link>
+      </Content>
     </ItemGroup>
 
 </Project>
