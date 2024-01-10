@@ -19,7 +19,7 @@ namespace LuckyDice.custom.events
         private static Dictionary<GameObject, Type> mountedEvents = new Dictionary<GameObject, Type>();
         private static List<Type> removedOneTimeEvents = new List<Type>();
 
-        public static string UnRegisterItem<TItem>() where TItem : GrabbableObject
+        public static string? UnRegisterItem<TItem>() where TItem : GrabbableObject
         {
             if (!itemToPool.TryGetValue(typeof(TItem), out string pool))
             {
@@ -31,7 +31,7 @@ namespace LuckyDice.custom.events
             return pool;
         }
         
-        public static string RegisterItem<TItem>(string pool = null) where TItem : GrabbableObject
+        public static string RegisterItem<TItem>(string? pool = null) where TItem : GrabbableObject
         {
             if (pool == null)
                 pool = typeof(TItem).Name;
@@ -40,7 +40,7 @@ namespace LuckyDice.custom.events
             return pool;
         }
         
-        public static string GetPoolFromItem(Type item)
+        public static string? GetPoolFromItem(Type item)
         {
             Plugin.Log.LogDebug($"Getting pool for item: {item.Name}");
             if (!itemToPool.ContainsKey(item))

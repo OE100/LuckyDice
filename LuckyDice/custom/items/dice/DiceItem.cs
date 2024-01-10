@@ -1,4 +1,6 @@
-﻿using LuckyDice.custom.network;
+﻿using HarmonyLib;
+using LuckyDice.custom.network;
+using LuckyDice.Utilities;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,14 +9,25 @@ namespace LuckyDice.custom.items.dice
     public class DiceItem : GrabbableObject
     {
         [SerializeField]
-        protected AudioSource audioSource;
-        
+        protected AudioSource audioSource = null!;
+
+        protected virtual string UseTooltip() => "Roll Dice [LMB]";
+
+        public override void Start()
+        {
+            base.Start();
+            itemProperties.toolTips.AddToArray(UseTooltip());
+        }
+
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
             // if in ship phase or on company moon don't roll
-            if (StartOfRound.Instance.inShipPhase || StartOfRound.Instance.currentLevelID == 3)
+            if (itemUsedUp || StartOfRound.Instance.inShipPhase || StartOfRound.Instance.currentLevelID == 3)
                 return;
             // else activate item and despawn it
+            playerHeldBy.activatingItem = true;
+            if (IsOneTimeUse())
+                itemUsedUp = true;
             base.ItemActivate(used, buttonDown);
             ItemActivateServerRPC(used, buttonDown);
         }
@@ -31,10 +44,14 @@ namespace LuckyDice.custom.items.dice
             // roll dice and despawn it
             if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
             {
+                if (IsOneTimeUse())
+                    itemUsedUp = true;
+                
                 OnItemActivateServerRPCEvent();
                 EventManager.Instance.TriggerEventFromPoolServerRPC(
                     new NetworkObjectReference(GetComponentInParent<NetworkObject>()),
-                    new NetworkObjectReference(playerHeldBy.GetComponentInParent<NetworkObject>()));
+                    new NetworkObjectReference(playerHeldBy.GetComponentInParent<NetworkObject>()),
+                    playerHeldBy.currentItemSlot);
             }
             
             ItemActivateClientRPC(used, buttonDown);
@@ -43,13 +60,17 @@ namespace LuckyDice.custom.items.dice
         [ClientRpc]
         private void ItemActivateClientRPC(bool used, bool buttonDown = true)
         {
-            OnItemActivateClientRPCEvent();
-            UseItemOnClient(false);
+            playerHeldBy.activatingItem = false;
             if (IsOneTimeUse())
-            {
-                DestroyObjectInHand(playerHeldBy);
-                Destroy(gameObject);
-            }
+                itemUsedUp = true;
+            
+            OnItemActivateClientRPCEvent();
+            
+            UseItemOnClient(false);
+            
+            DestroyObjectInHand(playerHeldBy);
+
+            StartCoroutine(Utils.DelayedDestroy(0.5f, gameObject));
         }
     }
 }

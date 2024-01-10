@@ -1,21 +1,21 @@
-﻿using System.Collections.Generic;
-using GameNetcodeStuff;
+﻿using GameNetcodeStuff;
 using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
 using LuckyDice.Utilities;
 using Unity.Netcode;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace LuckyDice.custom.monobehaviour.impl.player
 {
     [OneTimeEvent]
     public class TroubleInTerroristTown : BaseEventBehaviour
     {
-        private float timeRemaining;
-        private bool started;
-        private bool warningPlayed;
-        private List<PlayerControllerB> terrorists;
+        protected float TimeRemaining;
+        protected bool Started;
+        protected bool WarningPlayed;
+        protected List<PlayerControllerB> Terrorists = null!;
         
         private void Awake()
         {
@@ -25,21 +25,21 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             if (players.Count <= 1)
             {
                 Plugin.Log.LogDebug("One player alive, cancelling trouble in terrorist town.");
-                started = false;
+                Started = false;
                 return;
             }
 
-            started = true;
-            warningPlayed = false;
+            Started = true;
+            WarningPlayed = false;
             // select non-terrorist
             int nInd = Random.Range(0, players.Count);
             Plugin.Log.LogDebug($"Chosen {players[nInd].playerUsername} as non-terrorist");
             players.RemoveAt(nInd);
             // select terrorist
-            terrorists = new List<PlayerControllerB>();
+            Terrorists = new List<PlayerControllerB>();
             int tInd = Random.Range(0, players.Count);
             Plugin.Log.LogDebug($"Chosen {players[tInd].playerUsername} as terrorist");
-            terrorists.Add(players[tInd]);
+            Terrorists.Add(players[tInd]);
             players.RemoveAt(tInd);
             // randomly roll the rest
             while (players.Count > 0)
@@ -48,15 +48,15 @@ namespace LuckyDice.custom.monobehaviour.impl.player
                 if (Random.Range(0f, 1f) > 0.5f)
                 {
                     Plugin.Log.LogDebug($"Chosen {players[0].playerUsername} as terrorist");
-                    terrorists.Add(players[0]);
+                    Terrorists.Add(players[0]);
                 }
                 else
                     Plugin.Log.LogDebug($"Chosen {players[0].playerUsername} as non-terrorist");
                 players.RemoveAt(0);
             }
 
-            started = true;
-            timeRemaining = 20f; // todo: replace with random in range from config
+            Started = true;
+            TimeRemaining = 20f; // todo: replace with random in range from config
             EventManager.Instance.DisplayMessageClientRPC(
                 new NetworkObjectReference(),
                 "Trouble in terrorist town!",
@@ -73,20 +73,20 @@ namespace LuckyDice.custom.monobehaviour.impl.player
                 return;
             }
 
-            Plugin.Log.LogDebug($"Checking for not starting the event: {!started}");
-            if (!started)
+            Plugin.Log.LogDebug($"Checking for not starting the event: {!Started}");
+            if (!Started)
             {
                 Destroy(this);
                 return;
             }
             
-            Plugin.Log.LogDebug($"Checking for terrorists count: {terrorists.Count}");
-            if (terrorists.Count > 0)
+            Plugin.Log.LogDebug($"Checking for terrorists count: {Terrorists.Count}");
+            if (Terrorists.Count > 0)
             {
-                if (timeRemaining <= 15 && !warningPlayed)
+                if (TimeRemaining <= 15 && !WarningPlayed)
                 {
-                    warningPlayed = true;
-                    foreach (PlayerControllerB player in terrorists)
+                    WarningPlayed = true;
+                    foreach (PlayerControllerB player in Terrorists)
                     {
                         player.voiceMuffledByEnemy = true;
                         
@@ -97,9 +97,9 @@ namespace LuckyDice.custom.monobehaviour.impl.player
                         );
                     }
                 }
-                if (timeRemaining <= 0f)
+                if (TimeRemaining <= 0f)
                 {
-                    foreach (PlayerControllerB player in terrorists)
+                    foreach (PlayerControllerB player in Terrorists)
                         Kaboom(player);
                     
                     Destroy(this);
@@ -115,7 +115,7 @@ namespace LuckyDice.custom.monobehaviour.impl.player
                 Destroy(this);
             }
             
-            timeRemaining -= Time.deltaTime;
+            TimeRemaining -= Time.deltaTime;
         }
         
         private void Kaboom(PlayerControllerB player)

@@ -6,6 +6,7 @@ using LuckyDice.custom.network;
 using LuckyDice.Utilities;
 using Unity.Netcode;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace LuckyDice.custom.monobehaviour.impl.tweak
 {

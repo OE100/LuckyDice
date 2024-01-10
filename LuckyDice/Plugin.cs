@@ -6,6 +6,7 @@ using LethalLib.Modules;
 using LuckyDice.custom.events;
 using LuckyDice.custom.items.dice;
 using LuckyDice.custom.monobehaviour.impl.map;
+using LuckyDice.custom.monobehaviour.impl.persistent.weathercredits;
 using LuckyDice.custom.monobehaviour.impl.player;
 using LuckyDice.custom.monobehaviour.impl.spawn.Enemies.all;
 using LuckyDice.custom.monobehaviour.impl.spawn.Enemies.single;
@@ -19,43 +20,44 @@ using UnityEngine;
 
 namespace LuckyDice
 {
-    [BepInPlugin(GUID, NAME, VERSION)]
+    [BepInPlugin(Guid, Name, Version)]
     [BepInDependency(LethalLib.Plugin.ModGUID, LethalLib.Plugin.ModVersion)]
     public class Plugin : BaseUnityPlugin
     {
-        private readonly Harmony harmony = new Harmony(GUID);
+        private readonly Harmony _harmony = new Harmony(Guid);
+        
+        public const string Guid = "oe.tweaks.luckydice";
+        public const string Name = "Lucky Dice";
+        public const string Version = "0.2.1";
 
-        public const string GUID = "oe.tweaks.luckydice";
-        public const string NAME = "Lucky Dice";
-        public const string VERSION = "0.2.1";
+        public static Plugin Instance = null!;
 
-        public static Plugin Instance;
+        internal static ManualLogSource Log = null!;
 
-        internal static ManualLogSource Log;
-
-        public static AssetBundle ab;
+        public static AssetBundle ABundle = null!;
 
         private void Awake()
         {
             Log = Logger;
-            Log.LogInfo($"'{NAME}' is loading...");
+            Log.LogInfo($"'{Name}' is loading...");
 
             if (Instance == null)
                 Instance = this;
             
             Log.LogMessage("Trying to load asset bundle");
-            ab = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly()
+            ABundle = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly()
                 .GetManifestResourceStream(Assembly.GetExecutingAssembly().GetManifestResourceNames()[0]));
-            if (ab == null)
+            if (ABundle == null)
             {
                 Log.LogError("Failed to load asset bundle");
+                return;
             }
 
             ModConfig.Init(Config);
             
             InitializeNetworkRoutine();
             
-            NetworkStuffPatch.networkPrefabs.Add(ab.LoadAsset<GameObject>("EventManagerObject.prefab"));
+            NetworkStuffPatch.networkPrefabs.Add(ABundle.LoadAsset<GameObject>("EventManagerObject.prefab"));
             Utils.DiscoMonkey = RegisterItem("assets/custom/luckydice/scrap/disco_monkey/DiscoMonkey.asset", 1, Levels.LevelTypes.All);
             Utils.D4 = RegisterItem("assets/custom/luckydice/scrap/d4/D4.asset", ModConfig.D4Rarity.Value, Levels.LevelTypes.All);
             Utils.D6 = RegisterItem("assets/custom/luckydice/scrap/d6/D6.asset", ModConfig.D6Rarity.Value, Levels.LevelTypes.All);
@@ -63,9 +65,9 @@ namespace LuckyDice
             Utils.D12 = RegisterItem("assets/custom/luckydice/scrap/d12/D12.asset", ModConfig.D12Rarity.Value, Levels.LevelTypes.All);
             Utils.D20 = RegisterItem("assets/custom/luckydice/scrap/d20/D20.asset", ModConfig.D20Rarity.Value, Levels.LevelTypes.All);
 
-            harmony.PatchAll();
+            _harmony.PatchAll();
 
-            Log.LogInfo($"'{NAME}' loaded!");
+            Log.LogInfo($"'{Name}' loaded!");
         }
 
         private void InitializeNetworkRoutine()
@@ -85,9 +87,9 @@ namespace LuckyDice
             }
         }
 
-        private Item RegisterItem(string path, int rarity, Levels.LevelTypes levelTypes)
+        private Item? RegisterItem(string path, int rarity, Levels.LevelTypes levelTypes)
         {
-            Item item = ab.LoadAsset<Item>(path);
+            Item? item = ABundle.LoadAsset<Item>(path);
             if (item == null)
                 Log.LogError($"Failed to load item: {path}");
             else
@@ -127,13 +129,13 @@ namespace LuckyDice
             // register d8 pool
             string d8Pool = EventRegistry.RegisterItem<D8>();
             EventRegistry.RegisterEvent<StormyWeatherEvent>(d8Pool);
-            EventRegistry.RegisterEvent<SpawnFlowerman>(d8Pool);
+            EventRegistry.RegisterEvent<TeleportAllPlayers>(d8Pool);
             EventRegistry.RegisterEvent<RandomizeLocks>(d8Pool);
             EventRegistry.RegisterEvent<ExplodeLandmines>(d8Pool);
             EventRegistry.RegisterEvent<TroubleInTerroristTown>(d8Pool);
             EventRegistry.RegisterEvent<SpawnMetalSheet>(d8Pool);
             EventRegistry.RegisterEvent<SpawnMetalSheetForAll>(d8Pool);
-            // todo: register give 1 weather credit event
+            EventRegistry.RegisterEvent<WeatherCreditsEvent>(d8Pool);
             
             // register d12 pool
             string d12Pool = EventRegistry.RegisterItem<D12>();
@@ -147,15 +149,15 @@ namespace LuckyDice
             EventRegistry.RegisterEvent<TroubleInTerroristTown>(d12Pool);
             EventRegistry.RegisterEvent<SpawnMetalSheet>(d12Pool);
             EventRegistry.RegisterEvent<SpawnGoldBar>(d12Pool);
-            // todo: register give 2 weather credit event
             EventRegistry.RegisterEvent<SpawnJarOfPicklesForAll>(d12Pool);
+            EventRegistry.RegisterEvent<WeatherCreditsEvent>(d12Pool);
             
             // register d20 pool
             string d20Pool = EventRegistry.RegisterItem<D20>();
             EventRegistry.RegisterEvent<MaskedChaos>(d20Pool);
             EventRegistry.RegisterEvent<SpawnDressGirlForAll>(d20Pool);
             EventRegistry.RegisterEvent<SpawnDressGirlForAll>(d20Pool);
-            EventRegistry.RegisterEvent<SpawnDressGirl>(d20Pool);
+            EventRegistry.RegisterEvent<TeleportAllPlayers>(d20Pool);
             
             EventRegistry.RegisterEvent<StormyWeatherEvent>(d20Pool);
             EventRegistry.RegisterEvent<SpawnCoilheadForAll>(d20Pool);
@@ -170,7 +172,7 @@ namespace LuckyDice
             EventRegistry.RegisterEvent<SpawnGoldBar>(d20Pool);
             EventRegistry.RegisterEvent<SpawnJarOfPicklesForAll>(d20Pool);
             EventRegistry.RegisterEvent<SpawnJarOfPicklesForAll>(d20Pool);
-            // todo: register give 1 weather credit event
+            EventRegistry.RegisterEvent<WeatherCreditsEvent>(d20Pool);
             
             // todo: register give 2 weather credit event
             EventRegistry.RegisterEvent<SpawnGoldBarForAll>(d20Pool);

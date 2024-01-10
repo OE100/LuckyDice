@@ -1,7 +1,4 @@
-﻿#region
-
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using GameNetcodeStuff;
 using LuckyDice.custom.events;
 using LuckyDice.Patches;
@@ -9,30 +6,22 @@ using LuckyDice.Utilities;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
-
-#endregion
+using Random = UnityEngine.Random;
 
 namespace LuckyDice.custom.network
 {
     public class EventManager : NetworkBehaviour
     {
-        public static EventManager Instance { get; private set; }
+        public static EventManager Instance { get; private set; } = null!;
         
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
             Instance = this;
         }
-        
-        public override void OnNetworkDespawn()
-        {
-            base.OnNetworkDespawn();
-            Instance = null;
-        }
 
-        // rolls event on server
         [ServerRpc(RequireOwnership = false)]
-        public void TriggerEventFromPoolServerRPC(NetworkObjectReference triggerRef, NetworkObjectReference playerRef)
+        public void TriggerEventFromPoolServerRPC(NetworkObjectReference triggerRef, NetworkObjectReference playerRef, int slot = -1)
         {
             if (!(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
             {
@@ -48,7 +37,7 @@ namespace LuckyDice.custom.network
 
             GrabbableObject trigger = networkObject.GetComponentInParent<GrabbableObject>();
 
-            string pool = EventRegistry.GetPoolFromItem(trigger.GetType());
+            string? pool = EventRegistry.GetPoolFromItem(trigger.GetType());
             if (pool == null)
             {
                 Plugin.Log.LogWarning($"Item of type: {trigger.GetType()} has no event pool!");
@@ -72,11 +61,8 @@ namespace LuckyDice.custom.network
             
             EventRegistry.RunEventFromPool(pool, eventIndex, playerHeldBy);
         }
-        
-        
-        
-        
-        
+
+
         // RPCs
         
         [ClientRpc]
@@ -129,7 +115,7 @@ namespace LuckyDice.custom.network
         private IEnumerator delayedItemSpawn(NetworkObjectReference itemRef, int value)
         {
             Plugin.Log.LogDebug("Waiting for item to spawn");
-            NetworkObject networkObject = null;
+            NetworkObject networkObject = null!;
             yield return new WaitUntil(() => itemRef.TryGet(out networkObject));
             Plugin.Log.LogDebug("Item spawned, syncing to clients");
 

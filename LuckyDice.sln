@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuckyDice", "LuckyDice\LuckyDice.csproj", "{8756F0DB-69FB-4CB3-A6DF-46DC0BBA6E65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuckyDice", "LuckyDice\LuckyDice.csproj", "{DE3C9B81-52B7-4F55-B81B-02375E7EBAB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +8,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8756F0DB-69FB-4CB3-A6DF-46DC0BBA6E65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8756F0DB-69FB-4CB3-A6DF-46DC0BBA6E65}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8756F0DB-69FB-4CB3-A6DF-46DC0BBA6E65}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8756F0DB-69FB-4CB3-A6DF-46DC0BBA6E65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE3C9B81-52B7-4F55-B81B-02375E7EBAB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE3C9B81-52B7-4F55-B81B-02375E7EBAB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE3C9B81-52B7-4F55-B81B-02375E7EBAB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE3C9B81-52B7-4F55-B81B-02375E7EBAB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

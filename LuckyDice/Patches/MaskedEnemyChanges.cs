@@ -52,12 +52,12 @@ namespace LuckyDice.Patches
                 bufferDistance > 0.0 && Mathf.Abs(optimalDistance - Vector3.Distance(__instance.transform.position,
                     __instance.targetPlayer.transform.position)) < bufferDistance)
             {
-                __result = null;
+                __result = null!;
                 return false;
             }
             if (chosenPlayerIndex < 0)
             {
-                __result = null;
+                __result = null!;
                 return false;
             }
             __instance.mostOptimalDistance = optimalDistance;

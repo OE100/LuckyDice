@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using GameNetcodeStuff;
 using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
@@ -7,47 +6,48 @@ using LuckyDice.custom.network;
 using LuckyDice.Utilities;
 using Unity.Netcode;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace LuckyDice.custom.monobehaviour.impl.map
 {
     [NeedsRemoval]
     public class TeleportAllPlayers : BaseEventBehaviour
     {
-        protected List<PlayerControllerB> players;
-        protected List<EnemyAI> enemies;
-        protected float timeBetweenChecks = 5f;
-        protected float timeToNextCheck;
-        protected bool triggered;
+        protected List<PlayerControllerB> Players = null!;
+        protected List<EnemyAI> Enemies = null!;
+        protected const float TimeBetweenChecks = 5f;
+        protected float TimeToNextCheck;
+        protected bool Triggered;
 
         protected override void Update()
         {
-            if (!triggered && timeToNextCheck <= 0f)
+            if (!Triggered && TimeToNextCheck <= 0f)
             {
-                players = Utils.GetAllLivingPlayers();
-                enemies = new List<EnemyAI>(RoundManager.Instance.SpawnedEnemies);
-                enemies.RemoveAll(enemy => enemy.isOutside || enemy.isEnemyDead || !enemy.agent.isOnNavMesh);
+                Players = Utils.GetAllLivingPlayers();
+                Enemies = new List<EnemyAI>(RoundManager.Instance.SpawnedEnemies);
+                Enemies.RemoveAll(enemy => enemy.isOutside || enemy.isEnemyDead || !enemy.agent.isOnNavMesh);
                 
-                if (players.Count <= enemies.Count)
+                if (Players.Count <= Enemies.Count)
                 {
-                    triggered = true;
+                    Triggered = true;
                     StartCoroutine(SearchForReplacements());
                 }
                 
-                timeToNextCheck = timeBetweenChecks;
+                TimeToNextCheck = TimeBetweenChecks;
             }
-            timeToNextCheck -= Time.deltaTime;
+            TimeToNextCheck -= Time.deltaTime;
         }
 
         protected IEnumerator SearchForReplacements()
         {
-            while (players.Count > 0)
+            while (Players.Count > 0)
             {
-                PlayerControllerB player = players[0];
-                int enemyIndex = Random.Range(0, enemies.Count);
+                PlayerControllerB player = Players[0];
+                int enemyIndex = Random.Range(0, Enemies.Count);
                         
                 Vector3 position = player.transform.position;
                         
-                EnemyAI enemy = enemies[enemyIndex];
+                EnemyAI enemy = Enemies[enemyIndex];
                         
                 if (player.isInsideFactory == enemy.isOutside)
                     enemy.StartCoroutine(Utils.DelayedSetOutside(enemyAI: enemy,

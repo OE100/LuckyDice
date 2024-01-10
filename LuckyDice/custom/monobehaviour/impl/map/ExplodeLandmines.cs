@@ -10,7 +10,7 @@ namespace LuckyDice.custom.monobehaviour.impl.map
     public class ExplodeLandmines : BaseEventBehaviour
     {
         private float time;
-        private Landmine[] mines;
+        private Landmine[] mines = null!;
         
         private void Awake()
         {

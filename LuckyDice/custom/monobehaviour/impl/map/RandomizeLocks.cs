@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using LuckyDice.custom.monobehaviour.attributes;
+﻿using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
 using Unity.Netcode;
-using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace LuckyDice.custom.monobehaviour.impl.map
 {

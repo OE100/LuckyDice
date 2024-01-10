@@ -4,6 +4,7 @@ Some things might be broken and some events aren't implemented yet, please repor
 2) What other mods you have installed?
 3) What are the steps to reproduce the error?
 4) Add log files.
+- When testing out the mod, please enable logging debug messages to disk in your BepInEx config file.
 
 # Lucky Dice
 This mod adds a bunch of different dice, each with it's own event pool.

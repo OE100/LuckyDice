@@ -1,11 +1,7 @@
-﻿#region
-
-using System.Collections.Generic;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Unity.Netcode;
 using UnityEngine;
-
-#endregion
+using Object = UnityEngine.Object;
 
 namespace LuckyDice.Patches
 {

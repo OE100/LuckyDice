@@ -1,9 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
+using Debug = System.Diagnostics.Debug;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace LuckyDice.Utilities
@@ -11,41 +12,41 @@ namespace LuckyDice.Utilities
     public static class Utils
     {
         // Dice
-        public static Item D4 = null;
-        public static Item D6 = null;
-        public static Item D8 = null;
-        public static Item D12 = null;
-        public static Item D20 = null;
+        public static Item? D4 = null!;
+        public static Item? D6 = null!;
+        public static Item? D8 = null!;
+        public static Item? D12 = null!;
+        public static Item? D20 = null!;
         
         // Random items
-        public static Item DiscoMonkey = null;
+        public static Item? DiscoMonkey = null!;
         
         // Outside AI nodes
-        public static GameObject[] OutsideAINodes = null;
-        public static GameObject[] InsideAINodes = null;
+        public static GameObject[] OutsideAINodes = null!;
+        public static GameObject[] InsideAINodes = null!;
         
         // weather container
-        public static GameObject TimeAndWeather;
+        public static GameObject TimeAndWeather = null!;
         
         // stormy
-        public static GameObject StormyWeatherContainer;
-        public static StormyWeather StormyWeather;
-        public static GameObject StormyRainContainer;
+        public static GameObject StormyWeatherContainer = null!;
+        public static StormyWeather StormyWeather = null!;
+        public static GameObject StormyRainContainer = null!;
         
         // foggy
-        public static GameObject FoggyWeatherContainer;
+        public static GameObject FoggyWeatherContainer = null!;
         
         // flooding
-        public static GameObject FloodingWeatherContainer;
+        public static GameObject FloodingWeatherContainer = null!;
         
         // eclipse
-        public static GameObject EclipseWeatherContainer;
+        public static GameObject EclipseWeatherContainer = null!;
         
         // dust storm
-        public static GameObject DustStormWeatherContainer;
+        public static GameObject DustStormWeatherContainer = null!;
         
         // rainy
-        public static GameObject RainyWeatherContainer;
+        public static GameObject RainyWeatherContainer = null!;
         
         
         
@@ -83,16 +84,16 @@ namespace LuckyDice.Utilities
             return players;
         }
 
-        public static PlayerControllerB GetClosestPlayerToPosition(Vector3 position,
-            List<PlayerControllerB> players, 
+        public static PlayerControllerB? GetClosestPlayerToPosition(Vector3 position,
+            List<PlayerControllerB?> players, 
             bool inside = true)
         {
             float distance = Mathf.Infinity;
-            PlayerControllerB nearestPlayer = null;
+            PlayerControllerB? nearestPlayer = null;
             
-            foreach(PlayerControllerB player in players)
+            foreach(PlayerControllerB? player in players)
             {
-                Vector3 diff = player.transform.position - position;
+                Vector3 diff = player!.transform.position - position;
                 float curDistance = diff.sqrMagnitude; 
                 if(curDistance < distance)
                 {
@@ -149,6 +150,12 @@ namespace LuckyDice.Utilities
                 enemyAI.SyncPositionToClients();
                 yield return new WaitForSeconds(0.5f);
             }
+        }
+
+        public static IEnumerator DelayedDestroy(float delay, GameObject gameObject)
+        {
+            yield return new WaitForSeconds(delay);
+            Object.Destroy(gameObject);
         }
     }
 }
