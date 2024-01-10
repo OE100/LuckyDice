@@ -152,9 +152,9 @@ namespace LuckyDice.Utilities
             }
         }
 
-        public static IEnumerator DelayedDestroy(float delay, GameObject gameObject)
+        public static IEnumerator DelayedDestroy(Func<bool> predicate, GameObject gameObject)
         {
-            yield return new WaitForSeconds(delay);
+            yield return new WaitUntil(predicate);
             Object.Destroy(gameObject);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using GameNetcodeStuff;
+using LuckyDice.custom.events;
 using LuckyDice.custom.monobehaviour.attributes;
 using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
@@ -30,7 +31,7 @@ namespace LuckyDice.custom.monobehaviour.impl.map
                 {
                     GrabbableObject heldObjectServer = player.currentlyHeldObjectServer;
                     
-                    if (heldObjectServer == null)
+                    if (heldObjectServer == null || EventRegistry.GetPoolFromItem(heldObjectServer.GetType()) != null)
                         continue;
                     
                     if (!heldObjectServer.itemProperties.isConductiveMetal)

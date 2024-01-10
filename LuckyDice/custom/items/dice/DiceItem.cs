@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using GameNetcodeStuff;
+using HarmonyLib;
 using LuckyDice.custom.network;
 using LuckyDice.Utilities;
 using Unity.Netcode;
@@ -52,6 +53,9 @@ namespace LuckyDice.custom.items.dice
                     new NetworkObjectReference(GetComponentInParent<NetworkObject>()),
                     new NetworkObjectReference(playerHeldBy.GetComponentInParent<NetworkObject>()),
                     playerHeldBy.currentItemSlot);
+
+                playerHeldBy.activatingItem = true;
+                StartCoroutine(Utils.DelayedDestroy(() => playerHeldBy == null, gameObject));
             }
             
             ItemActivateClientRPC(used, buttonDown);
@@ -60,17 +64,14 @@ namespace LuckyDice.custom.items.dice
         [ClientRpc]
         private void ItemActivateClientRPC(bool used, bool buttonDown = true)
         {
-            playerHeldBy.activatingItem = false;
             if (IsOneTimeUse())
                 itemUsedUp = true;
             
             OnItemActivateClientRPCEvent();
             
-            UseItemOnClient(false);
+            playerHeldBy.activatingItem = false;
             
             DestroyObjectInHand(playerHeldBy);
-
-            StartCoroutine(Utils.DelayedDestroy(0.5f, gameObject));
         }
     }
 }

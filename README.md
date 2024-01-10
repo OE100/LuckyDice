@@ -22,6 +22,10 @@ https://github.com/OE100/ExampleEventExtensionMod
 
 # Releases:
 
+# 0.4.0 - API & Fixes
+- Fix: Bug where client couldn't activate the dice without getting stuck. (this time for real)
+- API: Switched the entire project to netstandard2.1, added some more null check stuff to prevent the compiler from shouting at me.
+
 # 0.3.2 - API & Fixes
 - Fix: Bug where if a client was activating the dice he would get stuck.
 - API: Added utility function to get all living, controller players.
