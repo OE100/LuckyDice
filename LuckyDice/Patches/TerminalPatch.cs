@@ -17,6 +17,8 @@ namespace LuckyDice.Patches
         [HarmonyPatch("Start"), HarmonyPostfix]
         private static void PatchStart(Terminal __instance)
         {
+            Utils.Terminal = __instance;
+            
             // Enemies
             if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
                 __instance.StartCoroutine(delayedRegistry(__instance.moonsCatalogueList));

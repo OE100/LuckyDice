@@ -5,15 +5,15 @@ namespace LuckyDice
     internal static class ModConfig
     {
         // General settings
-        public static ConfigEntry<bool> EnableDiceSpawning = null!;
-        public static ConfigEntry<bool> RegisterDiceToEventPools = null!;
+        public static ConfigEntry<bool> EnableDiceSpawning;
+        public static ConfigEntry<bool> RegisterDiceToEventPools;
         
         // Items
-        public static ConfigEntry<int> D4Rarity = null!;
-        public static ConfigEntry<int> D6Rarity = null!;
-        public static ConfigEntry<int> D8Rarity = null!;
-        public static ConfigEntry<int> D12Rarity = null!;
-        public static ConfigEntry<int> D20Rarity = null!;
+        public static ConfigEntry<int> D4Rarity;
+        public static ConfigEntry<int> D6Rarity;
+        public static ConfigEntry<int> D8Rarity;
+        public static ConfigEntry<int> D12Rarity;
+        public static ConfigEntry<int> D20Rarity;
         
         internal static void Init(ConfigFile config)
         {

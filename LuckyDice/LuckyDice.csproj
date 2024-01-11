@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -7,6 +6,8 @@
         <LangVersion>preview</LangVersion>
         <Nullable>disable</Nullable>
         <RootNamespace>LuckyDice</RootNamespace>
+        <Company>OE_Tweaks</Company>
+        <NeutralLanguage>he-IL</NeutralLanguage>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

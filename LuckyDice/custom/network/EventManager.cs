@@ -3,6 +3,7 @@ using GameNetcodeStuff;
 using LuckyDice.custom.events;
 using LuckyDice.Patches;
 using LuckyDice.Utilities;
+using TerminalApi.Classes;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -92,7 +93,7 @@ namespace LuckyDice.custom.network
             }
         }
         
-        [ServerRpc(RequireOwnership = false)]
+        [ServerRpc]
         public void SpawnItemAroundPositionServerRPC(Vector3 position, int itemId, int stackValue = 0)
         {
             var itemsList = StartOfRound.Instance.allItemsList.itemsList;
@@ -232,6 +233,45 @@ namespace LuckyDice.custom.network
             
             var agent = networkObject.GetComponentInChildren<NavMeshAgent>();
             agent.Warp(position);
+        }
+        
+        [ServerRpc(RequireOwnership = false)]
+        public void SetWeatherServerRPC(Weather weather)
+        {
+            if (NetworkManager.Singleton.IsServer || NetworkManager.Singleton.IsHost)
+                SetWeatherClientRPC(weather);
+        }
+        
+        [ClientRpc]
+        public void SetWeatherClientRPC(Weather weather)
+        {
+            Utils.DisableAllWeather();
+            switch (weather)
+            {
+                case Weather.Clear:
+                    break;
+                case Weather.Rainy:
+                    Utils.RainyWeatherContainer.SetActive(true);
+                    break;
+                case Weather.Thunder:
+                    Utils.StormyWeatherContainer.SetActive(true);
+                    break;
+                case Weather.Flooding:
+                    Utils.FloodingWeatherContainer.SetActive(true);
+                    break;
+                case Weather.Foggy:
+                    Utils.FoggyWeatherContainer.SetActive(true);
+                    break;
+                case Weather.Eclipse:
+                    Utils.EclipseWeatherContainer.SetActive(true);
+                    break;
+                case Weather.DustStorm:
+                    Utils.DustStormWeatherContainer.SetActive(true);
+                    break;
+                default:
+                    Plugin.Log.LogDebug("Why are you trying to break my code using reflection?!");
+                    break;
+            }
         }
     }
 }

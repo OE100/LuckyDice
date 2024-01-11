@@ -10,6 +10,9 @@ namespace LuckyDice.Utilities
 {
     public static class Utils
     {
+        // Terminal
+        public static Terminal Terminal;
+        
         // Dice
         public static Item D4;
         public static Item D6;
@@ -146,6 +149,17 @@ namespace LuckyDice.Utilities
         {
             yield return new WaitUntil(predicate);
             Object.Destroy(gameObject);
+        }
+
+        public static void DisableAllWeather()
+        {
+            StormyWeatherContainer.SetActive(false);
+            StormyRainContainer.SetActive(false);
+            FoggyWeatherContainer.SetActive(false);
+            FloodingWeatherContainer.SetActive(false); 
+            EclipseWeatherContainer.SetActive(false);
+            DustStormWeatherContainer.SetActive(false);
+            RainyWeatherContainer.SetActive(false);
         }
     }
 }
