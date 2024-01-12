@@ -22,6 +22,11 @@ https://github.com/OE100/ExampleEventExtensionMod
 
 # Releases:
 
+# 0.4.1 - API & Fixes & Additions
+- Fix: Weather credits now actually grant the ability to change the weather via terminal commands.
+- Added: More config options to control various events.
+- API: Added functions to change weather.
+
 # 0.4.0 - API & Fixes
 - Fix: Bug where client couldn't activate the dice without getting stuck. (this time for real)
 - API: Switched the entire project to netstandard2.1, added some more null check stuff to prevent the compiler from shouting at me.
