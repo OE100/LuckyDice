@@ -15,6 +15,15 @@ namespace LuckyDice
         public static ConfigEntry<int> D12Rarity;
         public static ConfigEntry<int> D20Rarity;
         
+        // Weather
+        public static ConfigEntry<bool> EnableWeatherChangingCommands;
+        public static ConfigEntry<float> SecondsPerWarningPeriod;
+        
+        // TTT
+        public static ConfigEntry<float> TTTTerroristChance;
+        public static ConfigEntry<int> TTTMinTimeToBlow;
+        public static ConfigEntry<int> TTTMaxTimeToBlow;
+        
         internal static void Init(ConfigFile config)
         {
             // General settings
@@ -34,6 +43,20 @@ namespace LuckyDice
                 "Rarity of the D12 item. (0 = Can't spawn, 100 = Extremely common");
             D20Rarity = config.Bind("Items", "D20Rarity", 5, 
                 "Rarity of the D20 item. (0 = Can't spawn, 100 = Extremely common");
+            
+            // Commands
+            EnableWeatherChangingCommands = config.Bind("Commands", "EnableWeatherChangingCommands", true, 
+                "Enable weather changing commands.");
+            SecondsPerWarningPeriod = config.Bind("Commands", "SecondsPerWarningPeriod", 10f, 
+                "Seconds per warning period.");
+            
+            // TTT
+            TTTTerroristChance = config.Bind("TTT", "TTTTerroristChance", 0.5f,
+                "Chance to become a terrorist in the TTT event.");
+            TTTMinTimeToBlow = config.Bind("TTT", "TTTMinTimeToBlow", 60, 
+                "Minimum time to blow up in the TTT event.");
+            TTTMaxTimeToBlow = config.Bind("TTT", "TTTMaxTimeToBlow", 120,
+                "Maximum time to blow up in the TTT event.");
         }
     }
 }

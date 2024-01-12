@@ -44,8 +44,7 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             // randomly roll the rest
             while (players.Count > 0)
             {
-                // todo: replace with terrorist chance from config
-                if (Random.Range(0f, 1f) > 0.5f)
+                if (Random.Range(0f, 1f) < ModConfig.TTTTerroristChance.Value)
                 {
                     Plugin.Log.LogDebug($"Chosen {players[0].playerUsername} as terrorist");
                     Terrorists.Add(players[0]);
@@ -56,7 +55,7 @@ namespace LuckyDice.custom.monobehaviour.impl.player
             }
 
             Started = true;
-            TimeRemaining = 20f; // todo: replace with random in range from config
+            TimeRemaining = Random.Range(ModConfig.TTTMinTimeToBlow.Value, ModConfig.TTTMaxTimeToBlow.Value);
             EventManager.Instance.DisplayMessageClientRPC(
                 new NetworkObjectReference(),
                 "Trouble in terrorist town!",

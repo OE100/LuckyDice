@@ -26,8 +26,26 @@ namespace LuckyDice.Patches
         [HarmonyPatch(nameof(StartOfRound.OnShipLandedMiscEvents)), HarmonyPostfix]
         private static void PatchOnShipLandedMiscEvents()
         {
+            // Get AI nodes
             Utils.OutsideAINodes = GameObject.FindGameObjectsWithTag("OutsideAINode");
             Utils.InsideAINodes = GameObject.FindGameObjectsWithTag("AINode");
+            
+            // Get weather
+            Utils.TimeAndWeather = GameObject.Find("Systems/GameSystems/TimeAndWeather");
+            // stormy
+            Utils.StormyWeatherContainer = Utils.TimeAndWeather.transform.Find("Stormy").gameObject;
+            Utils.StormyWeather = Utils.StormyWeatherContainer.GetComponent<StormyWeather>();
+            Utils.StormyRainContainer = Utils.TimeAndWeather.transform.Find("StormyRainParticleContainer").gameObject;
+            // foggy
+            Utils.FoggyWeatherContainer = Utils.TimeAndWeather.transform.Find("Foggy").gameObject;
+            // flooding
+            Utils.FloodingWeatherContainer = Utils.TimeAndWeather.transform.Find("Flooding").gameObject;
+            // eclipse
+            Utils.EclipseWeatherContainer = Utils.TimeAndWeather.transform.Find("Eclipse").gameObject;
+            // dust storm
+            Utils.DustStormWeatherContainer = Utils.TimeAndWeather.transform.Find("DustStorm").gameObject;
+            // rainy
+            Utils.RainyWeatherContainer = Utils.TimeAndWeather.transform.Find("RainParticleContainer").gameObject;
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class WeatherCreditsEvent3 : WeatherCreditsEvent
     {
-        private void Awake()
+        protected void Awake()
         {
             CreditsPerTrigger = 3;
         }

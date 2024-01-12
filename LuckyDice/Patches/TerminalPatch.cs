@@ -22,23 +22,6 @@ namespace LuckyDice.Patches
             // Enemies
             if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
                 __instance.StartCoroutine(delayedRegistry(__instance.moonsCatalogueList));
-            
-            // Get weather
-            Utils.TimeAndWeather = GameObject.Find("Systems/GameSystems/TimeAndWeather");
-            // stormy
-            Utils.StormyWeatherContainer = Utils.TimeAndWeather.transform.Find("Stormy").gameObject;
-            Utils.StormyWeather = Utils.StormyWeatherContainer.GetComponent<StormyWeather>();
-            Utils.StormyRainContainer = Utils.TimeAndWeather.transform.Find("StormyRainParticleContainer").gameObject;
-            // foggy
-            Utils.FoggyWeatherContainer = Utils.TimeAndWeather.transform.Find("Foggy").gameObject;
-            // flooding
-            Utils.FloodingWeatherContainer = Utils.TimeAndWeather.transform.Find("Flooding").gameObject;
-            // eclipse
-            Utils.EclipseWeatherContainer = Utils.TimeAndWeather.transform.Find("Eclipse").gameObject;
-            // dust storm
-            Utils.DustStormWeatherContainer = Utils.TimeAndWeather.transform.Find("DustStorm").gameObject;
-            // rainy
-            Utils.RainyWeatherContainer = Utils.TimeAndWeather.transform.Find("RainParticleContainer").gameObject;
         }
 
         private static IEnumerator delayedRegistry(SelectableLevel[] catalogue)

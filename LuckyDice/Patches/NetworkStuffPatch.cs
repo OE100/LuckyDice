@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -30,9 +31,11 @@ namespace LuckyDice.Patches
                 return;
             
             var networkHandlerHost = Object.Instantiate(networkPrefabs[0], Vector3.zero, Quaternion.identity);
+            networkHandlerHost.AddComponent<NetworkVariableHolder>();
             networkHandlerHost.GetComponent<NetworkObject>().Spawn(destroyWithScene: false);
             if (ModConfig.RegisterDiceToEventPools.Value)
                 Plugin.RegisterEventsAndItems();
+            Plugin.RegisterCommands();
         }
     }
 }

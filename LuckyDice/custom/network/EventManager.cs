@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using GameNetcodeStuff;
 using LuckyDice.custom.events;
+using LuckyDice.custom.monobehaviour.impl.persistent.weathercredits;
 using LuckyDice.Patches;
 using LuckyDice.Utilities;
 using TerminalApi.Classes;
@@ -255,6 +256,7 @@ namespace LuckyDice.custom.network
                     break;
                 case Weather.Thunder:
                     Utils.StormyWeatherContainer.SetActive(true);
+                    Utils.StormyRainContainer.SetActive(true);
                     break;
                 case Weather.Flooding:
                     Utils.FloodingWeatherContainer.SetActive(true);

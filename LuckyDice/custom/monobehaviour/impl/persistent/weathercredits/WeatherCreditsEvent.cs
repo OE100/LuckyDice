@@ -1,4 +1,5 @@
-﻿using LuckyDice.custom.monobehaviour.def;
+﻿using System.Collections;
+using LuckyDice.custom.monobehaviour.def;
 using LuckyDice.custom.network;
 using Unity.Netcode;
 using UnityEngine;
@@ -7,12 +8,12 @@ namespace LuckyDice.custom.monobehaviour.impl.persistent.weathercredits
 {
     public class WeatherCreditsEvent : BaseEventBehaviour
     {
-        public static int Credits = 0;
-
+        public static float TimeUntilNextWarning = 0f;
+        
         protected float TimeUntilTrigger = 2f;
         
         public int CreditsPerTrigger = 1;
-        
+
         private void LateUpdate()
         {
             // delayed trigger
@@ -21,7 +22,7 @@ namespace LuckyDice.custom.monobehaviour.impl.persistent.weathercredits
                 TimeUntilTrigger -= Time.deltaTime;
                 return;
             }
-            Credits += CreditsPerTrigger;
+            NetworkVariableHolder.Instance.WeatherCredits.Value += CreditsPerTrigger;
             EventManager.Instance.DisplayMessageClientRPC(new NetworkObjectReference(),
                 "Jewish Space Laser Online!",
                 $"You get {CreditsPerTrigger} credits for disabling weather effects!");
