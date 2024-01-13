@@ -15,13 +15,45 @@ namespace LuckyDice.custom.network
     public class EventManager : NetworkBehaviour
     {
         public static EventManager Instance { get; private set; } = null!;
+
+        public NetworkVariable<int> WeatherCredits = new();
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SetWeatherCreditsServerRPC(int value, bool delta = true)
+        {
+            if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
+                if (delta)
+                    WeatherCredits.Value += value;
+                else
+                    WeatherCredits.Value = value;
+        }
+        
+        public NetworkVariable<float> TimeUntilNextWarning = new();
+        [ServerRpc(RequireOwnership = false)]
+        public void SetTimeUntilNextWarningServerRPC(float value)
+        {
+            if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
+                TimeUntilNextWarning.Value = value;
+        }
         
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
             Instance = this;
+            
+            WeatherCredits.Value = 0;
+            TimeUntilNextWarning.Value = 0f;
         }
 
+        private void Update()
+        {
+            if (!(NetworkManager.Singleton.IsServer || NetworkManager.Singleton.IsHost))
+                return;
+        
+            if (TimeUntilNextWarning.Value > 0)
+                TimeUntilNextWarning.Value -= Time.deltaTime;
+        }
+        
         [ServerRpc(RequireOwnership = false)]
         public void TriggerEventFromPoolServerRPC(NetworkObjectReference triggerRef, NetworkObjectReference playerRef, int slot = -1)
         {
@@ -274,6 +306,13 @@ namespace LuckyDice.custom.network
                     Plugin.Log.LogDebug("Why are you trying to break my code using reflection?!");
                     break;
             }
+        }
+        
+        [ServerRpc(RequireOwnership = false)]
+        public void EndGameServerRPC()
+        {
+            if (NetworkManager.Singleton.IsServer || NetworkManager.Singleton.IsHost)
+                StartOfRound.Instance.ManuallyEjectPlayersServerRpc();
         }
     }
 }

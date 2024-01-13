@@ -15,6 +15,8 @@ namespace LuckyDice.Patches
     [HarmonyPatch(typeof(StartOfRound))]
     public class StartOfRoundPatch
     {
+        private static bool _registeredCommands;
+        
         [HarmonyPatch(nameof(StartOfRound.ShipLeave)), HarmonyPostfix]
         private static void PatchShipLeave()
         {
@@ -26,6 +28,13 @@ namespace LuckyDice.Patches
         [HarmonyPatch(nameof(StartOfRound.OnShipLandedMiscEvents)), HarmonyPostfix]
         private static void PatchOnShipLandedMiscEvents()
         {
+            // Register commands if not registered
+            if (!_registeredCommands)
+            {
+                _registeredCommands = true;
+                Plugin.RegisterCommands();
+            }
+            
             // Get AI nodes
             Utils.OutsideAINodes = GameObject.FindGameObjectsWithTag("OutsideAINode");
             Utils.InsideAINodes = GameObject.FindGameObjectsWithTag("AINode");

@@ -22,7 +22,7 @@ namespace LuckyDice.custom.monobehaviour.impl.persistent.weathercredits
                 TimeUntilTrigger -= Time.deltaTime;
                 return;
             }
-            NetworkVariableHolder.Instance.WeatherCredits.Value += CreditsPerTrigger;
+            EventManager.Instance.WeatherCredits.Value += CreditsPerTrigger;
             EventManager.Instance.DisplayMessageClientRPC(new NetworkObjectReference(),
                 "Jewish Space Laser Online!",
                 $"You get {CreditsPerTrigger} credits for disabling weather effects!");

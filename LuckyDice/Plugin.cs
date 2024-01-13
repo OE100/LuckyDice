@@ -109,6 +109,13 @@ namespace LuckyDice
         {
             if (!ModConfig.RegisterDiceToEventPools.Value) return;
             
+            IEnumerator EndGameCoroutine()
+            {
+                FindObjectOfType<StartMatchLever>().EndGame();
+                yield return new WaitUntil(() => StartOfRound.Instance.inShipPhase);
+                StartOfRound.Instance.ManuallyEjectPlayersServerRpc();
+            }
+            
             Log.LogDebug("Registering weather commands!");
             var values = Enum.GetValues(typeof(Weather));
             Log.LogDebug($"Found {values.Length} weather types!");
@@ -120,7 +127,7 @@ namespace LuckyDice
                     {
                         DisplayTextSupplier = () =>
                         {
-                            var credits = NetworkVariableHolder.Instance.WeatherCredits.Value;
+                            var credits = EventManager.Instance.WeatherCredits.Value;
                             if (credits <= 0)
                                 return $"Not enough credits! ({credits} left, need 1)";
 
@@ -130,26 +137,25 @@ namespace LuckyDice
                             }
                             if (StartOfRound.Instance.currentLevelID == 3)
                             {
-                                if (WeatherCreditsEvent.TimeUntilNextWarning > 0)
+                                if (EventManager.Instance.TimeUntilNextWarning.Value > 0)
                                 {
-                                    NetworkVariableHolder.Instance.WeatherCredits.Value -= 1;
+                                    EventManager.Instance.SetWeatherCreditsServerRPC(-1);
                                     EventManager.Instance.SetWeatherServerRPC(t);
-                                    FindObjectOfType<StartMatchLever>().EndGame();
+                                    EventManager.Instance.StartCoroutine(EndGameCoroutine());
                                     return "Now you've done it! You've been fired!";
                                 }
 
-                                WeatherCreditsEvent.TimeUntilNextWarning = ModConfig.SecondsPerWarningPeriod.Value;
+                                EventManager.Instance.SetTimeUntilNextWarningServerRPC(ModConfig.SecondsPerWarningPeriod.Value);
                                 return "No lasers allowed on company moons!\nYou've been warned, next time you'll be fired!";
                             }
                             
-                            NetworkVariableHolder.Instance.WeatherCredits.Value -= 1;
+                            EventManager.Instance.SetWeatherCreditsServerRPC(-1);
                             EventManager.Instance.SetWeatherServerRPC(t);
                             return $"Changed weather to {eName.ToLower()}! ({credits} credits left)";
                         },
                         Category = "Other",
                         Description = $"Sets the weather to {eName.ToLower()}"
-                    },
-                    "weather");
+                    });
             }
         }
         
