@@ -1,2 +1,1 @@
-LethalLib.dll
 TerminalApi.dll
